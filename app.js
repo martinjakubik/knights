@@ -73,7 +73,7 @@ const getMaximumBoardDisplaySize = function () {
 }
 
 const getHighLowForSquare = function (nRankIndex, nFileIndex) {
-    return (nRankIndex + nFileIndex) % 2 == 0 ? true : false;
+    return (nRankIndex + nFileIndex) % 2 == 0 ? false : true;
 }
 
 const drawChessboard = function (oChessboard) {
@@ -85,7 +85,7 @@ const drawChessboard = function (oChessboard) {
     const nSquareSize = nMaximumBoardWidth / NUM_RANKS;
     document.body.appendChild(oChessboardDiv);
     let bHigh = true;
-    for (nRankIndex = 0; nRankIndex < NUM_RANKS; nRankIndex++) {
+    for (nRankIndex = NUM_RANKS - 1; nRankIndex >= 0; nRankIndex--) {
         let nRank = nRankIndex + 1;
         for (nFileIndex = 0; nFileIndex < NUM_FILES; nFileIndex++) {
             let oDiv = document.createElement('div');

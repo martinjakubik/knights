@@ -10,6 +10,7 @@ div#chessboard {
 div.square{
     background-size: contain;
     background-position-x: center;
+    background-repeat: no-repeat;
 }
 
 div.square.high {
@@ -26,4 +27,44 @@ div.square.wp {
 
 div.square.bp {
     background-image: url('piece-pawn.b.forhtml.png');
+}
+
+div.square.wr {
+    background-image: url('piece-rook.w.forhtml.png');
+}
+
+div.square.br {
+    background-image: url('piece-rook.b.forhtml.png');
+}
+
+div.square.wn {
+    background-image: url('piece-knight.w.forhtml.png');
+}
+
+div.square.bn {
+    background-image: url('piece-knight.b.forhtml.png');
+}
+
+div.square.wb {
+    background-image: url('piece-bishop.w.forhtml.png');
+}
+
+div.square.bb {
+    background-image: url('piece-bishop.b.forhtml.png');
+}
+
+div.square.wq {
+    background-image: url('piece-queen.w.forhtml.png');
+}
+
+div.square.bq {
+    background-image: url('piece-queen.b.forhtml.png');
+}
+
+div.square.wk {
+    background-image: url('piece-king.w.forhtml.png');
+}
+
+div.square.bk {
+    background-image: url('piece-king.b.forhtml.png');
 }

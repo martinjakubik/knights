@@ -21,5 +21,9 @@ div.square.low {
 }
 
 div.square.wp {
-    background-image: url('piece-pawn.scene.forhtml.png');
+    background-image: url('piece-pawn.w.forhtml.png');
+}
+
+div.square.bp {
+    background-image: url('piece-pawn.b.forhtml.png');
 }

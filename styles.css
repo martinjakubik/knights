@@ -1,4 +1,16 @@
-div.square {
-    height: 80px;
-    width: 80px;
+body {
+    margin: 0;
+}
+
+div#chessboard {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+div.square.high {
+    background-color: rgb(235, 184, 152);
+}
+
+div.square.low {
+    background-color: rgb(86, 50, 27);
 }

@@ -2,6 +2,14 @@ let oChessboard = {};
 const NUM_RANKS = 8;
 const NUM_FILES = 8;
 const aFiles = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+const aImages = {
+    'r': 'rook',
+    'n': 'knight',
+    'b': 'bishop',
+    'q': 'queen',
+    'k': 'king',
+    'p': 'pawn'
+}
 
 CHESSBOARD_START = {
     'a1': 'wr',
@@ -89,7 +97,10 @@ const drawChessboard = function (oChessboard) {
             bHigh = getHighLowForSquare(nRankIndex, nFileIndex);
             oDiv.classList.add(bHigh ? 'high' : 'low');
             oChessboardDiv.appendChild(oDiv);
-            let oPiece = oChessboard[`${sFile}${nRank}`];
+            let sPiece = oChessboard[`${sFile}${nRank}`];
+            if (sPiece.length > 0) {
+                oDiv.classList.add(sPiece);
+            }
         };
     }
 }

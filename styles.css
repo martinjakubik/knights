@@ -7,10 +7,19 @@ div#chessboard {
     flex-wrap: wrap;
 }
 
+div.square{
+    background-size: contain;
+    background-position-x: center;
+}
+
 div.square.high {
     background-color: rgb(235, 184, 152);
 }
 
 div.square.low {
     background-color: rgb(86, 50, 27);
+}
+
+div.square.wp {
+    background-image: url('piece-pawn.scene.forhtml.png');
 }

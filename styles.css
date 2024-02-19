@@ -2,14 +2,22 @@ body {
     margin: 0;
 }
 
+div#gameboard {
+    display: flex;
+}
+
 div#chessboard {
     display: flex;
     flex-wrap: wrap;
 }
 
+div#discard {
+    display: flex;
+    flex-direction: column;
+}
+
 div#blackDiscard, div#whiteDiscard {
     display: flex;
-    flex-wrap: nowrap;
 }
 
 div.square, div.piece {

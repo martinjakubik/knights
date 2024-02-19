@@ -71,10 +71,15 @@ const setupChessboard = function (oSavedChessboard) {
     })
 }
 
+const isTallScreen = function () {
+    const nViewportWidth = document.documentElement.clientWidth;
+    const nViewportHeight = document.documentElement.clientHeight;
+    return (nViewportWidth <= nViewportHeight);
+}
 const getMaximumBoardDisplaySize = function () {
     const nViewportWidth = document.documentElement.clientWidth;
     const nViewportHeight = document.documentElement.clientHeight;
-    const nMaximumSize = nViewportWidth <= nViewportHeight ? nViewportWidth : nViewportHeight;
+    const nMaximumSize = isTallScreen() ? nViewportWidth : nViewportHeight;
     return nMaximumSize;
 }
 
@@ -157,26 +162,33 @@ const redrawChessboardMove = function () {
 }
 
 const drawGameboard = function (oChessboard) {
-    let oGameDiv = document.createElement('div');
+    let oGameboardDiv = document.createElement('div');
+    oGameboardDiv.id = 'gameboard';
     let oChessboardDiv = document.createElement('div');
     oChessboardDiv.id = 'chessboard';
+    let oDiscardDiv = document.createElement('div');
+    oDiscardDiv.id = 'discard';
     const nMaximumBoardWidth = getMaximumBoardDisplaySize();
-    oGameDiv.style.width = nMaximumBoardWidth;
-    oChessboardDiv.style.width = nMaximumBoardWidth;
-    oChessboardDiv.style.height = nMaximumBoardWidth;
     const nSquareSize = nMaximumBoardWidth / NUM_RANKS;
     let oDiscardBlackDiv = document.createElement('div');
     let oDiscardWhiteDiv = document.createElement('div');
     oDiscardBlackDiv.id = 'blackDiscard';
     oDiscardWhiteDiv.id = 'whiteDiscard';
-    oDiscardBlackDiv.style.width = nMaximumBoardWidth;
-    oDiscardBlackDiv.style.height = nSquareSize;
-    oDiscardWhiteDiv.style.width = nMaximumBoardWidth;
-    oDiscardWhiteDiv.style.height = nSquareSize;
-    oGameDiv.appendChild(oDiscardBlackDiv);
-    oGameDiv.appendChild(oChessboardDiv);
-    oGameDiv.appendChild(oDiscardWhiteDiv);
-    document.body.appendChild(oGameDiv);
+    oGameboardDiv.appendChild(oChessboardDiv);
+    oDiscardDiv.appendChild(oDiscardBlackDiv);
+    oDiscardDiv.appendChild(oDiscardWhiteDiv);
+    oGameboardDiv.appendChild(oDiscardDiv);
+    if (isTallScreen()) {
+        oGameboardDiv.style.width = nMaximumBoardWidth;
+        oGameboardDiv.style.flexDirection = 'column';
+    } else {
+        oGameboardDiv.style.width = nMaximumBoardWidth + 4 * nMaximumBoardWidth / NUM_FILES;
+    }
+    oChessboardDiv.style.width = nMaximumBoardWidth;
+    oChessboardDiv.style.height = nMaximumBoardWidth;
+    oDiscardBlackDiv.style.width = 4 * nMaximumBoardWidth / NUM_FILES;
+    oDiscardWhiteDiv.style.width = 4 * nMaximumBoardWidth / NUM_FILES;
+    document.body.appendChild(oGameboardDiv);
     let bHigh = true;
     for (nRankIndex = NUM_RANKS - 1; nRankIndex >= 0; nRankIndex--) {
         let nRank = nRankIndex + 1;

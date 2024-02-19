@@ -72,7 +72,7 @@ const getMaximumBoardDisplaySize = function () {
     return nMaximumSize;
 }
 
-const getHighLowForSquare = function (nRankIndex, nFileIndex) {
+const isSquareColorHighOrLow = function (nRankIndex, nFileIndex) {
     return (nRankIndex + nFileIndex) % 2 == 0 ? false : true;
 }
 
@@ -94,7 +94,7 @@ const drawChessboard = function (oChessboard) {
             oDiv.id = `${sFile}${nRank}`;
             oDiv.style.width = nSquareSize;
             oDiv.style.height = nSquareSize;
-            bHigh = getHighLowForSquare(nRankIndex, nFileIndex);
+            bHigh = isSquareColorHighOrLow(nRankIndex, nFileIndex);
             oDiv.classList.add(bHigh ? 'high' : 'low');
             oChessboardDiv.appendChild(oDiv);
             let sPiece = oChessboard[`${sFile}${nRank}`];

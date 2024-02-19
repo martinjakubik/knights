@@ -77,13 +77,24 @@ const isSquareColorHighOrLow = function (nRankIndex, nFileIndex) {
 }
 
 const drawChessboard = function (oChessboard) {
+    let oGameDiv = document.createElement('div');
     let oChessboardDiv = document.createElement('div');
     oChessboardDiv.id = 'chessboard';
     const nMaximumBoardWidth = getMaximumBoardDisplaySize();
+    oGameDiv.style.width = nMaximumBoardWidth;
     oChessboardDiv.style.width = nMaximumBoardWidth;
     oChessboardDiv.style.height = nMaximumBoardWidth;
     const nSquareSize = nMaximumBoardWidth / NUM_RANKS;
-    document.body.appendChild(oChessboardDiv);
+    let oDiscardBlackDiv = document.createElement('div');
+    let oDiscardWhiteDiv = document.createElement('div');
+    oDiscardBlackDiv.style.width = nMaximumBoardWidth;
+    oDiscardBlackDiv.style.height = nSquareSize;
+    oDiscardWhiteDiv.style.width = nMaximumBoardWidth;
+    oDiscardWhiteDiv.style.height = nSquareSize;
+    oGameDiv.appendChild(oDiscardBlackDiv);
+    oGameDiv.appendChild(oChessboardDiv);
+    oGameDiv.appendChild(oDiscardWhiteDiv);
+    document.body.appendChild(oGameDiv);
     let bHigh = true;
     for (nRankIndex = NUM_RANKS - 1; nRankIndex >= 0; nRankIndex--) {
         let nRank = nRankIndex + 1;

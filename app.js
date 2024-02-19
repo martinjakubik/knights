@@ -132,7 +132,7 @@ const redrawChessboard = function () {
     }
 }
 
-const drawChessboard = function (oChessboard) {
+const drawGameboard = function (oChessboard) {
     let oGameDiv = document.createElement('div');
     let oChessboardDiv = document.createElement('div');
     oChessboardDiv.id = 'chessboard';
@@ -185,4 +185,4 @@ const drawChessboard = function (oChessboard) {
 }
 
 setupChessboard(CHESSBOARD_START);
-drawChessboard(oChessboard);
+drawGameboard(oChessboard);

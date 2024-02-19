@@ -7,6 +7,11 @@ div#chessboard {
     flex-wrap: wrap;
 }
 
+div#blackDiscard, div#whiteDiscard {
+    display: flex;
+    flex-wrap: nowrap;
+}
+
 div.square, div.piece {
     background-size: contain;
     background-position-x: center;

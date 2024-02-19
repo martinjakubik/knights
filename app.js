@@ -104,11 +104,17 @@ const onDragoverPreventDefault = function (oEvent) {
 
 const onSquareDrop = function (oEvent) {
     const oTarget = oEvent.target;
-    sMovingToSquareId = oTarget ? oTarget.id : 'none';
-    console.log(`moved piece '${sMovingPieceId}' from ${sMovingFromSquareId} to ${sMovingToSquareId}`);
-    updateChessboard();
-    redrawChessboard();
-    clearMovingPieces();
+    let oSquareTarget = oTarget;
+    if (oTarget && oTarget.classList.contains('piece')) {
+        oSquareTarget = oTarget.parentNode;
+    }
+    if (oSquareTarget && oSquareTarget.classList.contains('square')) {
+        sMovingToSquareId = oSquareTarget ? oSquareTarget.id : 'none';
+        console.log(`moved piece '${sMovingPieceId}' from ${sMovingFromSquareId} to ${sMovingToSquareId}`);
+        updateChessboardMove();
+        redrawChessboardMove();
+        clearMovingPieces();
+    }
 }
 
 const clearMovingPieces = function () {
@@ -117,12 +123,30 @@ const clearMovingPieces = function () {
     sMovingPieceId = null;
 }
 
-const updateChessboard = function () {
+const killPiece = function (sSquareId) {
+    const oSquareNode = getNodeFromId(sSquareId);
+    const sPieceId = oChessboard[sSquareId];
+    const oPieceNode = getNodeFromId(sPieceId);
+    if (oSquareNode && oPieceNode) {
+        oSquareNode.removeChild(oPieceNode);
+    }
+    if (sPieceId) {
+        const sDiscardForPieceId = sPieceId.substring(0, 1);
+        const sDiscardForPiece = sDiscardForPieceId === 'b' ? 'blackDiscard' : 'whiteDiscard';
+        const oDiscardForPiece = document.getElementById(sDiscardForPiece);
+        oDiscardForPiece.appendChild(oPieceNode);
+    }
+}
+
+const updateChessboardMove = function () {
     oChessboard[sMovingFromSquareId] = '';
+    if (oChessboard[sMovingToSquareId].length > 0) {
+        killPiece(sMovingToSquareId);
+    }
     oChessboard[sMovingToSquareId] = sMovingPieceId;
 }
 
-const redrawChessboard = function () {
+const redrawChessboardMove = function () {
     const oMovedFromSquareNode = getNodeFromId(sMovingFromSquareId);
     const oMovedPieceNode = getNodeFromId(sMovingPieceId);
     const oMovedToSquareNode = getNodeFromId(sMovingToSquareId);
@@ -143,6 +167,8 @@ const drawGameboard = function (oChessboard) {
     const nSquareSize = nMaximumBoardWidth / NUM_RANKS;
     let oDiscardBlackDiv = document.createElement('div');
     let oDiscardWhiteDiv = document.createElement('div');
+    oDiscardBlackDiv.id = 'blackDiscard';
+    oDiscardWhiteDiv.id = 'whiteDiscard';
     oDiscardBlackDiv.style.width = nMaximumBoardWidth;
     oDiscardBlackDiv.style.height = nSquareSize;
     oDiscardWhiteDiv.style.width = nMaximumBoardWidth;

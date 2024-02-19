@@ -76,6 +76,12 @@ const isSquareColorHighOrLow = function (nRankIndex, nFileIndex) {
     return (nRankIndex + nFileIndex) % 2 == 0 ? false : true;
 }
 
+const onSquareDrag = function (oEvent) {
+    const sTarget = oEvent.target;
+    const sSquareId = sTarget ? sTarget.id : 'none';
+    console.log(`${sSquareId} dragged`);
+}
+
 const drawChessboard = function (oChessboard) {
     let oGameDiv = document.createElement('div');
     let oChessboardDiv = document.createElement('div');
@@ -107,6 +113,7 @@ const drawChessboard = function (oChessboard) {
             oDiv.style.height = nSquareSize;
             bHigh = isSquareColorHighOrLow(nRankIndex, nFileIndex);
             oDiv.classList.add(bHigh ? 'high' : 'low');
+            oDiv.addEventListener('dragstart', onSquareDrag);
             oChessboardDiv.appendChild(oDiv);
             let sPiece = oChessboard[`${sFile}${nRank}`];
             if (sPiece.length > 0) {

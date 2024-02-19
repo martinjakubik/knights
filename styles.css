@@ -7,7 +7,7 @@ div#chessboard {
     flex-wrap: wrap;
 }
 
-div.square{
+div.square, div.piece {
     background-size: contain;
     background-position-x: center;
     background-repeat: no-repeat;
@@ -21,50 +21,50 @@ div.square.low {
     background-color: rgb(86, 50, 27);
 }
 
-div.square.wp {
+div.piece.wp {
     background-image: url('piece-pawn.w.forhtml.png');
 }
 
-div.square.bp {
+div.piece.bp {
     background-image: url('piece-pawn.b.forhtml.png');
 }
 
-div.square.wr {
+div.piece.wr {
     background-image: url('piece-rook.w.forhtml.png');
 }
 
-div.square.br {
+div.piece.br {
     background-image: url('piece-rook.b.forhtml.png');
 }
 
-div.square.wn {
+div.piece.wn {
     background-image: url('piece-knight.w.forhtml.png');
 }
 
-div.square.bn {
+div.piece.bn {
     background-image: url('piece-knight.b.forhtml.png');
 }
 
-div.square.wb {
+div.piece.wb {
     background-image: url('piece-bishop.w.forhtml.png');
 }
 
-div.square.bb {
+div.piece.bb {
     background-image: url('piece-bishop.b.forhtml.png');
 }
 
-div.square.wq {
+div.piece.wq {
     background-image: url('piece-queen.w.forhtml.png');
 }
 
-div.square.bq {
+div.piece.bq {
     background-image: url('piece-queen.b.forhtml.png');
 }
 
-div.square.wk {
+div.piece.wk {
     background-image: url('piece-king.w.forhtml.png');
 }
 
-div.square.bk {
+div.piece.bk {
     background-image: url('piece-king.b.forhtml.png');
 }

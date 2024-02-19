@@ -1,6 +1,8 @@
 let oChessboard = {};
 const NUM_RANKS = 8;
 const NUM_FILES = 8;
+// files: a, b, c, ..., h
+// ranks: 1, 2, 3, ..., 8
 const aFiles = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 const aImages = {
     'r': 'rook',
@@ -12,39 +14,43 @@ const aImages = {
 }
 
 CHESSBOARD_START = {
-    'a1': 'wr',
-    'b1': 'wn',
-    'c1': 'wb',
+    'a1': 'wr1',
+    'b1': 'wn1',
+    'c1': 'wb1',
     'd1': 'wq',
     'e1': 'wk',
-    'f1': 'wb',
-    'g1': 'wn',
-    'h1': 'wr',
-    'a2': 'wp',
-    'b2': 'wp',
-    'c2': 'wp',
-    'd2': 'wp',
-    'e2': 'wp',
-    'f2': 'wp',
-    'g2': 'wp',
-    'h2': 'wp',
-    'a8': 'br',
-    'b8': 'bn',
-    'c8': 'bb',
+    'f1': 'wb2',
+    'g1': 'wn2',
+    'h1': 'wr2',
+    'a2': 'wp1',
+    'b2': 'wp2',
+    'c2': 'wp3',
+    'd2': 'wp4',
+    'e2': 'wp5',
+    'f2': 'wp6',
+    'g2': 'wp7',
+    'h2': 'wp8',
+    'a8': 'br1',
+    'b8': 'bn1',
+    'c8': 'bb1',
     'd8': 'bq',
     'e8': 'bk',
-    'f8': 'bb',
-    'g8': 'bn',
-    'h8': 'br',
-    'a7': 'bp',
-    'b7': 'bp',
-    'c7': 'bp',
-    'd7': 'bp',
-    'e7': 'bp',
-    'f7': 'bp',
-    'g7': 'bp',
-    'h7': 'bp'
-}
+    'f8': 'bb2',
+    'g8': 'bn2',
+    'h8': 'br2',
+    'a7': 'bp1',
+    'b7': 'bp2',
+    'c7': 'bp3',
+    'd7': 'bp4',
+    'e7': 'bp5',
+    'f7': 'bp6',
+    'g7': 'bp7',
+    'h7': 'bp8'
+};
+
+let sMovingPieceId = '';
+let sMovingFromSquareId = '';
+let sMovingToSquareId = '';
 
 const clearChessboard = function () {
     let sSquareKey = '';
@@ -76,10 +82,54 @@ const isSquareColorHighOrLow = function (nRankIndex, nFileIndex) {
     return (nRankIndex + nFileIndex) % 2 == 0 ? false : true;
 }
 
-const onSquareDrag = function (oEvent) {
-    const sTarget = oEvent.target;
-    const sSquareId = sTarget ? sTarget.id : 'none';
-    console.log(`${sSquareId} dragged`);
+const getSquareIdFromPieceNode = function (oPieceNode) {
+    const oSquareNode = oPieceNode ? oPieceNode.parentNode : null;
+    return oSquareNode ? oSquareNode.id : null;
+}
+
+const getNodeFromId = function (sId) {
+    return oDiv = document.getElementById(sId);
+}
+
+const onPieceDragStart = function (oEvent) {
+    const oTarget = oEvent.target;
+    sMovingFromSquareId = getSquareIdFromPieceNode(oTarget);
+    sMovingPieceId = oChessboard[sMovingFromSquareId];
+    console.log(`moving piece '${sMovingPieceId}' from ${sMovingFromSquareId}`);
+}
+
+const onDragoverPreventDefault = function (oEvent) {
+    oEvent.preventDefault();
+}
+
+const onSquareDrop = function (oEvent) {
+    const oTarget = oEvent.target;
+    sMovingToSquareId = oTarget ? oTarget.id : 'none';
+    console.log(`moved piece '${sMovingPieceId}' from ${sMovingFromSquareId} to ${sMovingToSquareId}`);
+    updateChessboard();
+    redrawChessboard();
+    clearMovingPieces();
+}
+
+const clearMovingPieces = function () {
+    sMovingFromSquareId = null;
+    sMovingToSquareId = null;
+    sMovingPieceId = null;
+}
+
+const updateChessboard = function () {
+    oChessboard[sMovingFromSquareId] = '';
+    oChessboard[sMovingToSquareId] = sMovingPieceId;
+}
+
+const redrawChessboard = function () {
+    const oMovedFromSquareNode = getNodeFromId(sMovingFromSquareId);
+    const oMovedPieceNode = getNodeFromId(sMovingPieceId);
+    const oMovedToSquareNode = getNodeFromId(sMovingToSquareId);
+    if (oMovedFromSquareNode && oMovedPieceNode && oMovedFromSquareNode) {
+        oMovedFromSquareNode.removeChild(oMovedPieceNode);
+        oMovedToSquareNode.appendChild(oMovedPieceNode);
+    }
 }
 
 const drawChessboard = function (oChessboard) {
@@ -105,19 +155,30 @@ const drawChessboard = function (oChessboard) {
     for (nRankIndex = NUM_RANKS - 1; nRankIndex >= 0; nRankIndex--) {
         let nRank = nRankIndex + 1;
         for (nFileIndex = 0; nFileIndex < NUM_FILES; nFileIndex++) {
-            let oDiv = document.createElement('div');
+            let oSquareDiv = document.createElement('div');
             let sFile = aFiles[nFileIndex];
-            oDiv.classList.add('square');
-            oDiv.id = `${sFile}${nRank}`;
-            oDiv.style.width = nSquareSize;
-            oDiv.style.height = nSquareSize;
+            oSquareDiv.classList.add('square');
+            oSquareDiv.id = `${sFile}${nRank}`;
+            oSquareDiv.style.width = nSquareSize;
+            oSquareDiv.style.height = nSquareSize;
             bHigh = isSquareColorHighOrLow(nRankIndex, nFileIndex);
-            oDiv.classList.add(bHigh ? 'high' : 'low');
-            oDiv.addEventListener('dragstart', onSquareDrag);
-            oChessboardDiv.appendChild(oDiv);
-            let sPiece = oChessboard[`${sFile}${nRank}`];
-            if (sPiece.length > 0) {
-                oDiv.classList.add(sPiece);
+            oSquareDiv.classList.add(bHigh ? 'high' : 'low');
+            oSquareDiv.addEventListener('dragover', onDragoverPreventDefault);
+            oSquareDiv.addEventListener('drop', onSquareDrop);
+            oChessboardDiv.appendChild(oSquareDiv);
+            let sPieceId = oChessboard[`${sFile}${nRank}`];
+            let sPieceClass = sPieceId.substring(0, 2);
+            if (sPieceId.length > 0) {
+                let oPieceDiv = document.createElement('div');
+                oPieceDiv.id = sPieceId;
+                oPieceDiv.classList.add('piece');
+                oPieceDiv.classList.add(sPieceClass);
+                oPieceDiv.style.width = nSquareSize;
+                oPieceDiv.style.height = nSquareSize;
+                oPieceDiv.draggable = true;
+                oPieceDiv.addEventListener('dragstart', onPieceDragStart);
+                oSquareDiv.addEventListener('dragover', onDragoverPreventDefault);
+                oSquareDiv.appendChild(oPieceDiv);
             }
         };
     }

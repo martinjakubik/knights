@@ -49,6 +49,8 @@ const CHESSBOARD_START = {
     'h7': 'bp8'
 };
 
+const sKnightbaseUrl = 'https://www.superguppy.io:2172/knightbase';
+
 let sMovingPieceId = '';
 let sMovingFromSquareId = '';
 let sMovingToSquareId = '';
@@ -162,6 +164,24 @@ const redrawChessboardMove = function () {
     }
 }
 
+const transformChessboardToKnightbaseGame = function () {
+
+}
+
+const saveGame = async function () {
+    const oFormBody = new URLSearchParams();
+    oFormBody.set('game', this.model.name);
+
+    const oPostOptions = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: oFormBody
+    };
+    const oResponse = await fetch(sKnightbaseUrl, oPostOptions)
+}
+
 const drawGameboard = function (oChessboard) {
     let oGameboardDiv = document.createElement('div');
     oGameboardDiv.id = 'gameboard';
@@ -175,10 +195,17 @@ const drawGameboard = function (oChessboard) {
     let oDiscardWhiteDiv = document.createElement('div');
     oDiscardBlackDiv.id = 'blackDiscard';
     oDiscardWhiteDiv.id = 'whiteDiscard';
+    const oSaveGameButton = document.createElement('button');
+    const oLoadGameButton = document.createElement('button');
+    oSaveGameButton.id = 'savegamebutton';
+    oLoadGameButton.id = 'loadgamebutton';
+    oSaveGameButton.innerText = 'Save';
+    oLoadGameButton.innerText = 'Load';
     oGameboardDiv.appendChild(oChessboardDiv);
     oDiscardDiv.appendChild(oDiscardBlackDiv);
     oDiscardDiv.appendChild(oDiscardWhiteDiv);
     oGameboardDiv.appendChild(oDiscardDiv);
+    oGameboardDiv.appendChild(oSaveGameButton);
     if (isTallScreen()) {
         oGameboardDiv.style.width = nMaximumBoardWidth;
         oGameboardDiv.style.flexDirection = 'column';

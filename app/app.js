@@ -205,6 +205,7 @@ const drawGameboard = function (oChessboard) {
     oLoadGameButton.id = 'loadgamebutton';
     oSaveGameButton.innerText = 'Save';
     oLoadGameButton.innerText = 'Load';
+    oSaveGameButton.onclick = saveGame;
     oGameboardDiv.appendChild(oChessboardDiv);
     oDiscardDiv.appendChild(oDiscardBlackDiv);
     oDiscardDiv.appendChild(oDiscardWhiteDiv);

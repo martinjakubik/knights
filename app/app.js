@@ -171,7 +171,7 @@ const transformChessboardToKnightbaseGame = function () {
 
 const saveGame = async function () {
     const nGame = 0;
-    const sUrl = `sKnightbaseUrl/${nGame}/save`;
+    const sUrl = `${sKnightbaseUrl}/${nGame}/save`;
     const oFormBody = new URLSearchParams();
     const oKnightbaseGame = transformChessboardToKnightbaseGame();
     oFormBody.set('game', oKnightbaseGame);

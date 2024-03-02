@@ -96,7 +96,7 @@ const getSquareIdFromPieceNode = function (oPieceNode) {
 }
 
 const getNodeFromId = function (sId) {
-    return oDiv = document.getElementById(sId);
+    return document.getElementById(sId);
 }
 
 const onPieceDragStart = function (oEvent) {

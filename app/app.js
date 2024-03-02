@@ -1,3 +1,4 @@
+//import * as learnhypertext from "lib/learnhypertext.mjs";
 let oChessboard = {};
 const NUM_RANKS = 8;
 const NUM_FILES = 8;
@@ -13,7 +14,7 @@ const aImages = {
     'p': 'pawn'
 }
 
-CHESSBOARD_START = {
+const CHESSBOARD_START = {
     'a1': 'wr1',
     'b1': 'wn1',
     'c1': 'wb1',
@@ -54,9 +55,9 @@ let sMovingToSquareId = '';
 
 const clearChessboard = function () {
     let sSquareKey = '';
-    for (nRankIndex = 0; nRankIndex < NUM_RANKS; nRankIndex++) {
+    for (let nRankIndex = 0; nRankIndex < NUM_RANKS; nRankIndex++) {
         let nRank = nRankIndex + 1;
-        for (nFileIndex = 0; nFileIndex < NUM_FILES; nFileIndex++) {
+        for (let nFileIndex = 0; nFileIndex < NUM_FILES; nFileIndex++) {
             let sFile = aFiles[nFileIndex];
             sSquareKey = `${sFile}${nRank}`;
             oChessboard[sSquareKey] = '';
@@ -190,9 +191,9 @@ const drawGameboard = function (oChessboard) {
     oDiscardWhiteDiv.style.width = 4 * nMaximumBoardWidth / NUM_FILES;
     document.body.appendChild(oGameboardDiv);
     let bHigh = true;
-    for (nRankIndex = NUM_RANKS - 1; nRankIndex >= 0; nRankIndex--) {
+    for (let nRankIndex = NUM_RANKS - 1; nRankIndex >= 0; nRankIndex--) {
         let nRank = nRankIndex + 1;
-        for (nFileIndex = 0; nFileIndex < NUM_FILES; nFileIndex++) {
+        for (let nFileIndex = 0; nFileIndex < NUM_FILES; nFileIndex++) {
             let oSquareDiv = document.createElement('div');
             let sFile = aFiles[nFileIndex];
             oSquareDiv.classList.add('square');

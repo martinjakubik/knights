@@ -1,5 +1,13 @@
 {
+  "type": "module",
   "devDependencies": {
     "eslint": "^8.56.0"
+  },
+  "dependencies": {
+    "learnhypertext": "^2.1.0"
+  },
+  "scripts": {
+    "start": "node dev/server.js",
+    "postinstall": "node postinstall.js"
   }
 }

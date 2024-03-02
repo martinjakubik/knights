@@ -4,3 +4,7 @@ build
 
 # Dependency directories
 node_modules/
+
+package.sh
+prepare.sh
+upload.sh

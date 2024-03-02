@@ -199,18 +199,10 @@ const drawGameboard = function (oChessboard) {
     let oDiscardWhiteDiv = document.createElement('div');
     oDiscardBlackDiv.id = 'blackDiscard';
     oDiscardWhiteDiv.id = 'whiteDiscard';
-    const oSaveGameButton = document.createElement('button');
-    const oLoadGameButton = document.createElement('button');
-    oSaveGameButton.id = 'savegamebutton';
-    oLoadGameButton.id = 'loadgamebutton';
-    oSaveGameButton.innerText = 'Save';
-    oLoadGameButton.innerText = 'Load';
-    oSaveGameButton.onclick = saveGame;
     oGameboardDiv.appendChild(oChessboardDiv);
     oDiscardDiv.appendChild(oDiscardBlackDiv);
     oDiscardDiv.appendChild(oDiscardWhiteDiv);
     oGameboardDiv.appendChild(oDiscardDiv);
-    oGameboardDiv.appendChild(oSaveGameButton);
     if (isTallScreen()) {
         oGameboardDiv.style.width = nMaximumBoardWidth;
         oGameboardDiv.style.flexDirection = 'column';
@@ -222,6 +214,14 @@ const drawGameboard = function (oChessboard) {
     oDiscardBlackDiv.style.width = 4 * nMaximumBoardWidth / NUM_FILES;
     oDiscardWhiteDiv.style.width = 4 * nMaximumBoardWidth / NUM_FILES;
     document.body.appendChild(oGameboardDiv);
+    const oSaveGameButton = document.createElement('button');
+    const oLoadGameButton = document.createElement('button');
+    oSaveGameButton.id = 'savegamebutton';
+    oLoadGameButton.id = 'loadgamebutton';
+    oSaveGameButton.innerText = 'Save';
+    oLoadGameButton.innerText = 'Load';
+    oSaveGameButton.onclick = saveGame;
+    document.body.appendChild(oSaveGameButton);
     let bHigh = true;
     for (let nRankIndex = NUM_RANKS - 1; nRankIndex >= 0; nRankIndex--) {
         let nRank = nRankIndex + 1;

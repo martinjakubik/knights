@@ -165,12 +165,16 @@ const redrawChessboardMove = function () {
 }
 
 const transformChessboardToKnightbaseGame = function () {
-
+    const oKnightbaseGame = JSON.stringify(oChessboard);
+    return oKnightbaseGame;
 }
 
 const saveGame = async function () {
+    const nGame = 0;
+    const sUrl = `sKnightbaseUrl/${nGame}/save`;
     const oFormBody = new URLSearchParams();
-    oFormBody.set('game', this.model.name);
+    const oKnightbaseGame = transformChessboardToKnightbaseGame();
+    oFormBody.set('game', oKnightbaseGame);
 
     const oPostOptions = {
         method: 'POST',
@@ -179,7 +183,7 @@ const saveGame = async function () {
         },
         body: oFormBody
     };
-    const oResponse = await fetch(sKnightbaseUrl, oPostOptions)
+    const oResponse = await fetch(sUrl, oPostOptions)
 }
 
 const drawGameboard = function (oChessboard) {

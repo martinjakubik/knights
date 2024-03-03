@@ -49,7 +49,7 @@ const CHESSBOARD_START = {
     'h7': 'bp8'
 };
 
-const sKnightbaseUrl = 'https://www.superguppy.io:2172/knightbase';
+const sKnightbaseUrl = 'https://www.supertitle.org:2172/knightbase';
 
 let sMovingPieceId = '';
 let sMovingFromSquareId = '';

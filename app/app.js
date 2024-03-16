@@ -1,4 +1,6 @@
 //import * as learnhypertext from "lib/learnhypertext.mjs";
+const STYLE_PX = 'PX';
+
 let oChessboard = {};
 const NUM_RANKS = 8;
 const NUM_FILES = 8;
@@ -204,15 +206,15 @@ const drawGameboard = function (oChessboard) {
     oDiscardDiv.appendChild(oDiscardWhiteDiv);
     oGameboardDiv.appendChild(oDiscardDiv);
     if (isTallScreen()) {
-        oGameboardDiv.style.width = nMaximumBoardWidth;
+        oGameboardDiv.style.width = nMaximumBoardWidth + STYLE_PX;
         oGameboardDiv.style.flexDirection = 'column';
     } else {
-        oGameboardDiv.style.width = nMaximumBoardWidth + 4 * nMaximumBoardWidth / NUM_FILES;
+        oGameboardDiv.style.width = (nMaximumBoardWidth + 4 * nMaximumBoardWidth / NUM_FILES) + STYLE_PX;
     }
-    oChessboardDiv.style.width = nMaximumBoardWidth;
-    oChessboardDiv.style.height = nMaximumBoardWidth;
-    oDiscardBlackDiv.style.width = 4 * nMaximumBoardWidth / NUM_FILES;
-    oDiscardWhiteDiv.style.width = 4 * nMaximumBoardWidth / NUM_FILES;
+    oChessboardDiv.style.width = nMaximumBoardWidth + STYLE_PX;
+    oChessboardDiv.style.height = nMaximumBoardWidth + STYLE_PX;
+    oDiscardBlackDiv.style.width = (4 * nMaximumBoardWidth / NUM_FILES) + STYLE_PX;
+    oDiscardWhiteDiv.style.width = (4 * nMaximumBoardWidth / NUM_FILES) + STYLE_PX;
     document.body.appendChild(oGameboardDiv);
     const oSaveGameButton = document.createElement('button');
     const oLoadGameButton = document.createElement('button');
@@ -230,8 +232,8 @@ const drawGameboard = function (oChessboard) {
             let sFile = aFiles[nFileIndex];
             oSquareDiv.classList.add('square');
             oSquareDiv.id = `${sFile}${nRank}`;
-            oSquareDiv.style.width = nSquareSize;
-            oSquareDiv.style.height = nSquareSize;
+            oSquareDiv.style.width = nSquareSize + STYLE_PX;
+            oSquareDiv.style.height = nSquareSize + STYLE_PX;
             bHigh = isSquareColorHighOrLow(nRankIndex, nFileIndex);
             oSquareDiv.classList.add(bHigh ? 'high' : 'low');
             oSquareDiv.addEventListener('dragover', onDragoverPreventDefault);
@@ -244,8 +246,8 @@ const drawGameboard = function (oChessboard) {
                 oPieceDiv.id = sPieceId;
                 oPieceDiv.classList.add('piece');
                 oPieceDiv.classList.add(sPieceClass);
-                oPieceDiv.style.width = nSquareSize;
-                oPieceDiv.style.height = nSquareSize;
+                oPieceDiv.style.width = nSquareSize + STYLE_PX;
+                oPieceDiv.style.height = nSquareSize + STYLE_PX;
                 oPieceDiv.draggable = true;
                 oPieceDiv.addEventListener('dragstart', onPieceDragStart);
                 oSquareDiv.addEventListener('dragover', onDragoverPreventDefault);

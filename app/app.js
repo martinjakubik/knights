@@ -85,6 +85,7 @@ const isTallScreen = function () {
     const nViewportHeight = document.documentElement.clientHeight;
     return (nViewportWidth <= nViewportHeight);
 }
+
 const getMaximumBoardDisplaySize = function () {
     const nViewportWidth = document.documentElement.clientWidth;
     const nViewportHeight = document.documentElement.clientHeight;

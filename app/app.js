@@ -188,6 +188,10 @@ const saveGame = async function () {
     const oResponse = await fetch(sUrl, oPostOptions)
 }
 
+const getWidthOfDiscardArea = function (nMaximumBoardWidth, NUM_FILES) {
+    return 4 * nMaximumBoardWidth / NUM_FILES;
+}
+
 const drawGameboard = function (oChessboard) {
     let oGameboardDiv = document.createElement('div');
     oGameboardDiv.id = 'gameboard';
@@ -209,12 +213,12 @@ const drawGameboard = function (oChessboard) {
         oGameboardDiv.style.width = nMaximumBoardWidth + STYLE_PX;
         oGameboardDiv.style.flexDirection = 'column';
     } else {
-        oGameboardDiv.style.width = (nMaximumBoardWidth + 4 * nMaximumBoardWidth / NUM_FILES) + STYLE_PX;
+        oGameboardDiv.style.width = (nMaximumBoardWidth + getWidthOfDiscardArea(nMaximumBoardWidth, NUM_FILES)) + STYLE_PX;
     }
     oChessboardDiv.style.width = nMaximumBoardWidth + STYLE_PX;
     oChessboardDiv.style.height = nMaximumBoardWidth + STYLE_PX;
-    oDiscardBlackDiv.style.width = (4 * nMaximumBoardWidth / NUM_FILES) + STYLE_PX;
-    oDiscardWhiteDiv.style.width = (4 * nMaximumBoardWidth / NUM_FILES) + STYLE_PX;
+    oDiscardBlackDiv.style.width = getWidthOfDiscardArea(nMaximumBoardWidth, NUM_FILES) + STYLE_PX;
+    oDiscardWhiteDiv.style.width = getWidthOfDiscardArea(nMaximumBoardWidth, NUM_FILES) + STYLE_PX;
     document.body.appendChild(oGameboardDiv);
     const oSaveGameButton = document.createElement('button');
     const oLoadGameButton = document.createElement('button');

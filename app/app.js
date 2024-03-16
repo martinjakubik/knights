@@ -1,11 +1,6 @@
 //import * as learnhypertext from "lib/learnhypertext.mjs";
 const STYLE_PX = 'PX';
 
-let oGameboard = {
-    chessboard: {},
-    whiteDiscard: [],
-    blackDiscard: []
-};
 const NUM_RANKS = 8;
 const NUM_FILES = 8;
 // files: a, b, c, ..., h
@@ -19,6 +14,14 @@ const aImages = {
     'k': 'king',
     'p': 'pawn'
 }
+const WHITE_DISCARD = 'whiteDiscard';
+const BLACK_DISCARD = 'blackDiscard';
+
+let oGameboard = {
+    chessboard: {}
+};
+oGameboard[WHITE_DISCARD] = [];
+oGameboard[BLACK_DISCARD] = [];
 
 const CHESSBOARD_START = {
     'a1': 'wr1',
@@ -130,7 +133,7 @@ const onPieceDragStart = function (oEvent) {
         sMovingPieceId = oGameboard.chessboard[sMovingFromSquareId];
         console.log(`moving piece '${sMovingPieceId}' from ${sMovingFromSquareId}`);
     } else if (oOriginOfMove && oOriginOfMove.originType == 1) {
-        sMovingFromDiscardAreaId = oOriginOfMove.discardArea === 'w' ? 'whiteDiscard' : 'blackDiscard';
+        sMovingFromDiscardAreaId = oOriginOfMove.discardArea === 'w' ? WHITE_DISCARD : BLACK_DISCARD;
         sMovingPieceId = oGameboard[sMovingFromDiscardAreaId][0];
         console.log(`moving piece '${sMovingPieceId}' from ${sMovingFromDiscardAreaId}`);
     }
@@ -170,7 +173,7 @@ const killPiece = function (sSquareId) {
     }
     if (sPieceId) {
         const sDiscardAreaForPieceId = sPieceId.substring(0, 1);
-        const sDiscardAreaForPiece = sDiscardAreaForPieceId === 'b' ? 'blackDiscard' : 'whiteDiscard';
+        const sDiscardAreaForPiece = sDiscardAreaForPieceId === 'b' ? BLACK_DISCARD : WHITE_DISCARD;
         const oDiscardAreaForPiece = document.getElementById(sDiscardAreaForPiece);
         oDiscardAreaForPiece.appendChild(oPieceNode);
         oGameboard[sDiscardAreaForPiece].push(sPieceId);
@@ -232,8 +235,8 @@ const drawGameboard = function (oGameboard) {
     const nSquareSize = nMaximumBoardWidth / NUM_RANKS;
     let oDiscardBlackDiv = document.createElement('div');
     let oDiscardWhiteDiv = document.createElement('div');
-    oDiscardBlackDiv.id = 'blackDiscard';
-    oDiscardWhiteDiv.id = 'whiteDiscard';
+    oDiscardBlackDiv.id = BLACK_DISCARD;
+    oDiscardWhiteDiv.id = WHITE_DISCARD;
     oGameboardDiv.appendChild(oChessboardDiv);
     oDiscardDiv.appendChild(oDiscardBlackDiv);
     oDiscardDiv.appendChild(oDiscardWhiteDiv);

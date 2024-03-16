@@ -193,16 +193,20 @@ const redrawChessboardMove = function () {
     }
 }
 
-const transformChessboardToKnightbaseGame = function () {
-    const oKnightbaseGame = JSON.stringify(oGameboard.chessboard);
+const transformGameboardToKnightbaseGame = function () {
+    const oKnightbaseGame = JSON.stringify(oGameboard);
     return oKnightbaseGame;
+}
+
+const transformKnightbaseGameToGameboard = function (oKnightbaseGame) {
+    oGameboard = JSON.parse(oGameboard);
 }
 
 const saveGame = async function () {
     const nGame = 0;
     const sUrl = `${sKnightbaseUrl}/${nGame}/save`;
     const oFormBody = new URLSearchParams();
-    const oKnightbaseGame = transformChessboardToKnightbaseGame();
+    const oKnightbaseGame = transformGameboardToKnightbaseGame();
     oFormBody.set('game', oKnightbaseGame);
 
     const oPostOptions = {
@@ -212,7 +216,18 @@ const saveGame = async function () {
         },
         body: oFormBody
     };
-    const oResponse = await fetch(sUrl, oPostOptions)
+    const oResponse = await fetch(sUrl, oPostOptions);
+}
+
+const loadGame = async function () {
+    const nGame = 0;
+    const sUrl = `${sKnightbaseUrl}/${nGame}/load`;
+
+    const oGetOptions = {
+        method: 'GET',
+    };
+    const oResponse = await fetch(sUrl, oGetOptions);
+    console.log(transformGameboardToKnightbaseGame(oResponse.body));
 }
 
 const getWidthOfDiscardArea = function (nMaximumBoardWidth, NUM_FILES) {
@@ -254,7 +269,9 @@ const drawGameboard = function (oGameboard) {
     oSaveGameButton.innerText = 'Save';
     oLoadGameButton.innerText = 'Load';
     oSaveGameButton.onclick = saveGame;
+    oLoadGameButton.onclick = loadGame;
     document.body.appendChild(oSaveGameButton);
+    document.body.appendChild(oLoadGameButton);
     let bHigh = true;
     for (let nRankIndex = NUM_RANKS - 1; nRankIndex >= 0; nRankIndex--) {
         let nRank = nRankIndex + 1;

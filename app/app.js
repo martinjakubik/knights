@@ -60,10 +60,8 @@ const CHESSBOARD_START = {
 
 const sKnightbaseUrl = 'https://www.supertitle.org:2721/knightbase';
 
-let sMovingPieceId = '';
-let sMovingFromSquareId = '';
-let sMovingToSquareId = '';
-let sMovingFromDiscardAreaId = '';
+let oOriginOfMove = {};
+let oTargetOfMove = {};
 
 const clearChessboard = function () {
     let sSquareKey = '';
@@ -101,23 +99,13 @@ const isSquareColorHighOrLow = function (nRankIndex, nFileIndex) {
     return (nRankIndex + nFileIndex) % 2 == 0 ? false : true;
 }
 
-const getDiscardIdFromNode = function (oNode) {
-    return oNode.id.substring(0, 1);
-}
-
 const getMoveOriginFromPieceNode = function (oPieceNode) {
     let oOriginOfMove = {
-        originType: 0
-    }
-    let bOriginOfMove = 0;
+        pieceId: oPieceNode.id
+    };
     const oParentNode = oPieceNode ? oPieceNode.parentNode : null;
-    bOriginOfMove = oParentNode ? (oParentNode.classList.contains('square') ? 0 : 1) : null;
-    if (bOriginOfMove == 0) {
-        oOriginOfMove.squareNode = oPieceNode ? oPieceNode.parentNode : null;
-    } else if (bOriginOfMove == 1) {
-        oOriginOfMove.originType = 1;
-        oOriginOfMove.discardArea = getDiscardIdFromNode(oParentNode);
-    }
+    oOriginOfMove.originId = oPieceNode ? oPieceNode.parentNode.id : null;
+    oOriginOfMove.originType = oParentNode ? (oParentNode.classList.contains('square') ? 0 : 1) : null;
     return oOriginOfMove;
 }
 
@@ -127,16 +115,8 @@ const getNodeFromId = function (sId) {
 
 const onPieceDragStart = function (oEvent) {
     const oTarget = oEvent.target;
-    const oOriginOfMove = getMoveOriginFromPieceNode(oTarget);
-    if (oOriginOfMove && oOriginOfMove.originType == 0) {
-        sMovingFromSquareId = oOriginOfMove.squareNode;
-        sMovingPieceId = oGameboard.chessboard[sMovingFromSquareId];
-        console.log(`moving piece '${sMovingPieceId}' from ${sMovingFromSquareId}`);
-    } else if (oOriginOfMove && oOriginOfMove.originType == 1) {
-        sMovingFromDiscardAreaId = oOriginOfMove.discardArea === 'w' ? WHITE_DISCARD : BLACK_DISCARD;
-        sMovingPieceId = oGameboard[sMovingFromDiscardAreaId][0];
-        console.log(`moving piece '${sMovingPieceId}' from ${sMovingFromDiscardAreaId}`);
-    }
+    oOriginOfMove = getMoveOriginFromPieceNode(oTarget);
+    console.log(`moving piece '${oOriginOfMove.pieceId}' from ${oOriginOfMove.originId}`);
 }
 
 const onDragoverPreventDefault = function (oEvent) {
@@ -150,18 +130,16 @@ const onSquareDrop = function (oEvent) {
         oSquareTarget = oTarget.parentNode;
     }
     if (oSquareTarget && oSquareTarget.classList.contains('square')) {
-        sMovingToSquareId = oSquareTarget ? oSquareTarget.id : 'none';
-        console.log(`moved piece '${sMovingPieceId}' from ${sMovingFromSquareId} to ${sMovingToSquareId}`);
+        oTargetOfMove.targetId = oSquareTarget ? oSquareTarget.id : 'none';
+        console.log(`moved piece '${oOriginOfMove.pieceId}' from ${oOriginOfMove.originId} to ${oTargetOfMove.targetId}`);
         updateChessboardMove();
-        redrawChessboardMove();
         clearMovingPieces();
     }
 }
 
 const clearMovingPieces = function () {
-    sMovingFromSquareId = null;
-    sMovingToSquareId = null;
-    sMovingPieceId = null;
+    oOriginOfMove = {};
+    oTargetOfMove = {};
 }
 
 const killPiece = function (sSquareId) {
@@ -180,21 +158,38 @@ const killPiece = function (sSquareId) {
     }
 }
 
-const updateChessboardMove = function () {
-    oGameboard.chessboard[sMovingFromSquareId] = '';
-    if (oGameboard.chessboard[sMovingToSquareId].length > 0) {
-        killPiece(sMovingToSquareId);
+const updateMoveFromSquareToSquare = function () {
+    oGameboard.chessboard[oOriginOfMove.originId] = '';
+    if (oGameboard.chessboard[oTargetOfMove.targetId].length > 0) {
+        killPiece(oTargetOfMove.targetId);
     }
-    oGameboard.chessboard[sMovingToSquareId] = sMovingPieceId;
+    oGameboard.chessboard[oTargetOfMove.targetId] = oOriginOfMove.pieceId;
+    redrawChessboardMove();
+}
+
+const updateMoveFromDiscardToSquare = function () {
+    if (oGameboard.chessboard[oTargetOfMove.targetId].length == 0) {
+        const nIndexOfPieceInDiscard = oGameboard[oOriginOfMove.originId].indexOf(oOriginOfMove.pieceId);
+        oGameboard[oOriginOfMove.originId].splice(nIndexOfPieceInDiscard, 1);
+        redrawChessboardMove();
+    }
+}
+
+const updateChessboardMove = function () {
+    if (oOriginOfMove.originType == 0) {
+        updateMoveFromSquareToSquare();
+    } else {
+        updateMoveFromDiscardToSquare();
+    }
 }
 
 const redrawChessboardMove = function () {
-    const oMovedFromSquareNode = getNodeFromId(sMovingFromSquareId);
-    const oMovedPieceNode = getNodeFromId(sMovingPieceId);
-    const oMovedToSquareNode = getNodeFromId(sMovingToSquareId);
-    if (oMovedFromSquareNode && oMovedPieceNode && oMovedFromSquareNode) {
-        oMovedFromSquareNode.removeChild(oMovedPieceNode);
-        oMovedToSquareNode.appendChild(oMovedPieceNode);
+    const oMovedFromNode = getNodeFromId(oOriginOfMove.originId);
+    const oMovedPieceNode = getNodeFromId(oOriginOfMove.pieceId);
+    const oMovedToNode = getNodeFromId(oTargetOfMove.targetId);
+    if (oMovedFromNode && oMovedPieceNode && oMovedToNode) {
+        oMovedFromNode.removeChild(oMovedPieceNode);
+        oMovedToNode.appendChild(oMovedPieceNode);
     }
 }
 

@@ -60,6 +60,7 @@ const sKnightbaseUrl = 'https://www.supertitle.org:2721/knightbase';
 let sMovingPieceId = '';
 let sMovingFromSquareId = '';
 let sMovingToSquareId = '';
+let sMovingFromDiscardAreaId = '';
 
 const clearChessboard = function () {
     let sSquareKey = '';
@@ -97,9 +98,24 @@ const isSquareColorHighOrLow = function (nRankIndex, nFileIndex) {
     return (nRankIndex + nFileIndex) % 2 == 0 ? false : true;
 }
 
-const getSquareIdFromPieceNode = function (oPieceNode) {
-    const oSquareNode = oPieceNode ? oPieceNode.parentNode : null;
-    return oSquareNode ? oSquareNode.id : null;
+const getDiscardIdFromNode = function (oNode) {
+    return oNode.id.substring(0, 1);
+}
+
+const getMoveOriginFromPieceNode = function (oPieceNode) {
+    let oOriginOfMove = {
+        originType: 0
+    }
+    let bOriginOfMove = 0;
+    const oParentNode = oPieceNode ? oPieceNode.parentNode : null;
+    bOriginOfMove = oParentNode ? (oParentNode.classList.contains('square') ? 0 : 1) : null;
+    if (bOriginOfMove == 0) {
+        oOriginOfMove.squareNode = oPieceNode ? oPieceNode.parentNode : null;
+    } else if (bOriginOfMove == 1) {
+        oOriginOfMove.originType = 1;
+        oOriginOfMove.discardArea = getDiscardIdFromNode(oParentNode);
+    }
+    return oOriginOfMove;
 }
 
 const getNodeFromId = function (sId) {
@@ -108,9 +124,16 @@ const getNodeFromId = function (sId) {
 
 const onPieceDragStart = function (oEvent) {
     const oTarget = oEvent.target;
-    sMovingFromSquareId = getSquareIdFromPieceNode(oTarget);
-    sMovingPieceId = oGameboard.chessboard[sMovingFromSquareId];
-    console.log(`moving piece '${sMovingPieceId}' from ${sMovingFromSquareId}`);
+    const oOriginOfMove = getMoveOriginFromPieceNode(oTarget);
+    if (oOriginOfMove && oOriginOfMove.originType == 0) {
+        sMovingFromSquareId = oOriginOfMove.squareNode;
+        sMovingPieceId = oGameboard.chessboard[sMovingFromSquareId];
+        console.log(`moving piece '${sMovingPieceId}' from ${sMovingFromSquareId}`);
+    } else if (oOriginOfMove && oOriginOfMove.originType == 1) {
+        sMovingFromDiscardAreaId = oOriginOfMove.discardArea === 'w' ? 'whiteDiscard' : 'blackDiscard';
+        sMovingPieceId = oGameboard[sMovingFromDiscardAreaId][0];
+        console.log(`moving piece '${sMovingPieceId}' from ${sMovingFromDiscardAreaId}`);
+    }
 }
 
 const onDragoverPreventDefault = function (oEvent) {

@@ -1,7 +1,11 @@
 //import * as learnhypertext from "lib/learnhypertext.mjs";
 const STYLE_PX = 'PX';
 
-let oChessboard = {};
+let oGameboard = {
+    chessboard: {},
+    whiteDiscard: [],
+    blackDiscard: []
+};
 const NUM_RANKS = 8;
 const NUM_FILES = 8;
 // files: a, b, c, ..., h
@@ -64,7 +68,7 @@ const clearChessboard = function () {
         for (let nFileIndex = 0; nFileIndex < NUM_FILES; nFileIndex++) {
             let sFile = aFiles[nFileIndex];
             sSquareKey = `${sFile}${nRank}`;
-            oChessboard[sSquareKey] = '';
+            oGameboard.chessboard[sSquareKey] = '';
         }
     }
 }
@@ -72,7 +76,7 @@ const clearChessboard = function () {
 const setupChessboard = function (oSavedChessboard) {
     clearChessboard();
     Object.keys(oSavedChessboard).forEach(sSquareKey => {
-        oChessboard[sSquareKey] = oSavedChessboard[sSquareKey];
+        oGameboard.chessboard[sSquareKey] = oSavedChessboard[sSquareKey];
     })
 }
 
@@ -104,7 +108,7 @@ const getNodeFromId = function (sId) {
 const onPieceDragStart = function (oEvent) {
     const oTarget = oEvent.target;
     sMovingFromSquareId = getSquareIdFromPieceNode(oTarget);
-    sMovingPieceId = oChessboard[sMovingFromSquareId];
+    sMovingPieceId = oGameboard.chessboard[sMovingFromSquareId];
     console.log(`moving piece '${sMovingPieceId}' from ${sMovingFromSquareId}`);
 }
 
@@ -135,25 +139,26 @@ const clearMovingPieces = function () {
 
 const killPiece = function (sSquareId) {
     const oSquareNode = getNodeFromId(sSquareId);
-    const sPieceId = oChessboard[sSquareId];
+    const sPieceId = oGameboard.chessboard[sSquareId];
     const oPieceNode = getNodeFromId(sPieceId);
     if (oSquareNode && oPieceNode) {
         oSquareNode.removeChild(oPieceNode);
     }
     if (sPieceId) {
-        const sDiscardForPieceId = sPieceId.substring(0, 1);
-        const sDiscardForPiece = sDiscardForPieceId === 'b' ? 'blackDiscard' : 'whiteDiscard';
-        const oDiscardForPiece = document.getElementById(sDiscardForPiece);
-        oDiscardForPiece.appendChild(oPieceNode);
+        const sDiscardAreaForPieceId = sPieceId.substring(0, 1);
+        const sDiscardAreaForPiece = sDiscardAreaForPieceId === 'b' ? 'blackDiscard' : 'whiteDiscard';
+        const oDiscardAreaForPiece = document.getElementById(sDiscardAreaForPiece);
+        oDiscardAreaForPiece.appendChild(oPieceNode);
+        oGameboard[sDiscardAreaForPiece].push(sPieceId);
     }
 }
 
 const updateChessboardMove = function () {
-    oChessboard[sMovingFromSquareId] = '';
-    if (oChessboard[sMovingToSquareId].length > 0) {
+    oGameboard.chessboard[sMovingFromSquareId] = '';
+    if (oGameboard.chessboard[sMovingToSquareId].length > 0) {
         killPiece(sMovingToSquareId);
     }
-    oChessboard[sMovingToSquareId] = sMovingPieceId;
+    oGameboard.chessboard[sMovingToSquareId] = sMovingPieceId;
 }
 
 const redrawChessboardMove = function () {
@@ -167,7 +172,7 @@ const redrawChessboardMove = function () {
 }
 
 const transformChessboardToKnightbaseGame = function () {
-    const oKnightbaseGame = JSON.stringify(oChessboard);
+    const oKnightbaseGame = JSON.stringify(oGameboard.chessboard);
     return oKnightbaseGame;
 }
 
@@ -192,7 +197,7 @@ const getWidthOfDiscardArea = function (nMaximumBoardWidth, NUM_FILES) {
     return 4 * nMaximumBoardWidth / NUM_FILES;
 }
 
-const drawGameboard = function (oChessboard) {
+const drawGameboard = function (oGameboard) {
     let oGameboardDiv = document.createElement('div');
     oGameboardDiv.id = 'gameboard';
     let oChessboardDiv = document.createElement('div');
@@ -243,7 +248,7 @@ const drawGameboard = function (oChessboard) {
             oSquareDiv.addEventListener('dragover', onDragoverPreventDefault);
             oSquareDiv.addEventListener('drop', onSquareDrop);
             oChessboardDiv.appendChild(oSquareDiv);
-            let sPieceId = oChessboard[`${sFile}${nRank}`];
+            let sPieceId = oGameboard.chessboard[`${sFile}${nRank}`];
             let sPieceClass = sPieceId.substring(0, 2);
             if (sPieceId.length > 0) {
                 let oPieceDiv = document.createElement('div');
@@ -262,4 +267,4 @@ const drawGameboard = function (oChessboard) {
 }
 
 setupChessboard(CHESSBOARD_START);
-drawGameboard(oChessboard);
+drawGameboard(oGameboard);

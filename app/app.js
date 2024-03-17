@@ -291,7 +291,6 @@ const drawPiecesOnChessboard = function (oChessboard) {
         for (let nFileIndex = 0; nFileIndex < NUM_FILES; nFileIndex++) {
             let sFile = aFiles[nFileIndex];
             let sPieceId = oChessboard[`${sFile}${nRank}`];
-            let sPieceClass = sPieceId.substring(0, 2);
             if (sPieceId.length > 0) {
                 let oPieceDiv = document.getElementById(sPieceId);
                 oPieceDiv.style.width = nSquareSize + STYLE_PX;

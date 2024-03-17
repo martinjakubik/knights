@@ -193,7 +193,7 @@ const redrawChessboardMove = function () {
     }
 }
 
-const transformGameboardToKnightbaseGame = function () {
+const transformGameboardToKnightbaseGame = function (oGameboard) {
     const oKnightbaseGame = JSON.stringify(oGameboard);
     return oKnightbaseGame;
 }
@@ -206,7 +206,7 @@ const saveGame = async function () {
     const nGame = 0;
     const sUrl = `${sKnightbaseUrl}/${nGame}/save`;
     const oFormBody = new URLSearchParams();
-    const oKnightbaseGame = transformGameboardToKnightbaseGame();
+    const oKnightbaseGame = transformGameboardToKnightbaseGame(oGameboard);
     oFormBody.set('game', oKnightbaseGame);
 
     const oPostOptions = {
@@ -227,7 +227,7 @@ const loadGame = async function () {
         method: 'GET',
     };
     const oResponse = await fetch(sUrl, oGetOptions);
-    console.log(transformGameboardToKnightbaseGame(oResponse.body));
+    console.log(transformKnightbaseGameToGameboard(oResponse.body));
 }
 
 const getWidthOfDiscardArea = function (nMaximumBoardWidth, NUM_FILES) {

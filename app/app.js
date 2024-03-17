@@ -227,7 +227,8 @@ const loadGame = async function () {
         method: 'GET',
     };
     const oResponse = await fetch(sUrl, oGetOptions);
-    console.log(transformKnightbaseGameToGameboard(oResponse.body));
+    const sKnightbaseResponse = await oResponse.json();
+    transformKnightbaseGameToGameboard(sKnightbaseResponse);
 }
 
 const getWidthOfDiscardArea = function (nMaximumBoardWidth, NUM_FILES) {

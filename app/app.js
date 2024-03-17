@@ -288,6 +288,7 @@ const clearPiecesFromDiscardViewAndModel = function (aWhiteDiscard, aBlackDiscar
         oPieceView.removeEventListener('dragstart', onPieceDragStart);
         const oDiscardAreaForPiece = document.getElementById(WHITE_DISCARD);
         oDiscardAreaForPiece.removeChild(oPieceView);
+        document.body.appendChild(oPieceView);
         aWhiteDiscard.splice(i, 1);
     }
     for (let i = aBlackDiscard.length - 1; i >= 0; i--) {
@@ -296,6 +297,7 @@ const clearPiecesFromDiscardViewAndModel = function (aWhiteDiscard, aBlackDiscar
         oPieceView.removeEventListener('dragstart', onPieceDragStart);
         const oDiscardAreaForPiece = document.getElementById(BLACK_DISCARD);
         oDiscardAreaForPiece.removeChild(oPieceView);
+        document.body.appendChild(oPieceView);
         aBlackDiscard.splice(i, 1);
     }
 }
@@ -311,6 +313,7 @@ const clearPiecesFromChessboardView = function (oChessboard) {
                 oPieceView.removeEventListener('dragstart', onPieceDragStart);
                 let oSquareView = document.getElementById(`${sFile}${nRank}`);
                 oSquareView.removeChild(oPieceView);
+                document.body.appendChild(oPieceView);
             }
         };
     }

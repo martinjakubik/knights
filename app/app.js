@@ -1,4 +1,6 @@
 //import * as learnhypertext from "lib/learnhypertext.mjs";
+import { KnightsView } from "./knightsView";
+
 const STYLE_PX = 'PX';
 
 const NUM_RANKS = 8;
@@ -82,16 +84,10 @@ const setupChessboard = function (oSavedChessboard) {
     })
 }
 
-const isTallScreen = function () {
-    const nViewportWidth = document.documentElement.clientWidth;
-    const nViewportHeight = document.documentElement.clientHeight;
-    return (nViewportWidth <= nViewportHeight);
-}
-
 const getMaximumBoardDisplaySize = function () {
     const nViewportWidth = document.documentElement.clientWidth;
     const nViewportHeight = document.documentElement.clientHeight;
-    const nMaximumSize = isTallScreen() ? nViewportWidth : nViewportHeight;
+    const nMaximumSize = KnightsView.isTallScreen() ? nViewportWidth : nViewportHeight;
     return nMaximumSize - 2;
 }
 
@@ -379,7 +375,7 @@ const makeGameboard = function () {
     const nMaximumBoardWidth = getMaximumBoardDisplaySize();
     makeChessboard(oGameboardDiv);
     makeDiscard(oGameboardDiv);
-    if (isTallScreen()) {
+    if (KnightsView.isTallScreen()) {
         oGameboardDiv.style.width = nMaximumBoardWidth + STYLE_PX;
         oGameboardDiv.style.flexDirection = 'column';
     } else {

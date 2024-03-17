@@ -1,3 +1,5 @@
 class KnightsViewController {
 
 }
+
+export { KnightsViewController };

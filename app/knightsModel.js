@@ -1,3 +1,5 @@
 class KnightsModel {
 
 }
+
+export { KnightsModel };

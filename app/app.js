@@ -1,5 +1,7 @@
 //import * as learnhypertext from "lib/learnhypertext.mjs";
 import { KnightsView } from './knightsView.js';
+import { KnightsModel } from './knightsModel.js';
+import { KnightsViewController } from './knightsViewController.js';
 
 const STYLE_PX = 'PX';
 

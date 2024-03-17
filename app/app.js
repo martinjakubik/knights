@@ -13,27 +13,6 @@ const sKnightbaseUrl = 'https://www.supertitle.org:2721/knightbase';
 let oOriginOfMove = {};
 let oTargetOfMove = {};
 
-const clearPiecesFromChessboardModel = function () {
-    let sSquareKey = '';
-    for (let nRankIndex = 0; nRankIndex < KnightsConstants.NUM_RANKS; nRankIndex++) {
-        let nRank = nRankIndex + 1;
-        for (let nFileIndex = 0; nFileIndex < KnightsConstants.NUM_FILES; nFileIndex++) {
-            let sFile = KnightsConstants.aFiles[nFileIndex];
-            sSquareKey = `${sFile}${nRank}`;
-            oModel.getChessboard()[sSquareKey] = '';
-            oModel.clearPiece(sSquareKey);
-        }
-    }
-}
-
-const setupChessboard = function (oSavedChessboard) {
-    clearPiecesFromChessboardModel();
-    oModel.clearModel();
-    Object.keys(oSavedChessboard).forEach(sSquareKey => {
-        oModel.getChessboard()[sSquareKey] = oSavedChessboard[sSquareKey];
-    })
-}
-
 const getMaximumBoardDisplaySize = function () {
     const nViewportWidth = document.documentElement.clientWidth;
     const nViewportHeight = document.documentElement.clientHeight;

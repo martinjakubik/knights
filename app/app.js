@@ -152,8 +152,8 @@ const killPiece = function (sSquareId) {
     if (sPieceId) {
         const sDiscardAreaForPieceId = sPieceId.substring(0, 1);
         const sDiscardAreaForPiece = sDiscardAreaForPieceId === 'b' ? BLACK_DISCARD : WHITE_DISCARD;
-        const oDiscardAreaForPiece = document.getElementById(sDiscardAreaForPiece);
-        oDiscardAreaForPiece.appendChild(oPieceView);
+        const oDiscardViewForPiece = document.getElementById(sDiscardAreaForPiece);
+        oDiscardViewForPiece.appendChild(oPieceView);
         oGameboard[sDiscardAreaForPiece].push(sPieceId);
     }
 }
@@ -286,8 +286,8 @@ const clearPiecesFromDiscardViewAndModel = function (aWhiteDiscard, aBlackDiscar
         const sPieceId = aWhiteDiscard[i];
         let oPieceView = document.getElementById(sPieceId);
         oPieceView.removeEventListener('dragstart', onPieceDragStart);
-        const oDiscardAreaForPiece = document.getElementById(WHITE_DISCARD);
-        oDiscardAreaForPiece.removeChild(oPieceView);
+        const oDiscardViewForPiece = document.getElementById(WHITE_DISCARD);
+        oDiscardViewForPiece.removeChild(oPieceView);
         document.body.appendChild(oPieceView);
         aWhiteDiscard.splice(i, 1);
     }
@@ -295,8 +295,8 @@ const clearPiecesFromDiscardViewAndModel = function (aWhiteDiscard, aBlackDiscar
         const sPieceId = aBlackDiscard[i];
         let oPieceView = document.getElementById(sPieceId);
         oPieceView.removeEventListener('dragstart', onPieceDragStart);
-        const oDiscardAreaForPiece = document.getElementById(BLACK_DISCARD);
-        oDiscardAreaForPiece.removeChild(oPieceView);
+        const oDiscardViewForPiece = document.getElementById(BLACK_DISCARD);
+        oDiscardViewForPiece.removeChild(oPieceView);
         document.body.appendChild(oPieceView);
         aBlackDiscard.splice(i, 1);
     }
@@ -324,15 +324,15 @@ const renderPiecesInDiscard = function (aWhiteDiscard, aBlackDiscard) {
         const sPieceId = aWhiteDiscard[i];
         let oPieceView = document.getElementById(sPieceId);
         oPieceView.addEventListener('dragstart', onPieceDragStart);
-        const oDiscardAreaForPiece = document.getElementById(WHITE_DISCARD);
-        oDiscardAreaForPiece.appendChild(oPieceView);
+        const oDiscardViewForPiece = document.getElementById(WHITE_DISCARD);
+        oDiscardViewForPiece.appendChild(oPieceView);
     }
     for (let i = 0; i < aBlackDiscard.length; i++) {
         const sPieceId = aBlackDiscard[i];
         let oPieceView = document.getElementById(sPieceId);
         oPieceView.addEventListener('dragstart', onPieceDragStart);
-        const oDiscardAreaForPiece = document.getElementById(BLACK_DISCARD);
-        oDiscardAreaForPiece.appendChild(oPieceView);
+        const oDiscardViewForPiece = document.getElementById(BLACK_DISCARD);
+        oDiscardViewForPiece.appendChild(oPieceView);
     }
 }
 

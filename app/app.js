@@ -89,9 +89,8 @@ const updateMoveFromSquareToSquare = function () {
 }
 
 const updateMoveFromDiscardToSquare = function () {
-    if (oModel.getChessboard()[oTargetOfMove.targetId].length == 0) {
-        const nIndexOfPieceInDiscard = oModel.getGameboard()[oOriginOfMove.originId].indexOf(oOriginOfMove.pieceId);
-        oModel.getGameboard()[oOriginOfMove.originId].splice(nIndexOfPieceInDiscard, 1);
+    if (!oModel.isPieceOnSquare(oTargetOfMove.targetId)) {
+        oModel.removePieceFromDiscard(oOriginOfMove);
         rerenderPiecesOnChessboardMove();
     }
 }

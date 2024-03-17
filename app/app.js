@@ -164,14 +164,14 @@ const updateMoveFromSquareToSquare = function () {
         killPiece(oTargetOfMove.targetId);
     }
     oGameboard.chessboard[oTargetOfMove.targetId] = oOriginOfMove.pieceId;
-    redrawPiecesOnChessboardMove();
+    rerenderPiecesOnChessboardMove();
 }
 
 const updateMoveFromDiscardToSquare = function () {
     if (oGameboard.chessboard[oTargetOfMove.targetId].length == 0) {
         const nIndexOfPieceInDiscard = oGameboard[oOriginOfMove.originId].indexOf(oOriginOfMove.pieceId);
         oGameboard[oOriginOfMove.originId].splice(nIndexOfPieceInDiscard, 1);
-        redrawPiecesOnChessboardMove();
+        rerenderPiecesOnChessboardMove();
     }
 }
 
@@ -183,7 +183,7 @@ const updateChessboardMove = function () {
     }
 }
 
-const redrawPiecesOnChessboardMove = function () {
+const rerenderPiecesOnChessboardMove = function () {
     const oMovedFromNode = getNodeFromId(oOriginOfMove.originId);
     const oMovedPieceNode = getNodeFromId(oOriginOfMove.pieceId);
     const oMovedToNode = getNodeFromId(oTargetOfMove.targetId);
@@ -201,7 +201,7 @@ const transformGameboardToKnightbaseGame = function (oGameboard) {
 const transformKnightbaseGameToGameboard = function (oKnightbaseGame) {
     clearChessboard(oGameboard.chessboard);
     oGameboard = JSON.parse(oKnightbaseGame);
-    drawPiecesOnChessboard(oGameboard.chessboard);
+    renderPiecesOnChessboard(oGameboard.chessboard);
 }
 
 const saveGame = async function () {
@@ -267,7 +267,7 @@ const makeChessboard = function (oGameboardDiv) {
 const clearDiscard = function (oDiscard) {
 }
 
-const drawPiecesInDiscard = function (oDiscard) {
+const renderPiecesInDiscard = function (oDiscard) {
 }
 
 const clearPiecesFromChessboard = function (oChessboard) {
@@ -286,7 +286,7 @@ const clearPiecesFromChessboard = function (oChessboard) {
     }
 }
 
-const drawPiecesOnChessboard = function (oChessboard) {
+const renderPiecesOnChessboard = function (oChessboard) {
     const nMaximumBoardWidth = getMaximumBoardDisplaySize();
     const nSquareSize = nMaximumBoardWidth / NUM_RANKS;
     for (let nRankIndex = NUM_RANKS - 1; nRankIndex >= 0; nRankIndex--) {
@@ -364,4 +364,4 @@ const makeGameboard = function () {
 setupChessboard(CHESSBOARD_START);
 makeGameboard();
 makePieces(oGameboard.chessboard);
-drawPiecesOnChessboard(oGameboard.chessboard);
+renderPiecesOnChessboard(oGameboard.chessboard);

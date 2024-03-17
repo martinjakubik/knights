@@ -199,7 +199,7 @@ const transformGameboardToKnightbaseGame = function (oGameboard) {
 }
 
 const transformKnightbaseGameToGameboard = function (oKnightbaseGame) {
-    oGameboard = JSON.parse(oGameboard);
+    oGameboard = JSON.parse(oKnightbaseGame);
 }
 
 const saveGame = async function () {

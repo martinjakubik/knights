@@ -322,7 +322,7 @@ const clearPiecesFromChessboardView = function (oChessboard) {
 const renderPiecesInDiscard = function (aWhiteDiscard, aBlackDiscard) {
     for (let i = 0; i < aWhiteDiscard.length; i++) {
         const sPieceId = aWhiteDiscard[i];
-        let oPieceView = document.createElement(sPieceId);
+        let oPieceView = document.getElementById(sPieceId);
         oPieceView.addEventListener('dragstart', onPieceDragStart);
         const oDiscardAreaForPiece = document.getElementById(WHITE_DISCARD);
         oDiscardAreaForPiece.appendChild(oPieceView);

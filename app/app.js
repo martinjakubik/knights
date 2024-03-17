@@ -282,9 +282,6 @@ const makeDiscard = function (oGameboardDiv) {
 const clearPiecesFromDiscard = function (oDiscard) {
 }
 
-const renderPiecesInDiscard = function (oDiscard) {
-}
-
 const clearPiecesFromChessboard = function (oChessboard) {
     for (let nRankIndex = NUM_RANKS - 1; nRankIndex >= 0; nRankIndex--) {
         let nRank = nRankIndex + 1;
@@ -299,6 +296,9 @@ const clearPiecesFromChessboard = function (oChessboard) {
             }
         };
     }
+}
+
+const renderPiecesInDiscard = function (oDiscard) {
 }
 
 const renderPiecesOnChessboard = function (oChessboard) {

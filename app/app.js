@@ -65,7 +65,7 @@ const clearMovingPieces = function () {
 
 const killPiece = function (sSquareId) {
     const oSquareView = document.getElementById(sSquareId);
-    const sPieceId = oModel.getChessboard()[sSquareId];
+    const sPieceId = oModel.getPieceFromSquare(sSquareId);
     const oPieceView = document.getElementById(sPieceId);
     if (oSquareView && oPieceView) {
         oSquareView.removeChild(oPieceView);
@@ -75,7 +75,7 @@ const killPiece = function (sSquareId) {
         const sDiscardAreaForPiece = sDiscardAreaForPieceId === 'b' ? KnightsConstants.BLACK_DISCARD : KnightsConstants.WHITE_DISCARD;
         const oDiscardViewForPiece = document.getElementById(sDiscardAreaForPiece);
         oDiscardViewForPiece.appendChild(oPieceView);
-        oModel.getGameboard()[sDiscardAreaForPiece].push(sPieceId);
+        oModel.killPiece(sSquareId);
     }
 }
 

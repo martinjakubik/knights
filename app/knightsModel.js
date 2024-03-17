@@ -10,10 +10,6 @@ class KnightsModel {
         this.gameboard[KnightsConstants.BLACK_DISCARD] = [];
     }
 
-    clearPiece(sKey) {
-        this.gameboard.chessboard[sKey] = '';
-    }
-
     clearModel() {
         let sSquareKey = '';
         for (let nRankIndex = 0; nRankIndex < KnightsConstants.NUM_RANKS; nRankIndex++) {
@@ -21,7 +17,7 @@ class KnightsModel {
             for (let nFileIndex = 0; nFileIndex < KnightsConstants.NUM_FILES; nFileIndex++) {
                 let sFile = KnightsConstants.aFiles[nFileIndex];
                 sSquareKey = `${sFile}${nRank}`;
-                this.clearPiece(sSquareKey);
+                this.removePieceFromSquare(sSquareKey);
             }
         }
     }
@@ -34,7 +30,7 @@ class KnightsModel {
     }
 
     getGameboard() {
-        return this.gameboard;
+        return this.gameboard || {};
     }
 
     setGameboard(oGameboard) {
@@ -42,7 +38,27 @@ class KnightsModel {
     }
 
     getChessboard() {
-        return this.gameboard.chessboard;
+        return this.getGameboard().chessboard || [];
+    }
+
+    getPieceFromSquare(sSquareId) {
+        return this.getChessboard()[sSquareId];
+    }
+
+    removePieceFromSquare(sSquareId) {
+        this.getChessboard()[sSquareId] = '';
+    }
+
+    addPieceToDiscard(sDiscardAreaForPiece, sPieceId) {
+        this.gameboard[sDiscardAreaForPiece].push(sPieceId);
+    }
+
+    killPiece(sSquareId) {
+        const sPieceId = this.getPieceFromSquare(sSquareId);
+        const sDiscardAreaForPieceId = sPieceId.substring(0, 1);
+        const sDiscardAreaForPiece = sDiscardAreaForPieceId === 'b' ? KnightsConstants.BLACK_DISCARD : KnightsConstants.WHITE_DISCARD;
+        this.removePieceFromSquare(sSquareId);
+        this.addPieceToDiscard(sDiscardAreaForPiece, sPieceId);
     }
 }
 

@@ -264,7 +264,22 @@ const makeChessboard = function (oGameboardDiv) {
     }
 }
 
-const clearDiscard = function (oDiscard) {
+const makeDiscard = function (oGameboardDiv) {
+    const nMaximumBoardWidth = getMaximumBoardDisplaySize();
+    let oDiscardDiv = document.createElement('div');
+    oDiscardDiv.id = 'discard';
+    let oDiscardBlackDiv = document.createElement('div');
+    let oDiscardWhiteDiv = document.createElement('div');
+    oDiscardBlackDiv.id = BLACK_DISCARD;
+    oDiscardWhiteDiv.id = WHITE_DISCARD;
+    oDiscardBlackDiv.style.width = getWidthOfDiscardArea(nMaximumBoardWidth, NUM_FILES) + STYLE_PX;
+    oDiscardWhiteDiv.style.width = getWidthOfDiscardArea(nMaximumBoardWidth, NUM_FILES) + STYLE_PX;
+    oDiscardDiv.appendChild(oDiscardBlackDiv);
+    oDiscardDiv.appendChild(oDiscardWhiteDiv);
+    oGameboardDiv.appendChild(oDiscardDiv);
+}
+
+const clearPiecesFromDiscard = function (oDiscard) {
 }
 
 const renderPiecesInDiscard = function (oDiscard) {
@@ -328,26 +343,15 @@ const makePieces = function (oChessboard) {
 const makeGameboard = function () {
     let oGameboardDiv = document.createElement('div');
     oGameboardDiv.id = 'gameboard';
-    let oDiscardDiv = document.createElement('div');
-    oDiscardDiv.id = 'discard';
     const nMaximumBoardWidth = getMaximumBoardDisplaySize();
-    const nSquareSize = nMaximumBoardWidth / NUM_RANKS;
-    let oDiscardBlackDiv = document.createElement('div');
-    let oDiscardWhiteDiv = document.createElement('div');
-    oDiscardBlackDiv.id = BLACK_DISCARD;
-    oDiscardWhiteDiv.id = WHITE_DISCARD;
-    oDiscardDiv.appendChild(oDiscardBlackDiv);
-    oDiscardDiv.appendChild(oDiscardWhiteDiv);
-    makeChessboard(oGameboardDiv, nMaximumBoardWidth, nSquareSize);
-    oGameboardDiv.appendChild(oDiscardDiv);
+    makeChessboard(oGameboardDiv);
+    makeDiscard(oGameboardDiv);
     if (isTallScreen()) {
         oGameboardDiv.style.width = nMaximumBoardWidth + STYLE_PX;
         oGameboardDiv.style.flexDirection = 'column';
     } else {
         oGameboardDiv.style.width = (nMaximumBoardWidth + getWidthOfDiscardArea(nMaximumBoardWidth, NUM_FILES)) + STYLE_PX;
     }
-    oDiscardBlackDiv.style.width = getWidthOfDiscardArea(nMaximumBoardWidth, NUM_FILES) + STYLE_PX;
-    oDiscardWhiteDiv.style.width = getWidthOfDiscardArea(nMaximumBoardWidth, NUM_FILES) + STYLE_PX;
     document.body.appendChild(oGameboardDiv);
     const oSaveGameButton = document.createElement('button');
     const oLoadGameButton = document.createElement('button');

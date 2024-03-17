@@ -99,7 +99,7 @@ const isSquareColorHighOrLow = function (nRankIndex, nFileIndex) {
     return (nRankIndex + nFileIndex) % 2 == 0 ? false : true;
 }
 
-const getMoveOriginFromPieceNode = function (oPieceView) {
+const getMoveOriginFromPieceView = function (oPieceView) {
     let oOriginOfMove = {
         pieceId: oPieceView.id
     };
@@ -109,13 +109,9 @@ const getMoveOriginFromPieceNode = function (oPieceView) {
     return oOriginOfMove;
 }
 
-const getNodeFromId = function (sId) {
-    return document.getElementById(sId);
-}
-
 const onPieceDragStart = function (oEvent) {
     const oTarget = oEvent.target;
-    oOriginOfMove = getMoveOriginFromPieceNode(oTarget);
+    oOriginOfMove = getMoveOriginFromPieceView(oTarget);
     console.log(`moving piece '${oOriginOfMove.pieceId}' from ${oOriginOfMove.originId}`);
 }
 
@@ -143,9 +139,9 @@ const clearMovingPieces = function () {
 }
 
 const killPiece = function (sSquareId) {
-    const oSquareView = getNodeFromId(sSquareId);
+    const oSquareView = document.getElementById(sSquareId);
     const sPieceId = oGameboard.chessboard[sSquareId];
-    const oPieceView = getNodeFromId(sPieceId);
+    const oPieceView = document.getElementById(sPieceId);
     if (oSquareView && oPieceView) {
         oSquareView.removeChild(oPieceView);
     }
@@ -184,9 +180,9 @@ const updateChessboardMove = function () {
 }
 
 const rerenderPiecesOnChessboardMove = function () {
-    const oMovedFromNode = getNodeFromId(oOriginOfMove.originId);
-    const oMovedPieceNode = getNodeFromId(oOriginOfMove.pieceId);
-    const oMovedToNode = getNodeFromId(oTargetOfMove.targetId);
+    const oMovedFromNode = document.getElementById(oOriginOfMove.originId);
+    const oMovedPieceNode = document.getElementById(oOriginOfMove.pieceId);
+    const oMovedToNode = document.getElementById(oTargetOfMove.targetId);
     if (oMovedFromNode && oMovedPieceNode && oMovedToNode) {
         oMovedFromNode.removeChild(oMovedPieceNode);
         oMovedToNode.appendChild(oMovedPieceNode);

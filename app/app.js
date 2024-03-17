@@ -164,14 +164,14 @@ const updateMoveFromSquareToSquare = function () {
         killPiece(oTargetOfMove.targetId);
     }
     oGameboard.chessboard[oTargetOfMove.targetId] = oOriginOfMove.pieceId;
-    redrawChessboardMove();
+    redrawPiecesOnChessboardMove();
 }
 
 const updateMoveFromDiscardToSquare = function () {
     if (oGameboard.chessboard[oTargetOfMove.targetId].length == 0) {
         const nIndexOfPieceInDiscard = oGameboard[oOriginOfMove.originId].indexOf(oOriginOfMove.pieceId);
         oGameboard[oOriginOfMove.originId].splice(nIndexOfPieceInDiscard, 1);
-        redrawChessboardMove();
+        redrawPiecesOnChessboardMove();
     }
 }
 
@@ -183,7 +183,7 @@ const updateChessboardMove = function () {
     }
 }
 
-const redrawChessboardMove = function () {
+const redrawPiecesOnChessboardMove = function () {
     const oMovedFromNode = getNodeFromId(oOriginOfMove.originId);
     const oMovedPieceNode = getNodeFromId(oOriginOfMove.pieceId);
     const oMovedToNode = getNodeFromId(oTargetOfMove.targetId);
@@ -235,44 +235,12 @@ const getWidthOfDiscardArea = function (nMaximumBoardWidth, NUM_FILES) {
     return 4 * nMaximumBoardWidth / NUM_FILES;
 }
 
-const drawGameboard = function (oGameboard) {
-    let oGameboardDiv = document.createElement('div');
-    oGameboardDiv.id = 'gameboard';
+const makeChessboard = function (oGameboardDiv, nMaximumBoardWidth, nSquareSize) {
     let oChessboardDiv = document.createElement('div');
     oChessboardDiv.id = 'chessboard';
-    let oDiscardDiv = document.createElement('div');
-    oDiscardDiv.id = 'discard';
-    const nMaximumBoardWidth = getMaximumBoardDisplaySize();
-    const nSquareSize = nMaximumBoardWidth / NUM_RANKS;
-    let oDiscardBlackDiv = document.createElement('div');
-    let oDiscardWhiteDiv = document.createElement('div');
-    oDiscardBlackDiv.id = BLACK_DISCARD;
-    oDiscardWhiteDiv.id = WHITE_DISCARD;
     oGameboardDiv.appendChild(oChessboardDiv);
-    oDiscardDiv.appendChild(oDiscardBlackDiv);
-    oDiscardDiv.appendChild(oDiscardWhiteDiv);
-    oGameboardDiv.appendChild(oDiscardDiv);
-    if (isTallScreen()) {
-        oGameboardDiv.style.width = nMaximumBoardWidth + STYLE_PX;
-        oGameboardDiv.style.flexDirection = 'column';
-    } else {
-        oGameboardDiv.style.width = (nMaximumBoardWidth + getWidthOfDiscardArea(nMaximumBoardWidth, NUM_FILES)) + STYLE_PX;
-    }
     oChessboardDiv.style.width = nMaximumBoardWidth + STYLE_PX;
     oChessboardDiv.style.height = nMaximumBoardWidth + STYLE_PX;
-    oDiscardBlackDiv.style.width = getWidthOfDiscardArea(nMaximumBoardWidth, NUM_FILES) + STYLE_PX;
-    oDiscardWhiteDiv.style.width = getWidthOfDiscardArea(nMaximumBoardWidth, NUM_FILES) + STYLE_PX;
-    document.body.appendChild(oGameboardDiv);
-    const oSaveGameButton = document.createElement('button');
-    const oLoadGameButton = document.createElement('button');
-    oSaveGameButton.id = 'savegamebutton';
-    oLoadGameButton.id = 'loadgamebutton';
-    oSaveGameButton.innerText = 'Save';
-    oLoadGameButton.innerText = 'Load';
-    oSaveGameButton.onclick = saveGame;
-    oLoadGameButton.onclick = loadGame;
-    document.body.appendChild(oSaveGameButton);
-    document.body.appendChild(oLoadGameButton);
     let bHigh = true;
     for (let nRankIndex = NUM_RANKS - 1; nRankIndex >= 0; nRankIndex--) {
         let nRank = nRankIndex + 1;
@@ -288,7 +256,16 @@ const drawGameboard = function (oGameboard) {
             oSquareDiv.addEventListener('dragover', onDragoverPreventDefault);
             oSquareDiv.addEventListener('drop', onSquareDrop);
             oChessboardDiv.appendChild(oSquareDiv);
-            let sPieceId = oGameboard.chessboard[`${sFile}${nRank}`];
+        };
+    }
+}
+
+const drawPiecesOnChessboard = function (oChessboard, nSquareSize) {
+    for (let nRankIndex = NUM_RANKS - 1; nRankIndex >= 0; nRankIndex--) {
+        let nRank = nRankIndex + 1;
+        for (let nFileIndex = 0; nFileIndex < NUM_FILES; nFileIndex++) {
+            let sFile = aFiles[nFileIndex];
+            let sPieceId = oChessboard[`${sFile}${nRank}`];
             let sPieceClass = sPieceId.substring(0, 2);
             if (sPieceId.length > 0) {
                 let oPieceDiv = document.createElement('div');
@@ -299,11 +276,48 @@ const drawGameboard = function (oGameboard) {
                 oPieceDiv.style.height = nSquareSize + STYLE_PX;
                 oPieceDiv.draggable = true;
                 oPieceDiv.addEventListener('dragstart', onPieceDragStart);
-                oSquareDiv.addEventListener('dragover', onDragoverPreventDefault);
+                let oSquareDiv = document.getElementById(`${sFile}${nRank}`);
                 oSquareDiv.appendChild(oPieceDiv);
             }
         };
     }
+}
+
+const drawGameboard = function (oGameboard) {
+    let oGameboardDiv = document.createElement('div');
+    oGameboardDiv.id = 'gameboard';
+    let oDiscardDiv = document.createElement('div');
+    oDiscardDiv.id = 'discard';
+    const nMaximumBoardWidth = getMaximumBoardDisplaySize();
+    const nSquareSize = nMaximumBoardWidth / NUM_RANKS;
+    let oDiscardBlackDiv = document.createElement('div');
+    let oDiscardWhiteDiv = document.createElement('div');
+    oDiscardBlackDiv.id = BLACK_DISCARD;
+    oDiscardWhiteDiv.id = WHITE_DISCARD;
+    oDiscardDiv.appendChild(oDiscardBlackDiv);
+    oDiscardDiv.appendChild(oDiscardWhiteDiv);
+    makeChessboard(oGameboardDiv, nMaximumBoardWidth, nSquareSize);
+    oGameboardDiv.appendChild(oDiscardDiv);
+    if (isTallScreen()) {
+        oGameboardDiv.style.width = nMaximumBoardWidth + STYLE_PX;
+        oGameboardDiv.style.flexDirection = 'column';
+    } else {
+        oGameboardDiv.style.width = (nMaximumBoardWidth + getWidthOfDiscardArea(nMaximumBoardWidth, NUM_FILES)) + STYLE_PX;
+    }
+    oDiscardBlackDiv.style.width = getWidthOfDiscardArea(nMaximumBoardWidth, NUM_FILES) + STYLE_PX;
+    oDiscardWhiteDiv.style.width = getWidthOfDiscardArea(nMaximumBoardWidth, NUM_FILES) + STYLE_PX;
+    document.body.appendChild(oGameboardDiv);
+    const oSaveGameButton = document.createElement('button');
+    const oLoadGameButton = document.createElement('button');
+    oSaveGameButton.id = 'savegamebutton';
+    oLoadGameButton.id = 'loadgamebutton';
+    oSaveGameButton.innerText = 'Save';
+    oLoadGameButton.innerText = 'Load';
+    oSaveGameButton.onclick = saveGame;
+    oLoadGameButton.onclick = loadGame;
+    document.body.appendChild(oSaveGameButton);
+    document.body.appendChild(oLoadGameButton);
+    drawPiecesOnChessboard(oGameboard.chessboard, nSquareSize);
 }
 
 setupChessboard(CHESSBOARD_START);

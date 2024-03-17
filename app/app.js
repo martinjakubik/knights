@@ -264,6 +264,12 @@ const makeChessboard = function (oGameboardDiv) {
     }
 }
 
+const clearDiscard = function (oDiscard) {
+}
+
+const drawPiecesInDiscard = function (oDiscard) {
+}
+
 const clearPiecesFromChessboard = function (oChessboard) {
     for (let nRankIndex = NUM_RANKS - 1; nRankIndex >= 0; nRankIndex--) {
         let nRank = nRankIndex + 1;
@@ -275,24 +281,6 @@ const clearPiecesFromChessboard = function (oChessboard) {
                 oPieceDiv.removeEventListener('dragstart');
                 let oSquareDiv = document.getElementById(`${sFile}${nRank}`);
                 oSquareDiv.removeChild(oPieceDiv);
-            }
-        };
-    }
-}
-
-const makePieces = function (oChessboard) {
-    for (let nRankIndex = NUM_RANKS - 1; nRankIndex >= 0; nRankIndex--) {
-        let nRank = nRankIndex + 1;
-        for (let nFileIndex = 0; nFileIndex < NUM_FILES; nFileIndex++) {
-            let sFile = aFiles[nFileIndex];
-            let sPieceId = oChessboard[`${sFile}${nRank}`];
-            let sPieceClass = sPieceId.substring(0, 2);
-            if (sPieceId.length > 0) {
-                let oPieceDiv = document.createElement('div');
-                oPieceDiv.id = sPieceId;
-                oPieceDiv.classList.add('piece');
-                oPieceDiv.classList.add(sPieceClass);
-                document.body.appendChild(oPieceDiv);
             }
         };
     }
@@ -314,6 +302,24 @@ const drawPiecesOnChessboard = function (oChessboard) {
                 oPieceDiv.addEventListener('dragstart', onPieceDragStart);
                 let oSquareDiv = document.getElementById(`${sFile}${nRank}`);
                 oSquareDiv.appendChild(oPieceDiv);
+            }
+        };
+    }
+}
+
+const makePieces = function (oChessboard) {
+    for (let nRankIndex = NUM_RANKS - 1; nRankIndex >= 0; nRankIndex--) {
+        let nRank = nRankIndex + 1;
+        for (let nFileIndex = 0; nFileIndex < NUM_FILES; nFileIndex++) {
+            let sFile = aFiles[nFileIndex];
+            let sPieceId = oChessboard[`${sFile}${nRank}`];
+            let sPieceClass = sPieceId.substring(0, 2);
+            if (sPieceId.length > 0) {
+                let oPieceDiv = document.createElement('div');
+                oPieceDiv.id = sPieceId;
+                oPieceDiv.classList.add('piece');
+                oPieceDiv.classList.add(sPieceClass);
+                document.body.appendChild(oPieceDiv);
             }
         };
     }

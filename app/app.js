@@ -285,7 +285,7 @@ const clearPiecesFromDiscardViewAndModel = function (aWhiteDiscard, aBlackDiscar
     for (let i = aWhiteDiscard.length - 1; i >= 0; i--) {
         const sPieceId = aWhiteDiscard[i];
         let oPieceDiv = document.getElementById(sPieceId);
-        oPieceDiv.removeEventListener('dragstart');
+        oPieceDiv.removeEventListener('dragstart', onPieceDragStart);
         const oDiscardAreaForPiece = document.getElementById(WHITE_DISCARD);
         oDiscardAreaForPiece.removeChild(oPieceDiv);
         aWhiteDiscard.splice(i, 1);
@@ -293,7 +293,7 @@ const clearPiecesFromDiscardViewAndModel = function (aWhiteDiscard, aBlackDiscar
     for (let i = aBlackDiscard.length - 1; i >= 0; i--) {
         const sPieceId = aBlackDiscard[i];
         let oPieceDiv = document.getElementById(sPieceId);
-        oPieceDiv.removeEventListener('dragstart');
+        oPieceDiv.removeEventListener('dragstart', onPieceDragStart);
         const oDiscardAreaForPiece = document.getElementById(BLACK_DISCARD);
         oDiscardAreaForPiece.removeChild(oPieceDiv);
         aBlackDiscard.splice(i, 1);
@@ -308,7 +308,7 @@ const clearPiecesFromChessboardView = function (oChessboard) {
             let sPieceId = oChessboard[`${sFile}${nRank}`];
             if (sPieceId.length > 0) {
                 let oPieceDiv = document.getElementById(sPieceId);
-                oPieceDiv.removeEventListener('dragstart');
+                oPieceDiv.removeEventListener('dragstart', onPieceDragStart);
                 let oSquareDiv = document.getElementById(`${sFile}${nRank}`);
                 oSquareDiv.removeChild(oPieceDiv);
             }

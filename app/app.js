@@ -2,7 +2,7 @@
 import { KnightsView } from './knightsView.js';
 import { KnightsModel } from './knightsModel.js';
 import { KnightsViewController } from './knightsViewController.js';
-import { KnightsConstants } from './knightsConstants.js';
+import * as KnightsConstants from './knightsConstants.js';
 
 const STYLE_PX = 'PX';
 
@@ -19,14 +19,12 @@ const aImages = {
     'k': 'king',
     'p': 'pawn'
 }
-const WHITE_DISCARD = 'whiteDiscard';
-const BLACK_DISCARD = 'blackDiscard';
 
 let oGameboard = {
     chessboard: {}
 };
-oGameboard[WHITE_DISCARD] = [];
-oGameboard[BLACK_DISCARD] = [];
+oGameboard[KnightsConstants.WHITE_DISCARD] = [];
+oGameboard[KnightsConstants.BLACK_DISCARD] = [];
 
 const CHESSBOARD_START = {
     'a1': 'wr1',
@@ -146,7 +144,7 @@ const killPiece = function (sSquareId) {
     }
     if (sPieceId) {
         const sDiscardAreaForPieceId = sPieceId.substring(0, 1);
-        const sDiscardAreaForPiece = sDiscardAreaForPieceId === 'b' ? BLACK_DISCARD : WHITE_DISCARD;
+        const sDiscardAreaForPiece = sDiscardAreaForPieceId === 'b' ? KnightsConstants.BLACK_DISCARD : KnightsConstants.WHITE_DISCARD;
         const oDiscardViewForPiece = document.getElementById(sDiscardAreaForPiece);
         oDiscardViewForPiece.appendChild(oPieceView);
         oGameboard[sDiscardAreaForPiece].push(sPieceId);
@@ -195,10 +193,10 @@ const transformGameboardToKnightbaseGame = function (oGameboard) {
 
 const transformKnightbaseGameToGameboard = function (oKnightbaseGame) {
     clearPiecesFromChessboardView(oGameboard.chessboard);
-    clearPiecesFromDiscardViewAndModel(oGameboard[WHITE_DISCARD], oGameboard[BLACK_DISCARD]);
+    clearPiecesFromDiscardViewAndModel(oGameboard[KnightsConstants.WHITE_DISCARD], oGameboard[KnightsConstants.BLACK_DISCARD]);
     oGameboard = JSON.parse(oKnightbaseGame);
     renderPiecesOnChessboard(oGameboard.chessboard);
-    renderPiecesInDiscard(oGameboard[WHITE_DISCARD], oGameboard[BLACK_DISCARD]);
+    renderPiecesInDiscard(oGameboard[KnightsConstants.WHITE_DISCARD], oGameboard[KnightsConstants.BLACK_DISCARD]);
 }
 
 const saveGame = async function () {
@@ -269,8 +267,8 @@ const makeDiscard = function (oGameboardDiv) {
     oDiscardDiv.id = 'discard';
     let oDiscardBlackDiv = document.createElement('div');
     let oDiscardWhiteDiv = document.createElement('div');
-    oDiscardBlackDiv.id = BLACK_DISCARD;
-    oDiscardWhiteDiv.id = WHITE_DISCARD;
+    oDiscardBlackDiv.id = KnightsConstants.BLACK_DISCARD;
+    oDiscardWhiteDiv.id = KnightsConstants.WHITE_DISCARD;
     oDiscardBlackDiv.style.width = getWidthOfDiscardArea(nMaximumBoardWidth, NUM_FILES) + STYLE_PX;
     oDiscardWhiteDiv.style.width = getWidthOfDiscardArea(nMaximumBoardWidth, NUM_FILES) + STYLE_PX;
     oDiscardDiv.appendChild(oDiscardBlackDiv);
@@ -283,7 +281,7 @@ const clearPiecesFromDiscardViewAndModel = function (aWhiteDiscard, aBlackDiscar
         const sPieceId = aWhiteDiscard[i];
         let oPieceView = document.getElementById(sPieceId);
         oPieceView.removeEventListener('dragstart', onPieceDragStart);
-        const oDiscardViewForPiece = document.getElementById(WHITE_DISCARD);
+        const oDiscardViewForPiece = document.getElementById(KnightsConstants.WHITE_DISCARD);
         oDiscardViewForPiece.removeChild(oPieceView);
         document.body.appendChild(oPieceView);
         aWhiteDiscard.splice(i, 1);
@@ -292,7 +290,7 @@ const clearPiecesFromDiscardViewAndModel = function (aWhiteDiscard, aBlackDiscar
         const sPieceId = aBlackDiscard[i];
         let oPieceView = document.getElementById(sPieceId);
         oPieceView.removeEventListener('dragstart', onPieceDragStart);
-        const oDiscardViewForPiece = document.getElementById(BLACK_DISCARD);
+        const oDiscardViewForPiece = document.getElementById(KnightsConstants.BLACK_DISCARD);
         oDiscardViewForPiece.removeChild(oPieceView);
         document.body.appendChild(oPieceView);
         aBlackDiscard.splice(i, 1);
@@ -321,14 +319,14 @@ const renderPiecesInDiscard = function (aWhiteDiscard, aBlackDiscard) {
         const sPieceId = aWhiteDiscard[i];
         let oPieceView = document.getElementById(sPieceId);
         oPieceView.addEventListener('dragstart', onPieceDragStart);
-        const oDiscardViewForPiece = document.getElementById(WHITE_DISCARD);
+        const oDiscardViewForPiece = document.getElementById(KnightsConstants.WHITE_DISCARD);
         oDiscardViewForPiece.appendChild(oPieceView);
     }
     for (let i = 0; i < aBlackDiscard.length; i++) {
         const sPieceId = aBlackDiscard[i];
         let oPieceView = document.getElementById(sPieceId);
         oPieceView.addEventListener('dragstart', onPieceDragStart);
-        const oDiscardViewForPiece = document.getElementById(BLACK_DISCARD);
+        const oDiscardViewForPiece = document.getElementById(KnightsConstants.BLACK_DISCARD);
         oDiscardViewForPiece.appendChild(oPieceView);
     }
 }

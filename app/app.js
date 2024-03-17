@@ -1,5 +1,5 @@
 //import * as learnhypertext from "lib/learnhypertext.mjs";
-import { KnightsView } from "./knightsView";
+import { KnightsView } from './knightsView.js';
 
 const STYLE_PX = 'PX';
 

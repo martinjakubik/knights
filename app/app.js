@@ -199,7 +199,9 @@ const transformGameboardToKnightbaseGame = function (oGameboard) {
 }
 
 const transformKnightbaseGameToGameboard = function (oKnightbaseGame) {
+    clearChessboard(oGameboard.chessboard);
     oGameboard = JSON.parse(oKnightbaseGame);
+    drawPiecesOnChessboard(oGameboard.chessboard);
 }
 
 const saveGame = async function () {
@@ -263,6 +265,19 @@ const makeChessboard = function (oGameboardDiv) {
 }
 
 const clearPiecesFromChessboard = function (oChessboard) {
+    for (let nRankIndex = NUM_RANKS - 1; nRankIndex >= 0; nRankIndex--) {
+        let nRank = nRankIndex + 1;
+        for (let nFileIndex = 0; nFileIndex < NUM_FILES; nFileIndex++) {
+            let sFile = aFiles[nFileIndex];
+            let sPieceId = oChessboard[`${sFile}${nRank}`];
+            if (sPieceId.length > 0) {
+                let oPieceDiv = document.getElementById(sPieceId);
+                oPieceDiv.removeEventListener('dragstart');
+                let oSquareDiv = document.getElementById(`${sFile}${nRank}`);
+                oSquareDiv.removeChild(oPieceDiv);
+            }
+        };
+    }
 }
 
 const makePieces = function (oChessboard) {

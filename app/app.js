@@ -6,12 +6,6 @@ import * as KnightsConstants from './knightsConstants.js';
 
 const STYLE_PX = 'PX';
 
-let oGameboard = {
-    chessboard: {}
-};
-oGameboard[KnightsConstants.WHITE_DISCARD] = [];
-oGameboard[KnightsConstants.BLACK_DISCARD] = [];
-
 let oModel = new KnightsModel();
 
 const sKnightbaseUrl = 'https://www.supertitle.org:2721/knightbase';
@@ -26,7 +20,7 @@ const clearPiecesFromChessboardModel = function () {
         for (let nFileIndex = 0; nFileIndex < KnightsConstants.NUM_FILES; nFileIndex++) {
             let sFile = KnightsConstants.aFiles[nFileIndex];
             sSquareKey = `${sFile}${nRank}`;
-            oGameboard.chessboard[sSquareKey] = '';
+            oModel.getChessboard()[sSquareKey] = '';
             oModel.clearPiece(sSquareKey);
         }
     }
@@ -36,7 +30,7 @@ const setupChessboard = function (oSavedChessboard) {
     clearPiecesFromChessboardModel();
     oModel.clearModel();
     Object.keys(oSavedChessboard).forEach(sSquareKey => {
-        oGameboard.chessboard[sSquareKey] = oSavedChessboard[sSquareKey];
+        oModel.getChessboard()[sSquareKey] = oSavedChessboard[sSquareKey];
     })
 }
 
@@ -92,7 +86,7 @@ const clearMovingPieces = function () {
 
 const killPiece = function (sSquareId) {
     const oSquareView = document.getElementById(sSquareId);
-    const sPieceId = oGameboard.chessboard[sSquareId];
+    const sPieceId = oModel.getChessboard()[sSquareId];
     const oPieceView = document.getElementById(sPieceId);
     if (oSquareView && oPieceView) {
         oSquareView.removeChild(oPieceView);
@@ -102,23 +96,23 @@ const killPiece = function (sSquareId) {
         const sDiscardAreaForPiece = sDiscardAreaForPieceId === 'b' ? KnightsConstants.BLACK_DISCARD : KnightsConstants.WHITE_DISCARD;
         const oDiscardViewForPiece = document.getElementById(sDiscardAreaForPiece);
         oDiscardViewForPiece.appendChild(oPieceView);
-        oGameboard[sDiscardAreaForPiece].push(sPieceId);
+        oModel.getGameboard()[sDiscardAreaForPiece].push(sPieceId);
     }
 }
 
 const updateMoveFromSquareToSquare = function () {
-    oGameboard.chessboard[oOriginOfMove.originId] = '';
-    if (oGameboard.chessboard[oTargetOfMove.targetId].length > 0) {
+    oModel.getChessboard()[oOriginOfMove.originId] = '';
+    if (oModel.getChessboard()[oTargetOfMove.targetId].length > 0) {
         killPiece(oTargetOfMove.targetId);
     }
-    oGameboard.chessboard[oTargetOfMove.targetId] = oOriginOfMove.pieceId;
+    oModel.getChessboard()[oTargetOfMove.targetId] = oOriginOfMove.pieceId;
     rerenderPiecesOnChessboardMove();
 }
 
 const updateMoveFromDiscardToSquare = function () {
-    if (oGameboard.chessboard[oTargetOfMove.targetId].length == 0) {
-        const nIndexOfPieceInDiscard = oGameboard[oOriginOfMove.originId].indexOf(oOriginOfMove.pieceId);
-        oGameboard[oOriginOfMove.originId].splice(nIndexOfPieceInDiscard, 1);
+    if (oModel.getChessboard()[oTargetOfMove.targetId].length == 0) {
+        const nIndexOfPieceInDiscard = oModel.getGameboard()[oOriginOfMove.originId].indexOf(oOriginOfMove.pieceId);
+        oModel.getGameboard()[oOriginOfMove.originId].splice(nIndexOfPieceInDiscard, 1);
         rerenderPiecesOnChessboardMove();
     }
 }
@@ -147,18 +141,18 @@ const transformGameboardToKnightbaseGame = function (oGameboard) {
 }
 
 const transformKnightbaseGameToGameboard = function (oKnightbaseGame) {
-    clearPiecesFromChessboardView(oGameboard.chessboard);
-    clearPiecesFromDiscardViewAndModel(oGameboard[KnightsConstants.WHITE_DISCARD], oGameboard[KnightsConstants.BLACK_DISCARD]);
-    oGameboard = JSON.parse(oKnightbaseGame);
-    renderPiecesOnChessboard(oGameboard.chessboard);
-    renderPiecesInDiscard(oGameboard[KnightsConstants.WHITE_DISCARD], oGameboard[KnightsConstants.BLACK_DISCARD]);
+    clearPiecesFromChessboardView(oModel.getChessboard());
+    clearPiecesFromDiscardViewAndModel(oModel.getGameboard()[KnightsConstants.WHITE_DISCARD], oModel.getGameboard()[KnightsConstants.BLACK_DISCARD]);
+    oModel.setGameboard(JSON.parse(oKnightbaseGame));
+    renderPiecesOnChessboard(oModel.getChessboard());
+    renderPiecesInDiscard(oModel.getGameboard()[KnightsConstants.WHITE_DISCARD], oModel.getGameboard()[KnightsConstants.BLACK_DISCARD]);
 }
 
 const saveGame = async function () {
     const nGame = 0;
     const sUrl = `${sKnightbaseUrl}/${nGame}/save`;
     const oFormBody = new URLSearchParams();
-    const oKnightbaseGame = transformGameboardToKnightbaseGame(oGameboard);
+    const oKnightbaseGame = transformGameboardToKnightbaseGame(oModel.getGameboard());
     oFormBody.set('game', oKnightbaseGame);
 
     const oPostOptions = {
@@ -350,8 +344,7 @@ const makeGameboard = function () {
     document.body.appendChild(oLoadGameButton);
 }
 
-setupChessboard(KnightsConstants.CHESSBOARD_START);
 oModel.setupChessboard(KnightsConstants.CHESSBOARD_START);
 makeGameboard();
-makePieces(oGameboard.chessboard);
-renderPiecesOnChessboard(oGameboard.chessboard);
+makePieces(oModel.getChessboard());
+renderPiecesOnChessboard(oModel.getChessboard());

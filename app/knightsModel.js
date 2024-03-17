@@ -32,6 +32,18 @@ class KnightsModel {
             this.gameboard.chessboard[sSquareKey] = oSavedChessboard[sSquareKey];
         })
     }
+
+    getGameboard() {
+        return this.gameboard;
+    }
+
+    setGameboard(oGameboard) {
+        this.gameboard = oGameboard;
+    }
+
+    getChessboard() {
+        return this.gameboard.chessboard;
+    }
 }
 
 export { KnightsModel };

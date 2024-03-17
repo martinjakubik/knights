@@ -92,7 +92,7 @@ const getMaximumBoardDisplaySize = function () {
     const nViewportWidth = document.documentElement.clientWidth;
     const nViewportHeight = document.documentElement.clientHeight;
     const nMaximumSize = isTallScreen() ? nViewportWidth : nViewportHeight;
-    return nMaximumSize;
+    return nMaximumSize - 2;
 }
 
 const isSquareColorHighOrLow = function (nRankIndex, nFileIndex) {

@@ -2,6 +2,7 @@
 import { KnightsView } from './knightsView.js';
 import { KnightsModel } from './knightsModel.js';
 import { KnightsViewController } from './knightsViewController.js';
+import { KnightsConstants } from './knightsConstants.js';
 
 const STYLE_PX = 'PX';
 

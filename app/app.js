@@ -99,12 +99,12 @@ const isSquareColorHighOrLow = function (nRankIndex, nFileIndex) {
     return (nRankIndex + nFileIndex) % 2 == 0 ? false : true;
 }
 
-const getMoveOriginFromPieceNode = function (oPieceNode) {
+const getMoveOriginFromPieceNode = function (oPieceView) {
     let oOriginOfMove = {
-        pieceId: oPieceNode.id
+        pieceId: oPieceView.id
     };
-    const oParentNode = oPieceNode ? oPieceNode.parentNode : null;
-    oOriginOfMove.originId = oPieceNode ? oPieceNode.parentNode.id : null;
+    const oParentNode = oPieceView ? oPieceView.parentNode : null;
+    oOriginOfMove.originId = oPieceView ? oPieceView.parentNode.id : null;
     oOriginOfMove.originType = oParentNode ? (oParentNode.classList.contains('square') ? 0 : 1) : null;
     return oOriginOfMove;
 }
@@ -125,12 +125,12 @@ const onDragoverPreventDefault = function (oEvent) {
 
 const onSquareDrop = function (oEvent) {
     const oTarget = oEvent.target;
-    let oSquareTarget = oTarget;
+    let oSquareView = oTarget;
     if (oTarget && oTarget.classList.contains('piece')) {
-        oSquareTarget = oTarget.parentNode;
+        oSquareView = oTarget.parentNode;
     }
-    if (oSquareTarget && oSquareTarget.classList.contains('square')) {
-        oTargetOfMove.targetId = oSquareTarget ? oSquareTarget.id : 'none';
+    if (oSquareView && oSquareView.classList.contains('square')) {
+        oTargetOfMove.targetId = oSquareView ? oSquareView.id : 'none';
         console.log(`moved piece '${oOriginOfMove.pieceId}' from ${oOriginOfMove.originId} to ${oTargetOfMove.targetId}`);
         updateChessboardMove();
         clearMovingPieces();
@@ -143,17 +143,17 @@ const clearMovingPieces = function () {
 }
 
 const killPiece = function (sSquareId) {
-    const oSquareNode = getNodeFromId(sSquareId);
+    const oSquareView = getNodeFromId(sSquareId);
     const sPieceId = oGameboard.chessboard[sSquareId];
-    const oPieceNode = getNodeFromId(sPieceId);
-    if (oSquareNode && oPieceNode) {
-        oSquareNode.removeChild(oPieceNode);
+    const oPieceView = getNodeFromId(sPieceId);
+    if (oSquareView && oPieceView) {
+        oSquareView.removeChild(oPieceView);
     }
     if (sPieceId) {
         const sDiscardAreaForPieceId = sPieceId.substring(0, 1);
         const sDiscardAreaForPiece = sDiscardAreaForPieceId === 'b' ? BLACK_DISCARD : WHITE_DISCARD;
         const oDiscardAreaForPiece = document.getElementById(sDiscardAreaForPiece);
-        oDiscardAreaForPiece.appendChild(oPieceNode);
+        oDiscardAreaForPiece.appendChild(oPieceView);
         oGameboard[sDiscardAreaForPiece].push(sPieceId);
     }
 }
@@ -251,17 +251,17 @@ const makeChessboard = function (oGameboardDiv) {
     for (let nRankIndex = NUM_RANKS - 1; nRankIndex >= 0; nRankIndex--) {
         let nRank = nRankIndex + 1;
         for (let nFileIndex = 0; nFileIndex < NUM_FILES; nFileIndex++) {
-            let oSquareDiv = document.createElement('div');
+            let oSquareView = document.createElement('div');
             let sFile = aFiles[nFileIndex];
-            oSquareDiv.classList.add('square');
-            oSquareDiv.id = `${sFile}${nRank}`;
-            oSquareDiv.style.width = nSquareSize + STYLE_PX;
-            oSquareDiv.style.height = nSquareSize + STYLE_PX;
+            oSquareView.classList.add('square');
+            oSquareView.id = `${sFile}${nRank}`;
+            oSquareView.style.width = nSquareSize + STYLE_PX;
+            oSquareView.style.height = nSquareSize + STYLE_PX;
             bHigh = isSquareColorHighOrLow(nRankIndex, nFileIndex);
-            oSquareDiv.classList.add(bHigh ? 'high' : 'low');
-            oSquareDiv.addEventListener('dragover', onDragoverPreventDefault);
-            oSquareDiv.addEventListener('drop', onSquareDrop);
-            oChessboardDiv.appendChild(oSquareDiv);
+            oSquareView.classList.add(bHigh ? 'high' : 'low');
+            oSquareView.addEventListener('dragover', onDragoverPreventDefault);
+            oSquareView.addEventListener('drop', onSquareDrop);
+            oChessboardDiv.appendChild(oSquareView);
         };
     }
 }
@@ -284,18 +284,18 @@ const makeDiscard = function (oGameboardDiv) {
 const clearPiecesFromDiscardViewAndModel = function (aWhiteDiscard, aBlackDiscard) {
     for (let i = aWhiteDiscard.length - 1; i >= 0; i--) {
         const sPieceId = aWhiteDiscard[i];
-        let oPieceDiv = document.getElementById(sPieceId);
-        oPieceDiv.removeEventListener('dragstart', onPieceDragStart);
+        let oPieceView = document.getElementById(sPieceId);
+        oPieceView.removeEventListener('dragstart', onPieceDragStart);
         const oDiscardAreaForPiece = document.getElementById(WHITE_DISCARD);
-        oDiscardAreaForPiece.removeChild(oPieceDiv);
+        oDiscardAreaForPiece.removeChild(oPieceView);
         aWhiteDiscard.splice(i, 1);
     }
     for (let i = aBlackDiscard.length - 1; i >= 0; i--) {
         const sPieceId = aBlackDiscard[i];
-        let oPieceDiv = document.getElementById(sPieceId);
-        oPieceDiv.removeEventListener('dragstart', onPieceDragStart);
+        let oPieceView = document.getElementById(sPieceId);
+        oPieceView.removeEventListener('dragstart', onPieceDragStart);
         const oDiscardAreaForPiece = document.getElementById(BLACK_DISCARD);
-        oDiscardAreaForPiece.removeChild(oPieceDiv);
+        oDiscardAreaForPiece.removeChild(oPieceView);
         aBlackDiscard.splice(i, 1);
     }
 }
@@ -307,10 +307,10 @@ const clearPiecesFromChessboardView = function (oChessboard) {
             let sFile = aFiles[nFileIndex];
             let sPieceId = oChessboard[`${sFile}${nRank}`];
             if (sPieceId.length > 0) {
-                let oPieceDiv = document.getElementById(sPieceId);
-                oPieceDiv.removeEventListener('dragstart', onPieceDragStart);
-                let oSquareDiv = document.getElementById(`${sFile}${nRank}`);
-                oSquareDiv.removeChild(oPieceDiv);
+                let oPieceView = document.getElementById(sPieceId);
+                oPieceView.removeEventListener('dragstart', onPieceDragStart);
+                let oSquareView = document.getElementById(`${sFile}${nRank}`);
+                oSquareView.removeChild(oPieceView);
             }
         };
     }
@@ -319,17 +319,17 @@ const clearPiecesFromChessboardView = function (oChessboard) {
 const renderPiecesInDiscard = function (aWhiteDiscard, aBlackDiscard) {
     for (let i = 0; i < aWhiteDiscard.length; i++) {
         const sPieceId = aWhiteDiscard[i];
-        let oPieceDiv = document.createElement(sPieceId);
-        oPieceDiv.addEventListener('dragstart', onPieceDragStart);
+        let oPieceView = document.createElement(sPieceId);
+        oPieceView.addEventListener('dragstart', onPieceDragStart);
         const oDiscardAreaForPiece = document.getElementById(WHITE_DISCARD);
-        oDiscardAreaForPiece.addChild(oPieceDiv);
+        oDiscardAreaForPiece.addChild(oPieceView);
     }
     for (let i = 0; i < aBlackDiscard.length; i++) {
         const sPieceId = aBlackDiscard[i];
-        let oPieceDiv = document.getElementById(sPieceId);
-        oPieceDiv.addEventListener('dragstart', onPieceDragStart);
+        let oPieceView = document.getElementById(sPieceId);
+        oPieceView.addEventListener('dragstart', onPieceDragStart);
         const oDiscardAreaForPiece = document.getElementById(BLACK_DISCARD);
-        oDiscardAreaForPiece.addChild(oPieceDiv);
+        oDiscardAreaForPiece.addChild(oPieceView);
     }
 }
 
@@ -342,13 +342,13 @@ const renderPiecesOnChessboard = function (oChessboard) {
             let sFile = aFiles[nFileIndex];
             let sPieceId = oChessboard[`${sFile}${nRank}`];
             if (sPieceId.length > 0) {
-                let oPieceDiv = document.getElementById(sPieceId);
-                oPieceDiv.style.width = nSquareSize + STYLE_PX;
-                oPieceDiv.style.height = nSquareSize + STYLE_PX;
-                oPieceDiv.draggable = true;
-                oPieceDiv.addEventListener('dragstart', onPieceDragStart);
-                let oSquareDiv = document.getElementById(`${sFile}${nRank}`);
-                oSquareDiv.appendChild(oPieceDiv);
+                let oPieceView = document.getElementById(sPieceId);
+                oPieceView.style.width = nSquareSize + STYLE_PX;
+                oPieceView.style.height = nSquareSize + STYLE_PX;
+                oPieceView.draggable = true;
+                oPieceView.addEventListener('dragstart', onPieceDragStart);
+                let oSquareView = document.getElementById(`${sFile}${nRank}`);
+                oSquareView.appendChild(oPieceView);
             }
         };
     }
@@ -362,11 +362,11 @@ const makePieces = function (oChessboard) {
             let sPieceId = oChessboard[`${sFile}${nRank}`];
             let sPieceClass = sPieceId.substring(0, 2);
             if (sPieceId.length > 0) {
-                let oPieceDiv = document.createElement('div');
-                oPieceDiv.id = sPieceId;
-                oPieceDiv.classList.add('piece');
-                oPieceDiv.classList.add(sPieceClass);
-                document.body.appendChild(oPieceDiv);
+                let oPieceView = document.createElement('div');
+                oPieceView.id = sPieceId;
+                oPieceView.classList.add('piece');
+                oPieceView.classList.add(sPieceClass);
+                document.body.appendChild(oPieceView);
             }
         };
     }

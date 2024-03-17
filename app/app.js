@@ -80,8 +80,8 @@ const killPiece = function (sSquareId) {
 }
 
 const updateMoveFromSquareToSquare = function () {
-    oModel.getChessboard()[oOriginOfMove.originId] = '';
-    if (oModel.getChessboard()[oTargetOfMove.targetId].length > 0) {
+    oModel.removePieceFromSquare(oOriginOfMove.originId);
+    if (oModel.isPieceOnSquare(oTargetOfMove.targetId)) {
         killPiece(oTargetOfMove.targetId);
     }
     oModel.getChessboard()[oTargetOfMove.targetId] = oOriginOfMove.pieceId;

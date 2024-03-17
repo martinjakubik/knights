@@ -49,6 +49,10 @@ class KnightsModel {
         this.getChessboard()[sSquareId] = '';
     }
 
+    isPieceOnSquare(sSquareId) {
+        return (this.getChessboard()[sSquareId].length > 0);
+    }
+
     addPieceToDiscard(sDiscardAreaForPiece, sPieceId) {
         this.gameboard[sDiscardAreaForPiece].push(sPieceId);
     }

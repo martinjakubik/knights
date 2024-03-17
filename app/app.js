@@ -262,9 +262,10 @@ const makeChessboard = function (oGameboardDiv) {
     }
 }
 
-const drawPiecesOnChessboard = function (oChessboard) {
-    const nMaximumBoardWidth = getMaximumBoardDisplaySize();
-    const nSquareSize = nMaximumBoardWidth / NUM_RANKS;
+const clearPiecesFromChessboard = function (oChessboard) {
+}
+
+const makePieces = function (oChessboard) {
     for (let nRankIndex = NUM_RANKS - 1; nRankIndex >= 0; nRankIndex--) {
         let nRank = nRankIndex + 1;
         for (let nFileIndex = 0; nFileIndex < NUM_FILES; nFileIndex++) {
@@ -276,6 +277,23 @@ const drawPiecesOnChessboard = function (oChessboard) {
                 oPieceDiv.id = sPieceId;
                 oPieceDiv.classList.add('piece');
                 oPieceDiv.classList.add(sPieceClass);
+                document.body.appendChild(oPieceDiv);
+            }
+        };
+    }
+}
+
+const drawPiecesOnChessboard = function (oChessboard) {
+    const nMaximumBoardWidth = getMaximumBoardDisplaySize();
+    const nSquareSize = nMaximumBoardWidth / NUM_RANKS;
+    for (let nRankIndex = NUM_RANKS - 1; nRankIndex >= 0; nRankIndex--) {
+        let nRank = nRankIndex + 1;
+        for (let nFileIndex = 0; nFileIndex < NUM_FILES; nFileIndex++) {
+            let sFile = aFiles[nFileIndex];
+            let sPieceId = oChessboard[`${sFile}${nRank}`];
+            let sPieceClass = sPieceId.substring(0, 2);
+            if (sPieceId.length > 0) {
+                let oPieceDiv = document.getElementById(sPieceId);
                 oPieceDiv.style.width = nSquareSize + STYLE_PX;
                 oPieceDiv.style.height = nSquareSize + STYLE_PX;
                 oPieceDiv.draggable = true;
@@ -287,7 +305,7 @@ const drawPiecesOnChessboard = function (oChessboard) {
     }
 }
 
-const makeGameboard = function (oGameboard) {
+const makeGameboard = function () {
     let oGameboardDiv = document.createElement('div');
     oGameboardDiv.id = 'gameboard';
     let oDiscardDiv = document.createElement('div');
@@ -324,5 +342,6 @@ const makeGameboard = function (oGameboard) {
 }
 
 setupChessboard(CHESSBOARD_START);
-makeGameboard(oGameboard);
+makeGameboard();
+makePieces(oGameboard.chessboard);
 drawPiecesOnChessboard(oGameboard.chessboard);

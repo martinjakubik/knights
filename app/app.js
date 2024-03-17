@@ -325,14 +325,14 @@ const renderPiecesInDiscard = function (aWhiteDiscard, aBlackDiscard) {
         let oPieceView = document.createElement(sPieceId);
         oPieceView.addEventListener('dragstart', onPieceDragStart);
         const oDiscardAreaForPiece = document.getElementById(WHITE_DISCARD);
-        oDiscardAreaForPiece.addChild(oPieceView);
+        oDiscardAreaForPiece.appendChild(oPieceView);
     }
     for (let i = 0; i < aBlackDiscard.length; i++) {
         const sPieceId = aBlackDiscard[i];
         let oPieceView = document.getElementById(sPieceId);
         oPieceView.addEventListener('dragstart', onPieceDragStart);
         const oDiscardAreaForPiece = document.getElementById(BLACK_DISCARD);
-        oDiscardAreaForPiece.addChild(oPieceView);
+        oDiscardAreaForPiece.appendChild(oPieceView);
     }
 }
 

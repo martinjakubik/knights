@@ -235,7 +235,9 @@ const getWidthOfDiscardArea = function (nMaximumBoardWidth, NUM_FILES) {
     return 4 * nMaximumBoardWidth / NUM_FILES;
 }
 
-const makeChessboard = function (oGameboardDiv, nMaximumBoardWidth, nSquareSize) {
+const makeChessboard = function (oGameboardDiv) {
+    const nMaximumBoardWidth = getMaximumBoardDisplaySize();
+    const nSquareSize = nMaximumBoardWidth / NUM_RANKS;
     let oChessboardDiv = document.createElement('div');
     oChessboardDiv.id = 'chessboard';
     oGameboardDiv.appendChild(oChessboardDiv);
@@ -260,7 +262,9 @@ const makeChessboard = function (oGameboardDiv, nMaximumBoardWidth, nSquareSize)
     }
 }
 
-const drawPiecesOnChessboard = function (oChessboard, nSquareSize) {
+const drawPiecesOnChessboard = function (oChessboard) {
+    const nMaximumBoardWidth = getMaximumBoardDisplaySize();
+    const nSquareSize = nMaximumBoardWidth / NUM_RANKS;
     for (let nRankIndex = NUM_RANKS - 1; nRankIndex >= 0; nRankIndex--) {
         let nRank = nRankIndex + 1;
         for (let nFileIndex = 0; nFileIndex < NUM_FILES; nFileIndex++) {
@@ -283,7 +287,7 @@ const drawPiecesOnChessboard = function (oChessboard, nSquareSize) {
     }
 }
 
-const drawGameboard = function (oGameboard) {
+const makeGameboard = function (oGameboard) {
     let oGameboardDiv = document.createElement('div');
     oGameboardDiv.id = 'gameboard';
     let oDiscardDiv = document.createElement('div');
@@ -317,8 +321,8 @@ const drawGameboard = function (oGameboard) {
     oLoadGameButton.onclick = loadGame;
     document.body.appendChild(oSaveGameButton);
     document.body.appendChild(oLoadGameButton);
-    drawPiecesOnChessboard(oGameboard.chessboard, nSquareSize);
 }
 
 setupChessboard(CHESSBOARD_START);
-drawGameboard(oGameboard);
+makeGameboard(oGameboard);
+drawPiecesOnChessboard(oGameboard.chessboard);

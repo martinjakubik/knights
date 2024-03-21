@@ -5,6 +5,7 @@ import { KnightsViewController } from './knightsViewController.js';
 import * as KnightsConstants from './knightsConstants.js';
 
 const STYLE_PX = 'PX';
+const NUM_GAMEBOARD_PIXEL_PADDING = 2;
 
 let oModel = new KnightsModel();
 
@@ -17,7 +18,7 @@ const getMaximumBoardDisplaySize = function () {
     const nViewportWidth = document.documentElement.clientWidth;
     const nViewportHeight = document.documentElement.clientHeight;
     const nMaximumSize = KnightsView.isTallScreen() ? nViewportWidth : nViewportHeight;
-    return nMaximumSize - 2;
+    return nMaximumSize - NUM_GAMEBOARD_PIXEL_PADDING;
 }
 
 const isSquareColorHighOrLow = function (nRankIndex, nFileIndex) {

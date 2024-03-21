@@ -21,35 +21,6 @@ class KnightsViewController {
         return oOriginOfMove;
     }
 
-    onPieceDragStart(oEvent) {
-        const oTarget = oEvent.target;
-        this.originOfMove = KnightsViewController.getMoveOriginFromPieceView(oTarget);
-        console.log(`moving piece '${this.originOfMove.pieceId}' from ${this.originOfMove.originId}`);
-    }
-
-    onDragoverPreventDefault(oEvent) {
-        oEvent.preventDefault();
-    }
-
-    onSquareDrop(oEvent) {
-        const oTarget = oEvent.target;
-        let oSquareView = oTarget;
-        if (oTarget && oTarget.classList.contains('piece')) {
-            oSquareView = oTarget.parentNode;
-        }
-        if (oSquareView && oSquareView.classList.contains('square')) {
-            this.targetOfMove.targetId = oSquareView ? oSquareView.id : 'none';
-            console.log(`moved piece '${this.originOfMove.pieceId}' from ${this.originOfMove.originId} to ${this.targetOfMove.targetId}`);
-            KnightsViewController.updateChessboardMove(this.model, this.originOfMove, this.targetOfMove);
-            this.clearMovingPieces();
-        }
-    }
-
-    clearMovingPieces() {
-        this.originOfMove = {};
-        this.targetOfMove = {};
-    }
-
     static killPiece(oModel, sSquareId) {
         const oSquareView = document.getElementById(sSquareId);
         const sPieceId = oModel.getPieceFromSquare(sSquareId);
@@ -100,24 +71,59 @@ class KnightsViewController {
         }
     }
 
-    transformGameboardToKnightbaseGame(oGameboard) {
+    static transformGameboardToKnightbaseGame(oGameboard) {
         const oKnightbaseGame = JSON.stringify(oGameboard);
         return oKnightbaseGame;
     }
 
-    transformKnightbaseGameToGameboard(oKnightbaseGame) {
+    static transformKnightbaseGameToGameboard(oKnightbaseGame) {
+        const oGameboard = JSON.parse(oKnightbaseGame)
+        return oGameboard;
+    }
+
+    setGameboard(oKnightbaseGame) {
         this.clearPiecesFromChessboardView(this.model.getChessboard());
         this.clearPiecesFromDiscardViewAndModel(this.model.getGameboard()[KnightsConstants.WHITE_DISCARD], this.model.getGameboard()[KnightsConstants.BLACK_DISCARD]);
-        this.model.setGameboard(JSON.parse(oKnightbaseGame));
+        const oGameboard = KnightsViewController.transformKnightbaseGameToGameboard(oKnightbaseGame);
+        this.model.setGameboard(oGameboard);
         this.renderPiecesOnChessboard(this.model.getChessboard());
         this.renderPiecesInDiscard(this.model.getGameboard()[KnightsConstants.WHITE_DISCARD], this.model.getGameboard()[KnightsConstants.BLACK_DISCARD]);
+    }
+
+    onPieceDragStart(oEvent) {
+        const oTarget = oEvent.target;
+        this.originOfMove = KnightsViewController.getMoveOriginFromPieceView(oTarget);
+        console.log(`moving piece '${this.originOfMove.pieceId}' from ${this.originOfMove.originId}`);
+    }
+
+    onDragoverPreventDefault(oEvent) {
+        oEvent.preventDefault();
+    }
+
+    onSquareDrop(oEvent) {
+        const oTarget = oEvent.target;
+        let oSquareView = oTarget;
+        if (oTarget && oTarget.classList.contains('piece')) {
+            oSquareView = oTarget.parentNode;
+        }
+        if (oSquareView && oSquareView.classList.contains('square')) {
+            this.targetOfMove.targetId = oSquareView ? oSquareView.id : 'none';
+            console.log(`moved piece '${this.originOfMove.pieceId}' from ${this.originOfMove.originId} to ${this.targetOfMove.targetId}`);
+            KnightsViewController.updateChessboardMove(this.model, this.originOfMove, this.targetOfMove);
+            this.clearMovingPieces();
+        }
+    }
+
+    clearMovingPieces() {
+        this.originOfMove = {};
+        this.targetOfMove = {};
     }
 
     saveGame = async function () {
         const nGame = 0;
         const sUrl = `${this.sKnightbaseUrl}/${nGame}/save`;
         const oFormBody = new URLSearchParams();
-        const oKnightbaseGame = this.transformGameboardToKnightbaseGame(this.model.getGameboard());
+        const oKnightbaseGame = KnightsViewController.transformGameboardToKnightbaseGame(this.model.getGameboard());
         oFormBody.set('game', oKnightbaseGame);
 
         const oPostOptions = {
@@ -140,7 +146,7 @@ class KnightsViewController {
         const oResponse = await fetch(sUrl, oGetOptions);
         if (oResponse.ok) {
             const sKnightbaseResponse = await oResponse.json();
-            this.transformKnightbaseGameToGameboard(sKnightbaseResponse);
+            this.setGameboard(sKnightbaseResponse);
         }
     }
 

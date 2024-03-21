@@ -4,8 +4,6 @@ import { KnightsModel } from './knightsModel.js';
 import { KnightsViewController } from './knightsViewController.js';
 import * as KnightsConstants from './knightsConstants.js';
 
-const STYLE_PX = 'PX';
-
 let oModel = new KnightsModel();
 let oKnightsViewController = new KnightsViewController(oModel);
 
@@ -157,8 +155,8 @@ const makeChessboard = function (oGameboardDiv) {
     let oChessboardDiv = document.createElement('div');
     oChessboardDiv.id = 'chessboard';
     oGameboardDiv.appendChild(oChessboardDiv);
-    oChessboardDiv.style.width = nMaximumBoardWidth + STYLE_PX;
-    oChessboardDiv.style.height = nMaximumBoardWidth + STYLE_PX;
+    oChessboardDiv.style.width = nMaximumBoardWidth + KnightsConstants.STYLE_PX;
+    oChessboardDiv.style.height = nMaximumBoardWidth + KnightsConstants.STYLE_PX;
     let bHigh = true;
     for (let nRankIndex = KnightsConstants.NUM_RANKS - 1; nRankIndex >= 0; nRankIndex--) {
         let nRank = nRankIndex + 1;
@@ -167,8 +165,8 @@ const makeChessboard = function (oGameboardDiv) {
             let sFile = KnightsConstants.aFiles[nFileIndex];
             oSquareView.classList.add('square');
             oSquareView.id = `${sFile}${nRank}`;
-            oSquareView.style.width = nSquareSize + STYLE_PX;
-            oSquareView.style.height = nSquareSize + STYLE_PX;
+            oSquareView.style.width = nSquareSize + KnightsConstants.STYLE_PX;
+            oSquareView.style.height = nSquareSize + KnightsConstants.STYLE_PX;
             bHigh = KnightsView.isSquareColorHighOrLow(nRankIndex, nFileIndex);
             oSquareView.classList.add(bHigh ? 'high' : 'low');
             oSquareView.addEventListener('dragover', onDragoverPreventDefault);
@@ -186,8 +184,8 @@ const makeDiscard = function (oGameboardDiv) {
     let oDiscardWhiteDiv = document.createElement('div');
     oDiscardBlackDiv.id = KnightsConstants.BLACK_DISCARD;
     oDiscardWhiteDiv.id = KnightsConstants.WHITE_DISCARD;
-    oDiscardBlackDiv.style.width = getWidthOfDiscardArea(nMaximumBoardWidth, KnightsConstants.NUM_FILES) + STYLE_PX;
-    oDiscardWhiteDiv.style.width = getWidthOfDiscardArea(nMaximumBoardWidth, KnightsConstants.NUM_FILES) + STYLE_PX;
+    oDiscardBlackDiv.style.width = getWidthOfDiscardArea(nMaximumBoardWidth, KnightsConstants.NUM_FILES) + KnightsConstants.STYLE_PX;
+    oDiscardWhiteDiv.style.width = getWidthOfDiscardArea(nMaximumBoardWidth, KnightsConstants.NUM_FILES) + KnightsConstants.STYLE_PX;
     oDiscardDiv.appendChild(oDiscardBlackDiv);
     oDiscardDiv.appendChild(oDiscardWhiteDiv);
     oGameboardDiv.appendChild(oDiscardDiv);
@@ -258,8 +256,8 @@ const renderPiecesOnChessboard = function (oChessboard) {
             let sPieceId = oChessboard[`${sFile}${nRank}`];
             if (sPieceId.length > 0) {
                 let oPieceView = document.getElementById(sPieceId);
-                oPieceView.style.width = nSquareSize + STYLE_PX;
-                oPieceView.style.height = nSquareSize + STYLE_PX;
+                oPieceView.style.width = nSquareSize + KnightsConstants.STYLE_PX;
+                oPieceView.style.height = nSquareSize + KnightsConstants.STYLE_PX;
                 oPieceView.draggable = true;
                 oPieceView.addEventListener('dragstart', onPieceDragStart);
                 let oSquareView = document.getElementById(`${sFile}${nRank}`);
@@ -294,10 +292,10 @@ const makeGameboard = function () {
     makeChessboard(oGameboardDiv);
     makeDiscard(oGameboardDiv);
     if (KnightsView.isTallScreen()) {
-        oGameboardDiv.style.width = nMaximumBoardWidth + STYLE_PX;
+        oGameboardDiv.style.width = nMaximumBoardWidth + KnightsConstants.STYLE_PX;
         oGameboardDiv.style.flexDirection = 'column';
     } else {
-        oGameboardDiv.style.width = (nMaximumBoardWidth + getWidthOfDiscardArea(nMaximumBoardWidth, KnightsConstants.NUM_FILES)) + STYLE_PX;
+        oGameboardDiv.style.width = (nMaximumBoardWidth + getWidthOfDiscardArea(nMaximumBoardWidth, KnightsConstants.NUM_FILES)) + KnightsConstants.STYLE_PX;
     }
     document.body.appendChild(oGameboardDiv);
     const oSaveGameButton = document.createElement('button');

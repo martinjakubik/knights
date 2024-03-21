@@ -5,7 +5,6 @@ import { KnightsViewController } from './knightsViewController.js';
 import * as KnightsConstants from './knightsConstants.js';
 
 const STYLE_PX = 'PX';
-const NUM_GAMEBOARD_PIXEL_PADDING = 2;
 
 let oModel = new KnightsModel();
 
@@ -13,13 +12,6 @@ const sKnightbaseUrl = 'https://www.supertitle.org:2721/knightbase';
 
 let oOriginOfMove = {};
 let oTargetOfMove = {};
-
-const getMaximumBoardDisplaySize = function () {
-    const nViewportWidth = document.documentElement.clientWidth;
-    const nViewportHeight = document.documentElement.clientHeight;
-    const nMaximumSize = KnightsView.isTallScreen() ? nViewportWidth : nViewportHeight;
-    return nMaximumSize - NUM_GAMEBOARD_PIXEL_PADDING;
-}
 
 const isSquareColorHighOrLow = function (nRankIndex, nFileIndex) {
     return (nRankIndex + nFileIndex) % 2 == 0 ? false : true;
@@ -163,7 +155,7 @@ const getWidthOfDiscardArea = function (nMaximumBoardWidth) {
 }
 
 const makeChessboard = function (oGameboardDiv) {
-    const nMaximumBoardWidth = getMaximumBoardDisplaySize();
+    const nMaximumBoardWidth = KnightsView.getMaximumBoardDisplaySize();
     const nSquareSize = nMaximumBoardWidth / KnightsConstants.NUM_RANKS;
     let oChessboardDiv = document.createElement('div');
     oChessboardDiv.id = 'chessboard';
@@ -190,7 +182,7 @@ const makeChessboard = function (oGameboardDiv) {
 }
 
 const makeDiscard = function (oGameboardDiv) {
-    const nMaximumBoardWidth = getMaximumBoardDisplaySize();
+    const nMaximumBoardWidth = KnightsView.getMaximumBoardDisplaySize();
     let oDiscardDiv = document.createElement('div');
     oDiscardDiv.id = 'discard';
     let oDiscardBlackDiv = document.createElement('div');
@@ -260,7 +252,7 @@ const renderPiecesInDiscard = function (aWhiteDiscard, aBlackDiscard) {
 }
 
 const renderPiecesOnChessboard = function (oChessboard) {
-    const nMaximumBoardWidth = getMaximumBoardDisplaySize();
+    const nMaximumBoardWidth = KnightsView.getMaximumBoardDisplaySize();
     const nSquareSize = nMaximumBoardWidth / KnightsConstants.NUM_RANKS;
     for (let nRankIndex = KnightsConstants.NUM_RANKS - 1; nRankIndex >= 0; nRankIndex--) {
         let nRank = nRankIndex + 1;
@@ -301,7 +293,7 @@ const makePieces = function (oChessboard) {
 const makeGameboard = function () {
     let oGameboardDiv = document.createElement('div');
     oGameboardDiv.id = 'gameboard';
-    const nMaximumBoardWidth = getMaximumBoardDisplaySize();
+    const nMaximumBoardWidth = KnightsView.getMaximumBoardDisplaySize();
     makeChessboard(oGameboardDiv);
     makeDiscard(oGameboardDiv);
     if (KnightsView.isTallScreen()) {

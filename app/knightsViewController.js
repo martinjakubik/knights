@@ -8,8 +8,8 @@ class KnightsViewController {
 
     constructor() {
         this.model = new KnightsModel();
-        this.oOriginOfMove = {};
-        this.oTargetOfMove = {};
+        this.originOfMove = {};
+        this.targetOfMove = {};
     }
 
     static getMoveOriginFromPieceView(oPieceView) {
@@ -23,8 +23,8 @@ class KnightsViewController {
 
     onPieceDragStart(oEvent) {
         const oTarget = oEvent.target;
-        this.oOriginOfMove = KnightsViewController.getMoveOriginFromPieceView(oTarget);
-        console.log(`moving piece '${this.oOriginOfMove.pieceId}' from ${this.oOriginOfMove.originId}`);
+        this.originOfMove = KnightsViewController.getMoveOriginFromPieceView(oTarget);
+        console.log(`moving piece '${this.originOfMove.pieceId}' from ${this.originOfMove.originId}`);
     }
 
     onDragoverPreventDefault(oEvent) {
@@ -38,16 +38,16 @@ class KnightsViewController {
             oSquareView = oTarget.parentNode;
         }
         if (oSquareView && oSquareView.classList.contains('square')) {
-            this.oTargetOfMove.targetId = oSquareView ? oSquareView.id : 'none';
-            console.log(`moved piece '${this.oOriginOfMove.pieceId}' from ${this.oOriginOfMove.originId} to ${this.oTargetOfMove.targetId}`);
-            KnightsViewController.updateChessboardMove(this.model, this.oOriginOfMove, this.oTargetOfMove);
+            this.targetOfMove.targetId = oSquareView ? oSquareView.id : 'none';
+            console.log(`moved piece '${this.originOfMove.pieceId}' from ${this.originOfMove.originId} to ${this.targetOfMove.targetId}`);
+            KnightsViewController.updateChessboardMove(this.model, this.originOfMove, this.targetOfMove);
             this.clearMovingPieces();
         }
     }
 
     clearMovingPieces() {
-        this.oOriginOfMove = {};
-        this.oTargetOfMove = {};
+        this.originOfMove = {};
+        this.targetOfMove = {};
     }
 
     static killPiece(oModel, sSquareId) {

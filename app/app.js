@@ -7,15 +7,12 @@ import * as KnightsConstants from './knightsConstants.js';
 const STYLE_PX = 'PX';
 
 let oModel = new KnightsModel();
+let oKnightsViewController = new KnightsViewController(oModel);
 
 const sKnightbaseUrl = 'https://www.supertitle.org:2721/knightbase';
 
 let oOriginOfMove = {};
 let oTargetOfMove = {};
-
-const isSquareColorHighOrLow = function (nRankIndex, nFileIndex) {
-    return (nRankIndex + nFileIndex) % 2 == 0 ? false : true;
-}
 
 const getMoveOriginFromPieceView = function (oPieceView) {
     let oOriginOfMove = {
@@ -172,7 +169,7 @@ const makeChessboard = function (oGameboardDiv) {
             oSquareView.id = `${sFile}${nRank}`;
             oSquareView.style.width = nSquareSize + STYLE_PX;
             oSquareView.style.height = nSquareSize + STYLE_PX;
-            bHigh = isSquareColorHighOrLow(nRankIndex, nFileIndex);
+            bHigh = KnightsView.isSquareColorHighOrLow(nRankIndex, nFileIndex);
             oSquareView.classList.add(bHigh ? 'high' : 'low');
             oSquareView.addEventListener('dragover', onDragoverPreventDefault);
             oSquareView.addEventListener('drop', onSquareDrop);

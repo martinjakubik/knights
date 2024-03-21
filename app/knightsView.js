@@ -13,6 +13,10 @@ class KnightsView {
         const nMaximumSize = KnightsView.isTallScreen() ? nViewportWidth : nViewportHeight;
         return nMaximumSize - KnightsConstants.NUM_GAMEBOARD_PIXEL_PADDING;
     }
+
+    static isSquareColorHighOrLow = function (nRankIndex, nFileIndex) {
+        return (nRankIndex + nFileIndex) % 2 == 0 ? false : true;
+    }
 }
 
 export { KnightsView };

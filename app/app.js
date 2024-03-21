@@ -145,52 +145,6 @@ const loadGame = async function () {
     }
 }
 
-const getWidthOfDiscardArea = function (nMaximumBoardWidth) {
-    return 4 * nMaximumBoardWidth / KnightsConstants.NUM_FILES;
-}
-
-const makeChessboard = function (oGameboardDiv) {
-    const nMaximumBoardWidth = KnightsView.getMaximumBoardDisplaySize();
-    const nSquareSize = nMaximumBoardWidth / KnightsConstants.NUM_RANKS;
-    let oChessboardDiv = document.createElement('div');
-    oChessboardDiv.id = 'chessboard';
-    oGameboardDiv.appendChild(oChessboardDiv);
-    oChessboardDiv.style.width = nMaximumBoardWidth + KnightsConstants.STYLE_PX;
-    oChessboardDiv.style.height = nMaximumBoardWidth + KnightsConstants.STYLE_PX;
-    let bHigh = true;
-    for (let nRankIndex = KnightsConstants.NUM_RANKS - 1; nRankIndex >= 0; nRankIndex--) {
-        let nRank = nRankIndex + 1;
-        for (let nFileIndex = 0; nFileIndex < KnightsConstants.NUM_FILES; nFileIndex++) {
-            let oSquareView = document.createElement('div');
-            let sFile = KnightsConstants.aFiles[nFileIndex];
-            oSquareView.classList.add('square');
-            oSquareView.id = `${sFile}${nRank}`;
-            oSquareView.style.width = nSquareSize + KnightsConstants.STYLE_PX;
-            oSquareView.style.height = nSquareSize + KnightsConstants.STYLE_PX;
-            bHigh = KnightsView.isSquareColorHighOrLow(nRankIndex, nFileIndex);
-            oSquareView.classList.add(bHigh ? 'high' : 'low');
-            oSquareView.addEventListener('dragover', onDragoverPreventDefault);
-            oSquareView.addEventListener('drop', onSquareDrop);
-            oChessboardDiv.appendChild(oSquareView);
-        };
-    }
-}
-
-const makeDiscard = function (oGameboardDiv) {
-    const nMaximumBoardWidth = KnightsView.getMaximumBoardDisplaySize();
-    let oDiscardDiv = document.createElement('div');
-    oDiscardDiv.id = 'discard';
-    let oDiscardBlackDiv = document.createElement('div');
-    let oDiscardWhiteDiv = document.createElement('div');
-    oDiscardBlackDiv.id = KnightsConstants.BLACK_DISCARD;
-    oDiscardWhiteDiv.id = KnightsConstants.WHITE_DISCARD;
-    oDiscardBlackDiv.style.width = getWidthOfDiscardArea(nMaximumBoardWidth, KnightsConstants.NUM_FILES) + KnightsConstants.STYLE_PX;
-    oDiscardWhiteDiv.style.width = getWidthOfDiscardArea(nMaximumBoardWidth, KnightsConstants.NUM_FILES) + KnightsConstants.STYLE_PX;
-    oDiscardDiv.appendChild(oDiscardBlackDiv);
-    oDiscardDiv.appendChild(oDiscardWhiteDiv);
-    oGameboardDiv.appendChild(oDiscardDiv);
-}
-
 const clearPiecesFromDiscardViewAndModel = function (aWhiteDiscard, aBlackDiscard) {
     for (let i = aWhiteDiscard.length - 1; i >= 0; i--) {
         const sPieceId = aWhiteDiscard[i];
@@ -285,32 +239,12 @@ const makePieces = function (oChessboard) {
     }
 }
 
-const makeGameboard = function () {
-    let oGameboardDiv = document.createElement('div');
-    oGameboardDiv.id = 'gameboard';
-    const nMaximumBoardWidth = KnightsView.getMaximumBoardDisplaySize();
-    makeChessboard(oGameboardDiv);
-    makeDiscard(oGameboardDiv);
-    if (KnightsView.isTallScreen()) {
-        oGameboardDiv.style.width = nMaximumBoardWidth + KnightsConstants.STYLE_PX;
-        oGameboardDiv.style.flexDirection = 'column';
-    } else {
-        oGameboardDiv.style.width = (nMaximumBoardWidth + getWidthOfDiscardArea(nMaximumBoardWidth, KnightsConstants.NUM_FILES)) + KnightsConstants.STYLE_PX;
-    }
-    document.body.appendChild(oGameboardDiv);
-    const oSaveGameButton = document.createElement('button');
-    const oLoadGameButton = document.createElement('button');
-    oSaveGameButton.id = 'savegamebutton';
-    oLoadGameButton.id = 'loadgamebutton';
-    oSaveGameButton.innerText = 'Save';
-    oLoadGameButton.innerText = 'Load';
-    oSaveGameButton.onclick = saveGame;
-    oLoadGameButton.onclick = loadGame;
-    document.body.appendChild(oSaveGameButton);
-    document.body.appendChild(oLoadGameButton);
-}
-
 oModel.setupChessboard(KnightsConstants.CHESSBOARD_START);
-makeGameboard();
+KnightsView.makeGameboard({
+    saveGame: saveGame,
+    loadGame: loadGame,
+    onDragoverPreventDefault: onDragoverPreventDefault,
+    onSquareDrop: onSquareDrop
+});
 makePieces(oModel.getChessboard());
 renderPiecesOnChessboard(oModel.getChessboard());

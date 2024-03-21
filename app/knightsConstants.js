@@ -43,4 +43,4 @@ export const aFiles = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 
 export const NUM_GAMEBOARD_PIXEL_PADDING = 2;
 
-const STYLE_PX = 'PX';
+export const STYLE_PX = 'PX';

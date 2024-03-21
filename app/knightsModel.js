@@ -59,7 +59,9 @@ class KnightsModel {
 
     removePieceFromDiscard(oOriginOfMove) {
         const nIndexOfPieceInDiscard = this.getGameboard()[oOriginOfMove.originId].indexOf(oOriginOfMove.pieceId);
-        this.getGameboard()[oOriginOfMove.originId].splice(nIndexOfPieceInDiscard, 1);
+        if (nIndexOfPieceInDiscard > -1) {
+            this.getGameboard()[oOriginOfMove.originId].splice(nIndexOfPieceInDiscard, 1);
+        }
     }
 
     killPiece(sSquareId) {

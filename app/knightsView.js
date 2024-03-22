@@ -43,7 +43,9 @@ class KnightsView {
                 bHigh = KnightsView.isSquareColorHighOrLow(nRankIndex, nFileIndex);
                 oSquareView.classList.add(bHigh ? 'high' : 'low');
                 oSquareView.addEventListener('dragover', oHandlers.onDragoverPreventDefault);
+                oSquareView.addEventListener('touchmove', oHandlers.onTouchMovePreventDefault);
                 oSquareView.addEventListener('drop', oHandlers.onSquareDrop);
+                oSquareView.addEventListener('touchend', oHandlers.onTouchEnd);
                 oChessboardDiv.appendChild(oSquareView);
             };
         }

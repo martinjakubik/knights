@@ -10,6 +10,7 @@ class KnightsViewController {
         this.model = new KnightsModel();
         this.originOfMove = {};
         this.targetOfMove = {};
+        this.currentTouch = null;
     }
 
     static getMoveOriginFromPieceView(oPieceView) {
@@ -98,6 +99,30 @@ class KnightsViewController {
 
     onDragoverPreventDefault(oEvent) {
         oEvent.preventDefault();
+        this.currentTouch = oEvent.touches ? oEvent.touches.item(0) : null;
+    }
+
+    onTouchEnd() {
+        const nMaximumBoardWidth = KnightsView.getMaximumBoardDisplaySize();
+        const nSquareSize = nMaximumBoardWidth / KnightsConstants.NUM_RANKS;
+        const oFirstTouch = this.currentTouch;
+        if (oFirstTouch) {
+            const nPageX = oFirstTouch.pageX;
+            const nPageY = oFirstTouch.pageY;
+            const nFileIndex = Math.floor(nPageX / nSquareSize + KnightsConstants.NUM_GAMEBOARD_PIXEL_PADDING) - 2;
+            const sFile = KnightsConstants.aFiles[nFileIndex];
+            const nRankIndex = 8 - Math.floor(nPageY / nSquareSize);
+            const sRank = nRankIndex;
+            const sSquareId = `${sFile}${sRank}`;
+            let oSquareView = document.getElementById(sSquareId);
+            if (oSquareView && oSquareView.classList.contains('square')) {
+                this.targetOfMove.targetId = oSquareView ? oSquareView.id : 'none';
+                console.log(`moved piece '${this.originOfMove.pieceId}' from ${this.originOfMove.originId} to ${this.targetOfMove.targetId}`);
+                KnightsViewController.updateChessboardMove(this.model, this.originOfMove, this.targetOfMove);
+                this.clearMovingPieces();
+            }
+            this.currentTouch = null;
+        }
     }
 
     onSquareDrop(oEvent) {
@@ -155,6 +180,7 @@ class KnightsViewController {
             const sPieceId = aWhiteDiscard[i];
             let oPieceView = document.getElementById(sPieceId);
             oPieceView.removeEventListener('dragstart', this.onPieceDragStart.bind(this));
+            oPieceView.removeEventListener('touchstart', this.onPieceDragStart.bind(this));
             const oDiscardViewForPiece = document.getElementById(KnightsConstants.WHITE_DISCARD);
             oDiscardViewForPiece.removeChild(oPieceView);
             document.body.appendChild(oPieceView);
@@ -163,7 +189,8 @@ class KnightsViewController {
         for (let i = aBlackDiscard.length - 1; i >= 0; i--) {
             const sPieceId = aBlackDiscard[i];
             let oPieceView = document.getElementById(sPieceId);
-            oPieceView.removeEventListener('dragstart', this.onPieceDragStart);
+            oPieceView.removeEventListener('dragstart', this.onPieceDragStart.bind(this));
+            oPieceView.removeEventListener('touchstart', this.onPieceDragStart.bind(this));
             const oDiscardViewForPiece = document.getElementById(KnightsConstants.BLACK_DISCARD);
             oDiscardViewForPiece.removeChild(oPieceView);
             document.body.appendChild(oPieceView);
@@ -180,6 +207,7 @@ class KnightsViewController {
                 if (sPieceId.length > 0) {
                     let oPieceView = document.getElementById(sPieceId);
                     oPieceView.removeEventListener('dragstart', this.onPieceDragStart.bind(this));
+                    oPieceView.removeEventListener('touchstart', this.onPieceDragStart.bind(this));
                     let oSquareView = document.getElementById(`${sFile}${nRank}`);
                     oSquareView.removeChild(oPieceView);
                     document.body.appendChild(oPieceView);
@@ -193,6 +221,7 @@ class KnightsViewController {
             const sPieceId = aWhiteDiscard[i];
             let oPieceView = document.getElementById(sPieceId);
             oPieceView.addEventListener('dragstart', this.onPieceDragStart.bind(this));
+            oPieceView.addEventListener('touchstart', this.onPieceDragStart.bind(this));
             const oDiscardViewForPiece = document.getElementById(KnightsConstants.WHITE_DISCARD);
             oDiscardViewForPiece.appendChild(oPieceView);
         }
@@ -200,6 +229,7 @@ class KnightsViewController {
             const sPieceId = aBlackDiscard[i];
             let oPieceView = document.getElementById(sPieceId);
             oPieceView.addEventListener('dragstart', this.onPieceDragStart.bind(this));
+            oPieceView.addEventListener('touchstart', this.onPieceDragStart.bind(this));
             const oDiscardViewForPiece = document.getElementById(KnightsConstants.BLACK_DISCARD);
             oDiscardViewForPiece.appendChild(oPieceView);
         }
@@ -219,6 +249,7 @@ class KnightsViewController {
                     oPieceView.style.height = nSquareSize + KnightsConstants.STYLE_PX;
                     oPieceView.draggable = true;
                     oPieceView.addEventListener('dragstart', this.onPieceDragStart.bind(this));
+                    oPieceView.addEventListener('touchstart', this.onPieceDragStart.bind(this));
                     let oSquareView = document.getElementById(`${sFile}${nRank}`);
                     oSquareView.appendChild(oPieceView);
                 }
@@ -250,7 +281,9 @@ class KnightsViewController {
             saveGame: this.saveGame.bind(this),
             loadGame: this.loadGame.bind(this),
             onDragoverPreventDefault: this.onDragoverPreventDefault.bind(this),
-            onSquareDrop: this.onSquareDrop.bind(this)
+            onTouchMovePreventDefault: this.onDragoverPreventDefault.bind(this),
+            onSquareDrop: this.onSquareDrop.bind(this),
+            onTouchEnd: this.onTouchEnd.bind(this)
         });
         this.makePieces(this.model.getChessboard());
         this.renderPiecesOnChessboard(this.model.getChessboard());

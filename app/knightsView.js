@@ -43,9 +43,7 @@ class KnightsView {
                 bHigh = KnightsView.isSquareColorHighOrLow(nRankIndex, nFileIndex);
                 oSquareView.classList.add(bHigh ? 'high' : 'low');
                 oSquareView.addEventListener('dragover', oHandlers.onDragoverPreventDefault);
-                oSquareView.addEventListener('touchmove', oHandlers.onTouchMovePreventDefault);
                 oSquareView.addEventListener('drop', oHandlers.onSquareDrop);
-                oSquareView.addEventListener('touchend', oHandlers.onTouchEnd);
                 oChessboardDiv.appendChild(oSquareView);
             };
         }
@@ -78,6 +76,7 @@ class KnightsView {
         } else {
             oGameboardDiv.style.width = (nMaximumBoardWidth + KnightsView.getWidthOfDiscardArea(nMaximumBoardWidth, KnightsConstants.NUM_FILES)) + KnightsConstants.STYLE_PX;
         }
+        oGameboardDiv.addEventListener('touchmove', oHandlers.onTouchMovePreventDefault);
         document.body.appendChild(oGameboardDiv);
         const oSaveGameButton = document.createElement('button');
         const oLoadGameButton = document.createElement('button');

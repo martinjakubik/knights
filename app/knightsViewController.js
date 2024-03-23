@@ -10,7 +10,8 @@ class KnightsViewController {
         this.model = new KnightsModel();
         this.originOfMove = {};
         this.targetOfMove = {};
-        this.currentTouch = null;
+        this.currentTouchPageX = -1;
+        this.currentTouchPageY = -1;
     }
 
     static getMoveOriginFromPieceView(oPieceView) {
@@ -99,16 +100,16 @@ class KnightsViewController {
 
     onDragoverPreventDefault(oEvent) {
         oEvent.preventDefault();
-        this.currentTouch = oEvent.touches ? oEvent.touches.item(0) : null;
+        this.currentTouchPageX = (oEvent.touches && oEvent.touches.length > 0) ? oEvent.touches.item(0).pageX : -1;
+        this.currentTouchPageY = (oEvent.touches && oEvent.touches.length > 0) ? oEvent.touches.item(0).pageY : -1;
     }
 
     onTouchEnd() {
         const nMaximumBoardWidth = KnightsView.getMaximumBoardDisplaySize();
         const nSquareSize = nMaximumBoardWidth / KnightsConstants.NUM_RANKS;
-        const oFirstTouch = this.currentTouch;
-        if (oFirstTouch) {
-            const nPageX = oFirstTouch.pageX;
-            const nPageY = oFirstTouch.pageY;
+        const nPageX = this.currentTouchPageX;
+        const nPageY = this.currentTouchPageY;
+        if (nPageX > -1 && nPageY > -1) {
             const nFileIndex = Math.floor(nPageX / nSquareSize + KnightsConstants.NUM_GAMEBOARD_PIXEL_PADDING) - 2;
             const sFile = KnightsConstants.aFiles[nFileIndex];
             const nRankIndex = 8 - Math.floor(nPageY / nSquareSize);
@@ -121,7 +122,8 @@ class KnightsViewController {
                 KnightsViewController.updateChessboardMove(this.model, this.originOfMove, this.targetOfMove);
                 this.clearMovingPieces();
             }
-            this.currentTouch = null;
+            this.currentTouchPageX = -1;
+            this.currentTouchPageY = -1;
         }
     }
 
@@ -269,6 +271,7 @@ class KnightsViewController {
                     oPieceView.id = sPieceId;
                     oPieceView.classList.add('piece');
                     oPieceView.classList.add(sPieceClass);
+                    oPieceView.addEventListener('touchend', this.onTouchEnd.bind(this));
                     document.body.appendChild(oPieceView);
                 }
             };

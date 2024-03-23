@@ -51,6 +51,7 @@ class KnightsView {
 
     static makeDiscard = function (oGameboardDiv) {
         const nMaximumBoardWidth = KnightsView.getMaximumBoardDisplaySize();
+        const nSquareSize = nMaximumBoardWidth / KnightsConstants.NUM_RANKS;
         let oDiscardDiv = document.createElement('div');
         oDiscardDiv.id = 'discard';
         let oDiscardBlackDiv = document.createElement('div');
@@ -58,7 +59,9 @@ class KnightsView {
         oDiscardBlackDiv.id = KnightsConstants.BLACK_DISCARD;
         oDiscardWhiteDiv.id = KnightsConstants.WHITE_DISCARD;
         oDiscardBlackDiv.style.width = KnightsView.getWidthOfDiscardArea(nMaximumBoardWidth, KnightsConstants.NUM_FILES) + KnightsConstants.STYLE_PX;
+        oDiscardBlackDiv.style.height = nSquareSize + KnightsConstants.STYLE_PX;
         oDiscardWhiteDiv.style.width = KnightsView.getWidthOfDiscardArea(nMaximumBoardWidth, KnightsConstants.NUM_FILES) + KnightsConstants.STYLE_PX;
+        oDiscardWhiteDiv.style.height = nSquareSize + KnightsConstants.STYLE_PX;
         oDiscardDiv.appendChild(oDiscardBlackDiv);
         oDiscardDiv.appendChild(oDiscardWhiteDiv);
         oGameboardDiv.appendChild(oDiscardDiv);

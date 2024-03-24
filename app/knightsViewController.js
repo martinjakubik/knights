@@ -34,11 +34,12 @@ class KnightsViewController {
     }
 
     static killPiece(oModel, sSquareId) {
+        const sPieceId = oModel.getPieceFromSquare(sSquareId);
+        oModel.killPiece(sSquareId);
         const aGameboardIds = KnightsViewController.getListOfGameboardIds();
         aGameboardIds.forEach(sGameboardId => {
             const sSquareIdOnGameboard = `${sSquareId}-${sGameboardId}`;
             const oSquareView = document.getElementById(sSquareIdOnGameboard);
-            const sPieceId = oModel.getPieceFromSquare(sSquareId);
             const sPieceIdOnGameboard = `${sPieceId}-${sGameboardId}`;
             const oPieceView = document.getElementById(sPieceIdOnGameboard);
             if (oSquareView && oPieceView) {
@@ -49,7 +50,6 @@ class KnightsViewController {
                 const sDiscardAreaForPiece = sDiscardAreaForPieceId === 'b' ? K.BLACK_DISCARD_ID : K.WHITE_DISCARD_ID;
                 const oDiscardViewForPiece = document.getElementById(sDiscardAreaForPiece);
                 oDiscardViewForPiece.appendChild(oPieceView);
-                oModel.killPiece(sSquareId);
             }
         })
     }

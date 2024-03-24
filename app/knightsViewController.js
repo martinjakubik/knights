@@ -20,11 +20,7 @@ class KnightsViewController {
         oOriginOfMove.pieceId = oPieceView.dataset.modelId;
         const oParentNode = oPieceView ? oPieceView.parentNode : null;
         oOriginOfMove.originType = oParentNode ? (oParentNode.classList.contains('square') ? K.MOVE_FROM_TYPES.square : K.MOVE_FROM_TYPES.discard) : null;
-        if (oOriginOfMove.originType === K.MOVE_FROM_TYPES.square) {
-            oOriginOfMove.originId = oPieceView ? oPieceView.parentNode.dataset.modelId : null;
-        } else if (oOriginOfMove.originType === K.MOVE_FROM_TYPES.discard) {
-            oOriginOfMove.originId = oPieceView ? oPieceView.parentNode.id : null;
-        }
+        oOriginOfMove.originId = oPieceView ? oPieceView.parentNode.dataset.modelId : null;
         return oOriginOfMove;
     }
 
@@ -49,12 +45,11 @@ class KnightsViewController {
             if (oSquareView && oPieceView) {
                 oSquareView.removeChild(oPieceView);
             }
-            if (sGameboardId === K.GAMEBOARD_MAIN_ID && sPieceIdOnGameboard) {
-                const sDiscardAreaForPieceId = sPieceIdOnGameboard.substring(0, 1);
-                const sDiscardAreaForPiece = sDiscardAreaForPieceId === 'b' ? K.BLACK_DISCARD_ID : K.WHITE_DISCARD_ID;
-                const oDiscardViewForPiece = document.getElementById(sDiscardAreaForPiece);
-                oDiscardViewForPiece.appendChild(oPieceView);
-            }
+            const sDiscardAreaForPieceId = sPieceIdOnGameboard.substring(0, 1);
+            const sDiscardAreaForPiece = sDiscardAreaForPieceId === 'b' ? K.BLACK_DISCARD_ID : K.WHITE_DISCARD_ID;
+            const sDiscardAreaOnGameboard = `${sDiscardAreaForPiece}-${sGameboardId}`;
+            const oDiscardViewForPiece = document.getElementById(sDiscardAreaOnGameboard);
+            oDiscardViewForPiece.appendChild(oPieceView);
         })
     }
 

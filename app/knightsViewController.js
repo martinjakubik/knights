@@ -12,6 +12,7 @@ class KnightsViewController {
         this.targetOfMove = {};
         this.currentTouchPageX = -1;
         this.currentTouchPageY = -1;
+        this.currentMiniGameboard = 1;
     }
 
     static getMoveOriginFromPieceView(oPieceView) {
@@ -110,7 +111,7 @@ class KnightsViewController {
         const nPageX = this.currentTouchPageX;
         const nPageY = this.currentTouchPageY;
         if (nPageX > -1 && nPageY > -1) {
-            const nFileIndex = Math.floor(nPageX / nSquareSize + KnightsConstants.NUM_GAMEBOARD_PIXEL_PADDING) - 2;
+            const nFileIndex = Math.floor(nPageX / nSquareSize + KnightsConstants.GAMEBOARD_PIXEL_PADDING) - 2;
             const sFile = KnightsConstants.aFiles[nFileIndex];
             const nRankIndex = 8 - Math.floor(nPageY / nSquareSize);
             const sRank = nRankIndex;
@@ -280,14 +281,17 @@ class KnightsViewController {
 
     start() {
         this.model.setupChessboard(KnightsConstants.CHESSBOARD_START);
-        KnightsView.makeGameboard({
+        const oHandlers = {
             saveGame: this.saveGame.bind(this),
             loadGame: this.loadGame.bind(this),
             onDragoverPreventDefault: this.onDragoverPreventDefault.bind(this),
             onTouchMovePreventDefault: this.onDragoverPreventDefault.bind(this),
             onSquareDrop: this.onSquareDrop.bind(this),
             onTouchEnd: this.onTouchEnd.bind(this)
-        });
+        }
+        KnightsView.makeGameboard('main', KnightsConstants.GAMEBOARD_RENDER_TYPES.main, oHandlers);
+        const sMiniGameboardId = `mini-${this.currentMiniGameboard}`;
+        KnightsView.makeGameboard(sMiniGameboardId, KnightsConstants.GAMEBOARD_RENDER_TYPES.mini);
         this.makePieces(this.model.getChessboard());
         this.renderPiecesOnChessboard(this.model.getChessboard());
     }

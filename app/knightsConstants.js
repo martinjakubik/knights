@@ -41,6 +41,15 @@ export const CHESSBOARD_START = {
 
 export const aFiles = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 
-export const NUM_GAMEBOARD_PIXEL_PADDING = 2;
-
 export const STYLE_PX = 'PX';
+
+export const CSS_CLASS_GAMEBOARD = 'gameboard';
+export const CSS_CLASS_CHESSBOARD = 'chessboard';
+
+export const GAMEBOARD_RENDER_TYPES = {
+    'main': 0,
+    'mini': 1
+}
+
+export const GAMEBOARD_PIXEL_PADDING = 2;
+export const GAMEBOARD_MINI_WIDTH = 100;

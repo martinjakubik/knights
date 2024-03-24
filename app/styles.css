@@ -2,11 +2,11 @@ body {
     margin: 0;
 }
 
-div#gameboard {
+div.gameboard {
     display: flex;
 }
 
-div#chessboard {
+div.chessboard {
     display: flex;
     flex-wrap: wrap;
 }

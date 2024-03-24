@@ -1,6 +1,10 @@
 import * as KnightsConstants from './knightsConstants.js';
+import { KnightsViewController } from './knightsViewController.js';
 
 class KnightsView {
+    static sGameboardIdPrefix = 'gameboard';
+    static sChessboardIdPrefix = 'chessboard';
+
     static isTallScreen = function () {
         const nViewportWidth = document.documentElement.clientWidth;
         const nViewportHeight = document.documentElement.clientHeight;
@@ -11,7 +15,7 @@ class KnightsView {
         const nViewportWidth = document.documentElement.clientWidth;
         const nViewportHeight = document.documentElement.clientHeight;
         const nMaximumSize = KnightsView.isTallScreen() ? nViewportWidth : nViewportHeight;
-        return nMaximumSize - KnightsConstants.NUM_GAMEBOARD_PIXEL_PADDING;
+        return nMaximumSize - KnightsConstants.GAMEBOARD_PIXEL_PADDING;
     }
 
     static getWidthOfDiscardArea = function (nMaximumBoardWidth) {
@@ -22,11 +26,15 @@ class KnightsView {
         return (nRankIndex + nFileIndex) % 2 == 0 ? false : true;
     }
 
-    static makeChessboard = function (oGameboardDiv, oHandlers = {}) {
-        const nMaximumBoardWidth = KnightsView.getMaximumBoardDisplaySize();
+    static makeChessboard = function (oGameboardDiv, sId, nGameboardRenderType, oHandlers = {}) {
+        let nMaximumBoardWidth = KnightsView.getMaximumBoardDisplaySize();
+        if (nGameboardRenderType === KnightsConstants.GAMEBOARD_RENDER_TYPES.mini) {
+            nMaximumBoardWidth = KnightsConstants.GAMEBOARD_MINI_WIDTH;
+        }
         const nSquareSize = nMaximumBoardWidth / KnightsConstants.NUM_RANKS;
         let oChessboardDiv = document.createElement('div');
-        oChessboardDiv.id = 'chessboard';
+        oChessboardDiv.id = sId ? `${KnightsView.sChessboardIdPrefix}-${sId}` : KnightsView.sChessboardIdPrefix;
+        oChessboardDiv.classList.add(KnightsConstants.CSS_CLASS_CHESSBOARD);
         oGameboardDiv.appendChild(oChessboardDiv);
         oChessboardDiv.style.width = nMaximumBoardWidth + KnightsConstants.STYLE_PX;
         oChessboardDiv.style.height = nMaximumBoardWidth + KnightsConstants.STYLE_PX;
@@ -71,11 +79,9 @@ class KnightsView {
         oGameboardDiv.appendChild(oDiscardDiv);
     }
 
-    static makeGameboard = function (oHandlers = {}) {
-        let oGameboardDiv = document.createElement('div');
-        oGameboardDiv.id = 'gameboard';
+    static makeMainGameboard = function (oGameboardDiv, sId = null, oHandlers = {}) {
         const nMaximumBoardWidth = KnightsView.getMaximumBoardDisplaySize();
-        KnightsView.makeChessboard(oGameboardDiv, oHandlers);
+        KnightsView.makeChessboard(oGameboardDiv, sId, KnightsConstants.GAMEBOARD_RENDER_TYPES.main, oHandlers);
         KnightsView.makeDiscard(oGameboardDiv);
         if (KnightsView.isTallScreen()) {
             oGameboardDiv.style.width = nMaximumBoardWidth + KnightsConstants.STYLE_PX;
@@ -101,6 +107,24 @@ class KnightsView {
         }
         document.body.appendChild(oSaveGameButton);
         document.body.appendChild(oLoadGameButton);
+    }
+
+    static makeMiniGameboard = function (oGameboardDiv, sId = null) {
+        KnightsView.makeChessboard(oGameboardDiv, sId, KnightsConstants.GAMEBOARD_RENDER_TYPES.mini);
+        oGameboardDiv.style.width = KnightsConstants.GAMEBOARD_MINI_WIDTH + KnightsConstants.STYLE_PX;
+        oGameboardDiv.style.flexDirection = 'column';
+        document.body.appendChild(oGameboardDiv);
+    }
+
+    static makeGameboard = function (sId = null, nGameboardRenderType, oHandlers = {}) {
+        let oGameboardDiv = document.createElement('div');
+        oGameboardDiv.id = sId ? `${KnightsView.sGameboardIdPrefix}-${sId}` : KnightsView.sGameboardIdPrefix;
+        oGameboardDiv.classList.add(KnightsConstants.CSS_CLASS_GAMEBOARD);
+        if (nGameboardRenderType === KnightsConstants.GAMEBOARD_RENDER_TYPES.main) {
+            KnightsView.makeMainGameboard(oGameboardDiv, sId, oHandlers);
+        } else if (nGameboardRenderType === KnightsConstants.GAMEBOARD_RENDER_TYPES.mini) {
+            KnightsView.makeMiniGameboard(oGameboardDiv, sId);
+        }
     }
 }
 

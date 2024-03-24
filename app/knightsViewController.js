@@ -63,10 +63,11 @@ class KnightsViewController {
     }
 
     static updateMoveFromDiscardToSquare(oModel, oOriginOfMove, oTargetOfMove) {
-        if (!oModel.isPieceOnSquare(oTargetOfMove.targetId)) {
-            oModel.removePieceFromDiscard(oOriginOfMove);
-            KnightsViewController.rerenderPiecesOnChessboardMove(oOriginOfMove, oTargetOfMove);
+        oModel.removePieceFromDiscard(oOriginOfMove);
+        if (oModel.isPieceOnSquare(oTargetOfMove.targetId)) {
+            KnightsViewController.killPiece(oModel, oTargetOfMove.targetId);
         }
+        KnightsViewController.rerenderPiecesOnChessboardMove(oOriginOfMove, oTargetOfMove);
     }
 
     static updateChessboardMove(oModel, oOriginOfMove, oTargetOfMove) {

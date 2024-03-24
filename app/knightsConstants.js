@@ -57,3 +57,8 @@ export const NUM_MINI_GAMEBOARDS = 2;
 
 export const GAMEBOARD_PIXEL_PADDING = 2;
 export const GAMEBOARD_MINI_WIDTH = 100;
+
+export const MOVE_FROM_TYPES = {
+    'square': 0,
+    'discard': 1
+}

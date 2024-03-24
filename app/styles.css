@@ -11,7 +11,11 @@ div.chessboard {
     flex-wrap: wrap;
 }
 
-div#discard {
+div.discard {
+    display: none;
+}
+
+div#discard-main {
     display: flex;
     flex-direction: column;
 }

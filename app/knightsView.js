@@ -3,6 +3,7 @@ import * as K from './knightsConstants.js';
 class KnightsView {
     static sGameboardIdPrefix = 'gameboard';
     static sChessboardIdPrefix = 'chessboard';
+    static sDiscardIdPrefix = 'discard';
 
     static isTallScreen = function () {
         const nViewportWidth = document.documentElement.clientWidth;
@@ -61,11 +62,12 @@ class KnightsView {
         }
     }
 
-    static makeDiscard = function (oGameboardDiv) {
+    static makeDiscard = function (oGameboardDiv, sId) {
         const nMaximumBoardWidth = KnightsView.getMaximumBoardDisplaySize();
         const nSquareSize = nMaximumBoardWidth / K.NUM_RANKS;
         let oDiscardDiv = document.createElement('div');
-        oDiscardDiv.id = 'discard';
+        oDiscardDiv.id = sId ? `${KnightsView.sDiscardIdPrefix}-${sId}` : KnightsView.sDiscardIdPrefix;
+        oDiscardDiv.classList.add('discard');
         let oDiscardBlackDiv = document.createElement('div');
         let oDiscardWhiteDiv = document.createElement('div');
         oDiscardBlackDiv.id = K.BLACK_DISCARD_ID;
@@ -82,7 +84,7 @@ class KnightsView {
     static makeMainGameboard = function (oGameboardDiv, sId = null, oHandlers = {}) {
         const nMaximumBoardWidth = KnightsView.getMaximumBoardDisplaySize();
         KnightsView.makeChessboard(oGameboardDiv, sId, K.GAMEBOARD_RENDER_TYPES.main, oHandlers);
-        KnightsView.makeDiscard(oGameboardDiv);
+        KnightsView.makeDiscard(oGameboardDiv, sId);
         if (KnightsView.isTallScreen()) {
             oGameboardDiv.style.width = nMaximumBoardWidth + K.STYLE_PX;
             oGameboardDiv.style.flexDirection = 'column';
@@ -111,6 +113,7 @@ class KnightsView {
 
     static makeMiniGameboard = function (oGameboardDiv, sId = null) {
         KnightsView.makeChessboard(oGameboardDiv, sId, K.GAMEBOARD_RENDER_TYPES.mini);
+        KnightsView.makeDiscard(oGameboardDiv, sId);
         oGameboardDiv.style.width = K.GAMEBOARD_MINI_WIDTH + K.STYLE_PX;
         oGameboardDiv.style.flexDirection = 'column';
         document.body.appendChild(oGameboardDiv);

@@ -19,8 +19,12 @@ class KnightsViewController {
         let oOriginOfMove = {}
         oOriginOfMove.pieceId = oPieceView.dataset.modelId;
         const oParentNode = oPieceView ? oPieceView.parentNode : null;
-        oOriginOfMove.originId = oPieceView ? oPieceView.parentNode.dataset.modelId : null;
-        oOriginOfMove.originType = oParentNode ? (oParentNode.classList.contains('square') ? 0 : 1) : null;
+        oOriginOfMove.originType = oParentNode ? (oParentNode.classList.contains('square') ? K.MOVE_FROM_TYPES.square : K.MOVE_FROM_TYPES.discard) : null;
+        if (oOriginOfMove.originType === K.MOVE_FROM_TYPES.square) {
+            oOriginOfMove.originId = oPieceView ? oPieceView.parentNode.dataset.modelId : null;
+        } else if (oOriginOfMove.originType === K.MOVE_FROM_TYPES.discard) {
+            oOriginOfMove.originId = oPieceView ? oPieceView.parentNode.id : null;
+        }
         return oOriginOfMove;
     }
 
@@ -71,9 +75,9 @@ class KnightsViewController {
     }
 
     static updateChessboardMove(oModel, oOriginOfMove, oTargetOfMove) {
-        if (oOriginOfMove.originType == 0) {
+        if (oOriginOfMove.originType === K.MOVE_FROM_TYPES.square) {
             KnightsViewController.updateMoveFromSquareToSquare(oModel, oOriginOfMove, oTargetOfMove);
-        } else {
+        } else if (oOriginOfMove.originType === K.MOVE_FROM_TYPES.discard) {
             KnightsViewController.updateMoveFromDiscardToSquare(oModel, oOriginOfMove, oTargetOfMove);
         }
     }

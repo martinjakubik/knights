@@ -45,6 +45,10 @@ class KnightsModel {
         return this.getChessboard()[sSquareId];
     }
 
+    putPieceOnSquare(sPieceId, sSquareId) {
+        this.getChessboard()[sSquareId] = sPieceId;
+    }
+
     removePieceFromSquare(sSquareId) {
         this.getChessboard()[sSquareId] = '';
     }

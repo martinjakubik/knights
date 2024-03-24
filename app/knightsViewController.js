@@ -58,7 +58,7 @@ class KnightsViewController {
         if (oModel.isPieceOnSquare(oTargetOfMove.targetId)) {
             KnightsViewController.killPiece(oModel, oTargetOfMove.targetId);
         }
-        oModel.getChessboard()[oTargetOfMove.targetId] = oOriginOfMove.pieceId;
+        oModel.putPieceOnSquare(oOriginOfMove.pieceId, oTargetOfMove.targetId);
         KnightsViewController.rerenderPiecesOnChessboardMove(oOriginOfMove, oTargetOfMove);
     }
 
@@ -67,6 +67,7 @@ class KnightsViewController {
         if (oModel.isPieceOnSquare(oTargetOfMove.targetId)) {
             KnightsViewController.killPiece(oModel, oTargetOfMove.targetId);
         }
+        oModel.putPieceOnSquare(oOriginOfMove.pieceId, oTargetOfMove.targetId);
         KnightsViewController.rerenderPiecesOnChessboardMove(oOriginOfMove, oTargetOfMove);
     }
 

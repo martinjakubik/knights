@@ -86,7 +86,6 @@ class KnightsView {
     static makeMainGameboard = function (oGameboardDiv, sId = null, oHandlers = {}) {
         const nMaximumBoardWidth = KnightsView.getMaximumBoardDisplaySize();
         KnightsView.makeChessboard(oGameboardDiv, sId, K.GAMEBOARD_RENDER_TYPES.main, oHandlers);
-        KnightsView.makeDiscard(oGameboardDiv, sId);
         if (KnightsView.isTallScreen()) {
             oGameboardDiv.style.width = nMaximumBoardWidth + K.STYLE_PX;
             oGameboardDiv.style.flexDirection = 'column';
@@ -115,7 +114,7 @@ class KnightsView {
 
     static makeMiniGameboard = function (oGameboardDiv, sId = null) {
         KnightsView.makeChessboard(oGameboardDiv, sId, K.GAMEBOARD_RENDER_TYPES.mini);
-        KnightsView.makeDiscard(oGameboardDiv, sId);
+        oGameboardDiv.classList.add(K.CSS_CLASS_MINI);
         oGameboardDiv.style.width = K.GAMEBOARD_MINI_WIDTH + K.STYLE_PX;
         oGameboardDiv.style.flexDirection = 'column';
         document.body.appendChild(oGameboardDiv);
@@ -130,6 +129,7 @@ class KnightsView {
         } else if (nGameboardRenderType === K.GAMEBOARD_RENDER_TYPES.mini) {
             KnightsView.makeMiniGameboard(oGameboardDiv, sId);
         }
+        KnightsView.makeDiscard(oGameboardDiv, sId);
     }
 }
 

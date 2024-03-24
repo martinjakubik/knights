@@ -6,6 +6,10 @@ div.gameboard {
     display: flex;
 }
 
+div.gameboard.mini {
+    margin: 1em;
+}
+
 div.chessboard {
     display: flex;
     flex-wrap: wrap;
@@ -36,6 +40,14 @@ div.square.high {
 
 div.square.low {
     background-color: rgb(86, 50, 27);
+}
+
+div.mini div.square.high {
+    background-color: rgba(235, 184, 152, 0.2);
+}
+
+div.mini div.square.low {
+    background-color: rgba(86, 50, 27, 0.2);
 }
 
 div.piece.wp {

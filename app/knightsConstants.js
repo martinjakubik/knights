@@ -46,6 +46,7 @@ export const aFiles = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 export const STYLE_PX = 'PX';
 
 export const CSS_CLASS_GAMEBOARD = 'gameboard';
+export const CSS_CLASS_MINI = 'mini';
 export const CSS_CLASS_CHESSBOARD = 'chessboard';
 
 export const GAMEBOARD_RENDER_TYPES = {

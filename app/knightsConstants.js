@@ -53,5 +53,7 @@ export const GAMEBOARD_RENDER_TYPES = {
     'mini': 1
 }
 
+export const NUM_MINI_GAMEBOARDS = 2;
+
 export const GAMEBOARD_PIXEL_PADDING = 2;
 export const GAMEBOARD_MINI_WIDTH = 100;

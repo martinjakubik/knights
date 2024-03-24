@@ -12,7 +12,7 @@ class KnightsViewController {
         this.targetOfMove = {};
         this.currentTouchPageX = -1;
         this.currentTouchPageY = -1;
-        this.currentMiniGameboard = 1;
+        this.currentMiniGameboard = 0;
     }
 
     static getMoveOriginFromPieceView(oPieceView) {
@@ -24,20 +24,34 @@ class KnightsViewController {
         return oOriginOfMove;
     }
 
+    static getListOfGameboardIds() {
+        const aGameboardIds = [];
+        aGameboardIds.push(K.GAMEBOARD_MAIN_ID);
+        for (let i = 0; i < 1; i++) {
+            aGameboardIds.push(`${K.GAMEBOARD_MINI_CLASS}-${i}`);
+        }
+        return aGameboardIds;
+    }
+
     static killPiece(oModel, sSquareId) {
-        const oSquareView = document.getElementById(sSquareId);
-        const sPieceId = oModel.getPieceFromSquare(sSquareId);
-        const oPieceView = document.getElementById(sPieceId);
-        if (oSquareView && oPieceView) {
-            oSquareView.removeChild(oPieceView);
-        }
-        if (sPieceId) {
-            const sDiscardAreaForPieceId = sPieceId.substring(0, 1);
-            const sDiscardAreaForPiece = sDiscardAreaForPieceId === 'b' ? K.BLACK_DISCARD_ID : K.WHITE_DISCARD_ID;
-            const oDiscardViewForPiece = document.getElementById(sDiscardAreaForPiece);
-            oDiscardViewForPiece.appendChild(oPieceView);
-            oModel.killPiece(sSquareId);
-        }
+        const aGameboardIds = KnightsViewController.getListOfGameboardIds();
+        aGameboardIds.forEach(sGameboardId => {
+            const sSquareIdOnGameboard = `${sSquareId}-${sGameboardId}`;
+            const oSquareView = document.getElementById(sSquareIdOnGameboard);
+            const sPieceId = oModel.getPieceFromSquare(sSquareId);
+            const sPieceIdOnGameboard = `${sPieceId}-${sGameboardId}`;
+            const oPieceView = document.getElementById(sPieceIdOnGameboard);
+            if (oSquareView && oPieceView) {
+                oSquareView.removeChild(oPieceView);
+            }
+            if (sGameboardId === K.GAMEBOARD_MAIN_ID && sPieceIdOnGameboard) {
+                const sDiscardAreaForPieceId = sPieceIdOnGameboard.substring(0, 1);
+                const sDiscardAreaForPiece = sDiscardAreaForPieceId === 'b' ? K.BLACK_DISCARD_ID : K.WHITE_DISCARD_ID;
+                const oDiscardViewForPiece = document.getElementById(sDiscardAreaForPiece);
+                oDiscardViewForPiece.appendChild(oPieceView);
+                oModel.killPiece(sSquareId);
+            }
+        })
     }
 
     static updateMoveFromSquareToSquare(oModel, oOriginOfMove, oTargetOfMove) {
@@ -65,13 +79,19 @@ class KnightsViewController {
     }
 
     static rerenderPiecesOnChessboardMove(oOriginOfMove, oTargetOfMove) {
-        const oMovedFromNode = document.getElementById(oOriginOfMove.originId);
-        const oMovedPieceNode = document.getElementById(oOriginOfMove.pieceId);
-        const oMovedToNode = document.getElementById(oTargetOfMove.targetId);
-        if (oMovedFromNode && oMovedPieceNode && oMovedToNode) {
-            oMovedFromNode.removeChild(oMovedPieceNode);
-            oMovedToNode.appendChild(oMovedPieceNode);
-        }
+        const aGameboardIds = KnightsViewController.getListOfGameboardIds();
+        aGameboardIds.forEach(sGameboardId => {
+            const sOriginOfMoveIdOnGameboard = `${oOriginOfMove.originId}-${sGameboardId}`;
+            const sPieceIdOnGameboard = `${sPieceId}-${sGameboardId}`;
+            const sTargetOfMoveIdOnGameboard = `${sPieceId}-${sGameboardId}`;
+            const oMovedFromNode = document.getElementById(sOriginOfMoveIdOnGameboard);
+            const oMovedPieceNode = document.getElementById(sPieceIdOnGameboard);
+            const oMovedToNode = document.getElementById(sTargetOfMoveIdOnGameboard);
+            if (oMovedFromNode && oMovedPieceNode && oMovedToNode) {
+                oMovedFromNode.removeChild(oMovedPieceNode);
+                oMovedToNode.appendChild(oMovedPieceNode);
+            }
+        });
     }
 
     static transformGameboardToKnightbaseGame(oGameboard) {
@@ -89,7 +109,10 @@ class KnightsViewController {
         this.clearPiecesFromDiscardViewAndModel(this.model.getGameboard()[K.WHITE_DISCARD_ID], this.model.getGameboard()[K.BLACK_DISCARD_ID]);
         const oGameboard = KnightsViewController.transformKnightbaseGameToGameboard(oKnightbaseGame);
         this.model.setGameboard(oGameboard);
-        this.renderPiecesOnChessboard(this.model.getChessboard());
+        const aGameboardIds = KnightsViewController.getListOfGameboardIds();
+        aGameboardIds.forEach(sGameboardId => {
+            this.renderPiecesOnChessboard(this.model.getChessboard(), sGameboardId);
+        });
         this.renderPiecesInDiscard(this.model.getGameboard()[K.WHITE_DISCARD_ID], this.model.getGameboard()[K.BLACK_DISCARD_ID]);
     }
 
@@ -116,9 +139,11 @@ class KnightsViewController {
             const nRankIndex = 8 - Math.floor(nPageY / nSquareSize);
             const sRank = nRankIndex;
             const sSquareId = `${sFile}${sRank}`;
-            let oSquareView = document.getElementById(sSquareId);
+            const sSquareIdOnMainGameboard = `${sSquareId}-${K.GAMEBOARD_MAIN_ID}`;
+            let oSquareView = document.getElementById(sSquareIdOnMainGameboard);
             if (oSquareView && oSquareView.classList.contains('square')) {
-                this.targetOfMove.targetId = oSquareView ? oSquareView.id : 'none';
+                const sTargetOfMoveId = oSquareView ? oSquareView.id.substring(0, oSquareView.id.indexOf('-')) : 'none';
+                this.targetOfMove.targetId = sTargetOfMoveId;
                 console.log(`moved piece '${this.originOfMove.pieceId}' from ${this.originOfMove.originId} to ${this.targetOfMove.targetId}`);
                 KnightsViewController.updateChessboardMove(this.model, this.originOfMove, this.targetOfMove);
                 this.clearMovingPieces();
@@ -180,7 +205,7 @@ class KnightsViewController {
 
     clearPiecesFromDiscardViewAndModel(aWhiteDiscard, aBlackDiscard) {
         for (let i = aWhiteDiscard.length - 1; i >= 0; i--) {
-            const sPieceId = aWhiteDiscard[i];
+            const sPieceId = `${aWhiteDiscard[i]}-${K.GAMEBOARD_MAIN_ID}`;
             let oPieceView = document.getElementById(sPieceId);
             oPieceView.removeEventListener('dragstart', this.onPieceDragStart.bind(this));
             oPieceView.removeEventListener('touchstart', this.onPieceDragStart.bind(this));
@@ -190,7 +215,7 @@ class KnightsViewController {
             aWhiteDiscard.splice(i, 1);
         }
         for (let i = aBlackDiscard.length - 1; i >= 0; i--) {
-            const sPieceId = aBlackDiscard[i];
+            const sPieceId = `${aBlackDiscard[i]}-${K.GAMEBOARD_MAIN_ID}`;
             let oPieceView = document.getElementById(sPieceId);
             oPieceView.removeEventListener('dragstart', this.onPieceDragStart.bind(this));
             oPieceView.removeEventListener('touchstart', this.onPieceDragStart.bind(this));
@@ -202,21 +227,27 @@ class KnightsViewController {
     }
 
     clearPiecesFromChessboardView(oChessboard) {
-        for (let nRankIndex = K.NUM_RANKS - 1; nRankIndex >= 0; nRankIndex--) {
-            let nRank = nRankIndex + 1;
-            for (let nFileIndex = 0; nFileIndex < K.NUM_FILES; nFileIndex++) {
-                let sFile = K.aFiles[nFileIndex];
-                let sPieceId = oChessboard[`${sFile}${nRank}`];
-                if (sPieceId.length > 0) {
-                    let oPieceView = document.getElementById(sPieceId);
-                    oPieceView.removeEventListener('dragstart', this.onPieceDragStart.bind(this));
-                    oPieceView.removeEventListener('touchstart', this.onPieceDragStart.bind(this));
-                    let oSquareView = document.getElementById(`${sFile}${nRank}`);
-                    oSquareView.removeChild(oPieceView);
-                    document.body.appendChild(oPieceView);
-                }
-            };
-        }
+        const aGameboardIds = KnightsViewController.getListOfGameboardIds();
+        aGameboardIds.forEach(sGameboardId => {
+            for (let nRankIndex = K.NUM_RANKS - 1; nRankIndex >= 0; nRankIndex--) {
+                let nRank = nRankIndex + 1;
+                for (let nFileIndex = 0; nFileIndex < K.NUM_FILES; nFileIndex++) {
+                    let sFile = K.aFiles[nFileIndex];
+                    let sPieceId = oChessboard[`${sFile}${nRank}`];
+                    const sPieceIdOnGameboard = `${sPieceId}-${sGameboardId}`;
+                    if (sPieceId.length > 0) {
+                        let oPieceView = document.getElementById(sPieceIdOnGameboard);
+                        oPieceView.removeEventListener('dragstart', this.onPieceDragStart.bind(this));
+                        oPieceView.removeEventListener('touchstart', this.onPieceDragStart.bind(this));
+                        const sSquareId = `${sFile}${nRank}`;
+                        const sSquareIdOnGameboard = `${sSquareId}-${sGameboardId}`;
+                        let oSquareView = document.getElementById(sSquareIdOnGameboard);
+                        oSquareView.removeChild(oPieceView);
+                        document.body.appendChild(oPieceView);
+                    }
+                };
+            }
+        });
     }
 
     renderPiecesInDiscard(aWhiteDiscard, aBlackDiscard) {
@@ -238,8 +269,11 @@ class KnightsViewController {
         }
     }
 
-    renderPiecesOnChessboard(oChessboard) {
-        const nMaximumBoardWidth = KnightsView.getMaximumBoardDisplaySize();
+    renderPiecesOnChessboard(oChessboard, sGameboardId, nGameboardRenderType) {
+        let nMaximumBoardWidth = KnightsView.getMaximumBoardDisplaySize();
+        if (nGameboardRenderType === K.GAMEBOARD_RENDER_TYPES.mini) {
+            nMaximumBoardWidth = K.GAMEBOARD_MINI_WIDTH;
+        }
         const nSquareSize = nMaximumBoardWidth / K.NUM_RANKS;
         for (let nRankIndex = K.NUM_RANKS - 1; nRankIndex >= 0; nRankIndex--) {
             let nRank = nRankIndex + 1;
@@ -247,14 +281,17 @@ class KnightsViewController {
                 let sFile = K.aFiles[nFileIndex];
                 let sPieceId = oChessboard[`${sFile}${nRank}`];
                 if (sPieceId.length > 0) {
-                    let oPieceView = document.getElementById(sPieceId);
+                    const sPieceIdOnGameboard = `${sPieceId}-${sGameboardId}`;
+                    let oPieceView = document.getElementById(sPieceIdOnGameboard);
                     oPieceView.style.width = nSquareSize + K.STYLE_PX;
                     oPieceView.style.height = nSquareSize + K.STYLE_PX;
                     oPieceView.draggable = true;
                     oPieceView.addEventListener('dragstart', this.onPieceDragStart.bind(this));
                     oPieceView.addEventListener('touchstart', this.onPieceDragStart.bind(this));
                     oPieceView.addEventListener('touchend', this.onTouchEnd.bind(this));
-                    let oSquareView = document.getElementById(`${sFile}${nRank}`);
+                    const sSquareId = `${sFile}${nRank}`;
+                    const sSquareIdOnGameboard = `${sSquareId}-${sGameboardId}`;
+                    let oSquareView = document.getElementById(sSquareIdOnGameboard);
                     oSquareView.appendChild(oPieceView);
                 }
             };
@@ -270,7 +307,7 @@ class KnightsViewController {
                 if (sPieceId.length > 0) {
                     let sPieceClass = sPieceId.substring(0, 2);
                     let oPieceView = document.createElement('div');
-                    oPieceView.id = sPieceId;
+                    oPieceView.id = `${sPieceId}-${sGameboardId}`;
                     oPieceView.classList.add('piece');
                     oPieceView.classList.add(sPieceClass);
                     document.body.appendChild(oPieceView);
@@ -294,9 +331,13 @@ class KnightsViewController {
         this.makePieces(this.model.getChessboard());
         KnightsView.makeGameboard(sMiniGameboardId, K.GAMEBOARD_RENDER_TYPES.mini);
         this.makePieces(this.model.getChessboard(), sMiniGameboardId);
-        sMiniGameboardId = `${K.GAMEBOARD_MINI_CLASS}-2`;
+        sMiniGameboardId = `${K.GAMEBOARD_MINI_CLASS}-1`;
         KnightsView.makeGameboard(sMiniGameboardId, K.GAMEBOARD_RENDER_TYPES.mini);
-        this.renderPiecesOnChessboard(this.model.getChessboard());
+        const aGameboardIds = KnightsViewController.getListOfGameboardIds();
+        aGameboardIds.forEach((sGameboardId, nIndex) => {
+            const nGameboardRenderType = nIndex == 0 ? K.GAMEBOARD_RENDER_TYPES.main : K.GAMEBOARD_RENDER_TYPES.mini;
+            this.renderPiecesOnChessboard(this.model.getChessboard(), sGameboardId, nGameboardRenderType);
+        });
     }
 }
 

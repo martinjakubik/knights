@@ -1,5 +1,4 @@
 import * as KnightsConstants from './knightsConstants.js';
-import { KnightsViewController } from './knightsViewController.js';
 
 class KnightsView {
     static sGameboardIdPrefix = 'gameboard';
@@ -45,7 +44,7 @@ class KnightsView {
                 let oSquareView = document.createElement('div');
                 let sFile = KnightsConstants.aFiles[nFileIndex];
                 oSquareView.classList.add('square');
-                oSquareView.id = `${sFile}${nRank}`;
+                oSquareView.id = `${sFile}${nRank}-${sId}`;
                 oSquareView.style.width = nSquareSize + KnightsConstants.STYLE_PX;
                 oSquareView.style.height = nSquareSize + KnightsConstants.STYLE_PX;
                 bHigh = KnightsView.isSquareColorHighOrLow(nRankIndex, nFileIndex);

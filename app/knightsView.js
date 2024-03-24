@@ -22,7 +22,7 @@ class KnightsView {
         return (nRankIndex + nFileIndex) % 2 == 0 ? false : true;
     }
 
-    static makeChessboard = function (oGameboardDiv, oHandlers) {
+    static makeChessboard = function (oGameboardDiv, oHandlers = {}) {
         const nMaximumBoardWidth = KnightsView.getMaximumBoardDisplaySize();
         const nSquareSize = nMaximumBoardWidth / KnightsConstants.NUM_RANKS;
         let oChessboardDiv = document.createElement('div');
@@ -42,8 +42,12 @@ class KnightsView {
                 oSquareView.style.height = nSquareSize + KnightsConstants.STYLE_PX;
                 bHigh = KnightsView.isSquareColorHighOrLow(nRankIndex, nFileIndex);
                 oSquareView.classList.add(bHigh ? 'high' : 'low');
-                oSquareView.addEventListener('dragover', oHandlers.onDragoverPreventDefault);
-                oSquareView.addEventListener('drop', oHandlers.onSquareDrop);
+                if (oHandlers.onDragoverPreventDefault) {
+                    oSquareView.addEventListener('dragover', oHandlers.onDragoverPreventDefault);
+                }
+                if (oHandlers.onSquareDrop) {
+                    oSquareView.addEventListener('drop', oHandlers.onSquareDrop);
+                }
                 oChessboardDiv.appendChild(oSquareView);
             };
         }
@@ -67,7 +71,7 @@ class KnightsView {
         oGameboardDiv.appendChild(oDiscardDiv);
     }
 
-    static makeGameboard = function (oHandlers) {
+    static makeGameboard = function (oHandlers = {}) {
         let oGameboardDiv = document.createElement('div');
         oGameboardDiv.id = 'gameboard';
         const nMaximumBoardWidth = KnightsView.getMaximumBoardDisplaySize();
@@ -79,7 +83,9 @@ class KnightsView {
         } else {
             oGameboardDiv.style.width = (nMaximumBoardWidth + KnightsView.getWidthOfDiscardArea(nMaximumBoardWidth, KnightsConstants.NUM_FILES)) + KnightsConstants.STYLE_PX;
         }
-        oGameboardDiv.addEventListener('touchmove', oHandlers.onTouchMovePreventDefault);
+        if (oHandlers.onTouchMovePreventDefault) {
+            oGameboardDiv.addEventListener('touchmove', oHandlers.onTouchMovePreventDefault);
+        }
         document.body.appendChild(oGameboardDiv);
         const oSaveGameButton = document.createElement('button');
         const oLoadGameButton = document.createElement('button');
@@ -87,8 +93,12 @@ class KnightsView {
         oLoadGameButton.id = 'loadgamebutton';
         oSaveGameButton.innerText = 'Save';
         oLoadGameButton.innerText = 'Load';
-        oSaveGameButton.onclick = oHandlers.saveGame;
-        oLoadGameButton.onclick = oHandlers.loadGame;
+        if (oHandlers.saveGame) {
+            oSaveGameButton.onclick = oHandlers.saveGame;
+        }
+        if (oHandlers.loadGame) {
+            oLoadGameButton.onclick = oHandlers.loadGame;
+        }
         document.body.appendChild(oSaveGameButton);
         document.body.appendChild(oLoadGameButton);
     }

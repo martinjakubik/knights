@@ -17,9 +17,9 @@ class KnightsViewController {
 
     static getMoveOriginFromPieceView(oPieceView) {
         let oOriginOfMove = {}
-        oOriginOfMove.pieceId = oPieceView.id;
+        oOriginOfMove.pieceId = oPieceView.dataset.modelId;
         const oParentNode = oPieceView ? oPieceView.parentNode : null;
-        oOriginOfMove.originId = oPieceView ? oPieceView.parentNode.id : null;
+        oOriginOfMove.originId = oPieceView ? oPieceView.parentNode.dataset.modelId : null;
         oOriginOfMove.originType = oParentNode ? (oParentNode.classList.contains('square') ? 0 : 1) : null;
         return oOriginOfMove;
     }
@@ -82,8 +82,8 @@ class KnightsViewController {
         const aGameboardIds = KnightsViewController.getListOfGameboardIds();
         aGameboardIds.forEach(sGameboardId => {
             const sOriginOfMoveIdOnGameboard = `${oOriginOfMove.originId}-${sGameboardId}`;
-            const sPieceIdOnGameboard = `${sPieceId}-${sGameboardId}`;
-            const sTargetOfMoveIdOnGameboard = `${sPieceId}-${sGameboardId}`;
+            const sPieceIdOnGameboard = `${oOriginOfMove.pieceId}-${sGameboardId}`;
+            const sTargetOfMoveIdOnGameboard = `${oTargetOfMove.targetId}-${sGameboardId}`;
             const oMovedFromNode = document.getElementById(sOriginOfMoveIdOnGameboard);
             const oMovedPieceNode = document.getElementById(sPieceIdOnGameboard);
             const oMovedToNode = document.getElementById(sTargetOfMoveIdOnGameboard);
@@ -142,7 +142,7 @@ class KnightsViewController {
             const sSquareIdOnMainGameboard = `${sSquareId}-${K.GAMEBOARD_MAIN_ID}`;
             let oSquareView = document.getElementById(sSquareIdOnMainGameboard);
             if (oSquareView && oSquareView.classList.contains('square')) {
-                const sTargetOfMoveId = oSquareView ? oSquareView.id.substring(0, oSquareView.id.indexOf('-')) : 'none';
+                const sTargetOfMoveId = oSquareView ? oSquareView.dataset.modelId : 'none';
                 this.targetOfMove.targetId = sTargetOfMoveId;
                 console.log(`moved piece '${this.originOfMove.pieceId}' from ${this.originOfMove.originId} to ${this.targetOfMove.targetId}`);
                 KnightsViewController.updateChessboardMove(this.model, this.originOfMove, this.targetOfMove);
@@ -160,7 +160,7 @@ class KnightsViewController {
             oSquareView = oTarget.parentNode;
         }
         if (oSquareView && oSquareView.classList.contains('square')) {
-            this.targetOfMove.targetId = oSquareView ? oSquareView.id : 'none';
+            this.targetOfMove.targetId = oSquareView ? oSquareView.dataset.modelId : 'none';
             console.log(`moved piece '${this.originOfMove.pieceId}' from ${this.originOfMove.originId} to ${this.targetOfMove.targetId}`);
             KnightsViewController.updateChessboardMove(this.model, this.originOfMove, this.targetOfMove);
             this.clearMovingPieces();
@@ -274,6 +274,7 @@ class KnightsViewController {
         if (nGameboardRenderType === K.GAMEBOARD_RENDER_TYPES.mini) {
             nMaximumBoardWidth = K.GAMEBOARD_MINI_WIDTH;
         }
+        let oPieceView;
         const nSquareSize = nMaximumBoardWidth / K.NUM_RANKS;
         for (let nRankIndex = K.NUM_RANKS - 1; nRankIndex >= 0; nRankIndex--) {
             let nRank = nRankIndex + 1;
@@ -282,7 +283,7 @@ class KnightsViewController {
                 let sPieceId = oChessboard[`${sFile}${nRank}`];
                 if (sPieceId.length > 0) {
                     const sPieceIdOnGameboard = `${sPieceId}-${sGameboardId}`;
-                    let oPieceView = document.getElementById(sPieceIdOnGameboard);
+                    oPieceView = document.getElementById(sPieceIdOnGameboard);
                     oPieceView.style.width = nSquareSize + K.STYLE_PX;
                     oPieceView.style.height = nSquareSize + K.STYLE_PX;
                     oPieceView.draggable = true;
@@ -308,6 +309,7 @@ class KnightsViewController {
                     let sPieceClass = sPieceId.substring(0, 2);
                     let oPieceView = document.createElement('div');
                     oPieceView.id = `${sPieceId}-${sGameboardId}`;
+                    oPieceView.dataset.modelId = sPieceId;
                     oPieceView.classList.add('piece');
                     oPieceView.classList.add(sPieceClass);
                     document.body.appendChild(oPieceView);

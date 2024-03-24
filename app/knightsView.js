@@ -45,6 +45,7 @@ class KnightsView {
                 let sFile = K.aFiles[nFileIndex];
                 oSquareView.classList.add('square');
                 oSquareView.id = `${sFile}${nRank}-${sId}`;
+                oSquareView.dataset.modelId = `${sFile}${nRank}`;
                 oSquareView.style.width = nSquareSize + K.STYLE_PX;
                 oSquareView.style.height = nSquareSize + K.STYLE_PX;
                 bHigh = KnightsView.isSquareColorHighOrLow(nRankIndex, nFileIndex);

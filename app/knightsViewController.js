@@ -53,30 +53,17 @@ class KnightsViewController {
         })
     }
 
-    static updateMoveFromSquareToSquare(oModel, oOriginOfMove, oTargetOfMove) {
-        oModel.removePieceFromSquare(oOriginOfMove.originId);
-        if (oModel.isPieceOnSquare(oTargetOfMove.targetId)) {
-            KnightsViewController.killPiece(oModel, oTargetOfMove.targetId);
-        }
-        oModel.putPieceOnSquare(oOriginOfMove.pieceId, oTargetOfMove.targetId);
-        KnightsViewController.rerenderPiecesOnChessboardMove(oOriginOfMove, oTargetOfMove);
-    }
-
-    static updateMoveFromDiscardToSquare(oModel, oOriginOfMove, oTargetOfMove) {
-        oModel.removePieceFromDiscard(oOriginOfMove);
-        if (oModel.isPieceOnSquare(oTargetOfMove.targetId)) {
-            KnightsViewController.killPiece(oModel, oTargetOfMove.targetId);
-        }
-        oModel.putPieceOnSquare(oOriginOfMove.pieceId, oTargetOfMove.targetId);
-        KnightsViewController.rerenderPiecesOnChessboardMove(oOriginOfMove, oTargetOfMove);
-    }
-
     static updateChessboardMove(oModel, oOriginOfMove, oTargetOfMove) {
         if (oOriginOfMove.originType === K.MOVE_FROM_TYPES.square) {
-            KnightsViewController.updateMoveFromSquareToSquare(oModel, oOriginOfMove, oTargetOfMove);
+            oModel.removePieceFromSquare(oOriginOfMove.originId);
         } else if (oOriginOfMove.originType === K.MOVE_FROM_TYPES.discard) {
-            KnightsViewController.updateMoveFromDiscardToSquare(oModel, oOriginOfMove, oTargetOfMove);
+            oModel.removePieceFromDiscard(oOriginOfMove);
         }
+        if (oModel.isPieceOnSquare(oTargetOfMove.targetId)) {
+            KnightsViewController.killPiece(oModel, oTargetOfMove.targetId);
+        }
+        oModel.putPieceOnSquare(oOriginOfMove.pieceId, oTargetOfMove.targetId);
+        KnightsViewController.rerenderPiecesOnChessboardMove(oOriginOfMove, oTargetOfMove);
     }
 
     static rerenderPiecesOnChessboardMove(oOriginOfMove, oTargetOfMove) {

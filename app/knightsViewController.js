@@ -266,8 +266,8 @@ class KnightsViewController {
             for (let nFileIndex = 0; nFileIndex < KnightsConstants.NUM_FILES; nFileIndex++) {
                 let sFile = KnightsConstants.aFiles[nFileIndex];
                 let sPieceId = oChessboard[`${sFile}${nRank}`];
-                let sPieceClass = sPieceId.substring(0, 2);
                 if (sPieceId.length > 0) {
+                    let sPieceClass = sPieceId.substring(0, 2);
                     let oPieceView = document.createElement('div');
                     oPieceView.id = sPieceId;
                     oPieceView.classList.add('piece');

@@ -57,7 +57,7 @@ class KnightsModel {
         return (this.getChessboard()[sSquareId].length > 0);
     }
 
-    addPieceToDiscard(sDiscardAreaForPiece, sPieceId) {
+    addPieceToDiscard(sPieceId, sDiscardAreaForPiece) {
         this.gameboard[sDiscardAreaForPiece].push(sPieceId);
     }
 
@@ -73,7 +73,7 @@ class KnightsModel {
         const sDiscardAreaForPieceId = sPieceId.substring(0, 1);
         const sDiscardAreaForPiece = sDiscardAreaForPieceId === 'b' ? KnightsConstants.BLACK_DISCARD_ID : KnightsConstants.WHITE_DISCARD_ID;
         this.removePieceFromSquare(sSquareId);
-        this.addPieceToDiscard(sDiscardAreaForPiece, sPieceId);
+        this.addPieceToDiscard(sPieceId, sDiscardAreaForPiece);
     }
 }
 

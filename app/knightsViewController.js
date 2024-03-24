@@ -253,6 +253,7 @@ class KnightsViewController {
                     oPieceView.draggable = true;
                     oPieceView.addEventListener('dragstart', this.onPieceDragStart.bind(this));
                     oPieceView.addEventListener('touchstart', this.onPieceDragStart.bind(this));
+                    oPieceView.addEventListener('touchend', this.onTouchEnd.bind(this));
                     let oSquareView = document.getElementById(`${sFile}${nRank}`);
                     oSquareView.appendChild(oPieceView);
                 }
@@ -260,7 +261,7 @@ class KnightsViewController {
         }
     }
 
-    makePieces(oChessboard) {
+    makePieces(oChessboard, sGameboardId = K.GAMEBOARD_MAIN_ID) {
         for (let nRankIndex = K.NUM_RANKS - 1; nRankIndex >= 0; nRankIndex--) {
             let nRank = nRankIndex + 1;
             for (let nFileIndex = 0; nFileIndex < K.NUM_FILES; nFileIndex++) {
@@ -272,7 +273,6 @@ class KnightsViewController {
                     oPieceView.id = sPieceId;
                     oPieceView.classList.add('piece');
                     oPieceView.classList.add(sPieceClass);
-                    oPieceView.addEventListener('touchend', this.onTouchEnd.bind(this));
                     document.body.appendChild(oPieceView);
                 }
             };
@@ -293,10 +293,9 @@ class KnightsViewController {
         let sMiniGameboardId = `${K.GAMEBOARD_MINI_CLASS}-${this.currentMiniGameboard}`;
         this.makePieces(this.model.getChessboard());
         KnightsView.makeGameboard(sMiniGameboardId, K.GAMEBOARD_RENDER_TYPES.mini);
-        this.makePieces(this.model.getChessboard());
+        this.makePieces(this.model.getChessboard(), sMiniGameboardId);
         sMiniGameboardId = `${K.GAMEBOARD_MINI_CLASS}-2`;
         KnightsView.makeGameboard(sMiniGameboardId, K.GAMEBOARD_RENDER_TYPES.mini);
-        this.makePieces(this.model.getChessboard());
         this.renderPiecesOnChessboard(this.model.getChessboard());
     }
 }

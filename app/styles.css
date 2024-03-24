@@ -24,7 +24,7 @@ div#discard-main {
     flex-direction: column;
 }
 
-div#blackDiscard, div#whiteDiscard {
+div#blackDiscard-main, div#whiteDiscard-main {
     display: flex;
 }
 

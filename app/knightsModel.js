@@ -6,8 +6,8 @@ class KnightsModel {
     };
 
     constructor() {
-        this.gameboard[KnightsConstants.WHITE_DISCARD] = [];
-        this.gameboard[KnightsConstants.BLACK_DISCARD] = [];
+        this.gameboard[KnightsConstants.WHITE_DISCARD_ID] = [];
+        this.gameboard[KnightsConstants.BLACK_DISCARD_ID] = [];
     }
 
     clearModel() {
@@ -67,7 +67,7 @@ class KnightsModel {
     killPiece(sSquareId) {
         const sPieceId = this.getPieceFromSquare(sSquareId);
         const sDiscardAreaForPieceId = sPieceId.substring(0, 1);
-        const sDiscardAreaForPiece = sDiscardAreaForPieceId === 'b' ? KnightsConstants.BLACK_DISCARD : KnightsConstants.WHITE_DISCARD;
+        const sDiscardAreaForPiece = sDiscardAreaForPieceId === 'b' ? KnightsConstants.BLACK_DISCARD_ID : KnightsConstants.WHITE_DISCARD_ID;
         this.removePieceFromSquare(sSquareId);
         this.addPieceToDiscard(sDiscardAreaForPiece, sPieceId);
     }

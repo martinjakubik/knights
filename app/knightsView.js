@@ -68,8 +68,8 @@ class KnightsView {
         oDiscardDiv.id = 'discard';
         let oDiscardBlackDiv = document.createElement('div');
         let oDiscardWhiteDiv = document.createElement('div');
-        oDiscardBlackDiv.id = KnightsConstants.BLACK_DISCARD;
-        oDiscardWhiteDiv.id = KnightsConstants.WHITE_DISCARD;
+        oDiscardBlackDiv.id = KnightsConstants.BLACK_DISCARD_ID;
+        oDiscardWhiteDiv.id = KnightsConstants.WHITE_DISCARD_ID;
         oDiscardBlackDiv.style.width = KnightsView.getWidthOfDiscardArea(nMaximumBoardWidth, KnightsConstants.NUM_FILES) + KnightsConstants.STYLE_PX;
         oDiscardBlackDiv.style.height = nSquareSize + KnightsConstants.STYLE_PX;
         oDiscardWhiteDiv.style.width = KnightsView.getWidthOfDiscardArea(nMaximumBoardWidth, KnightsConstants.NUM_FILES) + KnightsConstants.STYLE_PX;

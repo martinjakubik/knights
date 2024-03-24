@@ -1,6 +1,6 @@
 import { KnightsView } from './knightsView.js';
 import { KnightsModel } from './knightsModel.js';
-import * as KnightsConstants from './knightsConstants.js';
+import * as KC from './knightsConstants.js';
 
 class KnightsViewController {
     sKnightbaseUrl = 'https://www.supertitle.org:2721/knightbase';
@@ -33,7 +33,7 @@ class KnightsViewController {
         }
         if (sPieceId) {
             const sDiscardAreaForPieceId = sPieceId.substring(0, 1);
-            const sDiscardAreaForPiece = sDiscardAreaForPieceId === 'b' ? KnightsConstants.BLACK_DISCARD : KnightsConstants.WHITE_DISCARD;
+            const sDiscardAreaForPiece = sDiscardAreaForPieceId === 'b' ? KC.BLACK_DISCARD_ID : KC.WHITE_DISCARD_ID;
             const oDiscardViewForPiece = document.getElementById(sDiscardAreaForPiece);
             oDiscardViewForPiece.appendChild(oPieceView);
             oModel.killPiece(sSquareId);
@@ -86,11 +86,11 @@ class KnightsViewController {
 
     setGameboard(oKnightbaseGame) {
         this.clearPiecesFromChessboardView(this.model.getChessboard());
-        this.clearPiecesFromDiscardViewAndModel(this.model.getGameboard()[KnightsConstants.WHITE_DISCARD], this.model.getGameboard()[KnightsConstants.BLACK_DISCARD]);
+        this.clearPiecesFromDiscardViewAndModel(this.model.getGameboard()[KC.WHITE_DISCARD_ID], this.model.getGameboard()[KC.BLACK_DISCARD_ID]);
         const oGameboard = KnightsViewController.transformKnightbaseGameToGameboard(oKnightbaseGame);
         this.model.setGameboard(oGameboard);
         this.renderPiecesOnChessboard(this.model.getChessboard());
-        this.renderPiecesInDiscard(this.model.getGameboard()[KnightsConstants.WHITE_DISCARD], this.model.getGameboard()[KnightsConstants.BLACK_DISCARD]);
+        this.renderPiecesInDiscard(this.model.getGameboard()[KC.WHITE_DISCARD_ID], this.model.getGameboard()[KC.BLACK_DISCARD_ID]);
     }
 
     onPieceDragStart(oEvent) {
@@ -107,12 +107,12 @@ class KnightsViewController {
 
     onTouchEnd() {
         const nMaximumBoardWidth = KnightsView.getMaximumBoardDisplaySize();
-        const nSquareSize = nMaximumBoardWidth / KnightsConstants.NUM_RANKS;
+        const nSquareSize = nMaximumBoardWidth / KC.NUM_RANKS;
         const nPageX = this.currentTouchPageX;
         const nPageY = this.currentTouchPageY;
         if (nPageX > -1 && nPageY > -1) {
-            const nFileIndex = Math.floor(nPageX / nSquareSize + KnightsConstants.GAMEBOARD_PIXEL_PADDING) - 2;
-            const sFile = KnightsConstants.aFiles[nFileIndex];
+            const nFileIndex = Math.floor(nPageX / nSquareSize + KC.GAMEBOARD_PIXEL_PADDING) - 2;
+            const sFile = KC.aFiles[nFileIndex];
             const nRankIndex = 8 - Math.floor(nPageY / nSquareSize);
             const sRank = nRankIndex;
             const sSquareId = `${sFile}${sRank}`;
@@ -184,7 +184,7 @@ class KnightsViewController {
             let oPieceView = document.getElementById(sPieceId);
             oPieceView.removeEventListener('dragstart', this.onPieceDragStart.bind(this));
             oPieceView.removeEventListener('touchstart', this.onPieceDragStart.bind(this));
-            const oDiscardViewForPiece = document.getElementById(KnightsConstants.WHITE_DISCARD);
+            const oDiscardViewForPiece = document.getElementById(KC.WHITE_DISCARD_ID);
             oDiscardViewForPiece.removeChild(oPieceView);
             document.body.appendChild(oPieceView);
             aWhiteDiscard.splice(i, 1);
@@ -194,7 +194,7 @@ class KnightsViewController {
             let oPieceView = document.getElementById(sPieceId);
             oPieceView.removeEventListener('dragstart', this.onPieceDragStart.bind(this));
             oPieceView.removeEventListener('touchstart', this.onPieceDragStart.bind(this));
-            const oDiscardViewForPiece = document.getElementById(KnightsConstants.BLACK_DISCARD);
+            const oDiscardViewForPiece = document.getElementById(KC.BLACK_DISCARD_ID);
             oDiscardViewForPiece.removeChild(oPieceView);
             document.body.appendChild(oPieceView);
             aBlackDiscard.splice(i, 1);
@@ -202,10 +202,10 @@ class KnightsViewController {
     }
 
     clearPiecesFromChessboardView(oChessboard) {
-        for (let nRankIndex = KnightsConstants.NUM_RANKS - 1; nRankIndex >= 0; nRankIndex--) {
+        for (let nRankIndex = KC.NUM_RANKS - 1; nRankIndex >= 0; nRankIndex--) {
             let nRank = nRankIndex + 1;
-            for (let nFileIndex = 0; nFileIndex < KnightsConstants.NUM_FILES; nFileIndex++) {
-                let sFile = KnightsConstants.aFiles[nFileIndex];
+            for (let nFileIndex = 0; nFileIndex < KC.NUM_FILES; nFileIndex++) {
+                let sFile = KC.aFiles[nFileIndex];
                 let sPieceId = oChessboard[`${sFile}${nRank}`];
                 if (sPieceId.length > 0) {
                     let oPieceView = document.getElementById(sPieceId);
@@ -225,7 +225,7 @@ class KnightsViewController {
             let oPieceView = document.getElementById(sPieceId);
             oPieceView.addEventListener('dragstart', this.onPieceDragStart.bind(this));
             oPieceView.addEventListener('touchstart', this.onPieceDragStart.bind(this));
-            const oDiscardViewForPiece = document.getElementById(KnightsConstants.WHITE_DISCARD);
+            const oDiscardViewForPiece = document.getElementById(KC.WHITE_DISCARD_ID);
             oDiscardViewForPiece.appendChild(oPieceView);
         }
         for (let i = 0; i < aBlackDiscard.length; i++) {
@@ -233,23 +233,23 @@ class KnightsViewController {
             let oPieceView = document.getElementById(sPieceId);
             oPieceView.addEventListener('dragstart', this.onPieceDragStart.bind(this));
             oPieceView.addEventListener('touchstart', this.onPieceDragStart.bind(this));
-            const oDiscardViewForPiece = document.getElementById(KnightsConstants.BLACK_DISCARD);
+            const oDiscardViewForPiece = document.getElementById(KC.BLACK_DISCARD_ID);
             oDiscardViewForPiece.appendChild(oPieceView);
         }
     }
 
     renderPiecesOnChessboard(oChessboard) {
         const nMaximumBoardWidth = KnightsView.getMaximumBoardDisplaySize();
-        const nSquareSize = nMaximumBoardWidth / KnightsConstants.NUM_RANKS;
-        for (let nRankIndex = KnightsConstants.NUM_RANKS - 1; nRankIndex >= 0; nRankIndex--) {
+        const nSquareSize = nMaximumBoardWidth / KC.NUM_RANKS;
+        for (let nRankIndex = KC.NUM_RANKS - 1; nRankIndex >= 0; nRankIndex--) {
             let nRank = nRankIndex + 1;
-            for (let nFileIndex = 0; nFileIndex < KnightsConstants.NUM_FILES; nFileIndex++) {
-                let sFile = KnightsConstants.aFiles[nFileIndex];
+            for (let nFileIndex = 0; nFileIndex < KC.NUM_FILES; nFileIndex++) {
+                let sFile = KC.aFiles[nFileIndex];
                 let sPieceId = oChessboard[`${sFile}${nRank}`];
                 if (sPieceId.length > 0) {
                     let oPieceView = document.getElementById(sPieceId);
-                    oPieceView.style.width = nSquareSize + KnightsConstants.STYLE_PX;
-                    oPieceView.style.height = nSquareSize + KnightsConstants.STYLE_PX;
+                    oPieceView.style.width = nSquareSize + KC.STYLE_PX;
+                    oPieceView.style.height = nSquareSize + KC.STYLE_PX;
                     oPieceView.draggable = true;
                     oPieceView.addEventListener('dragstart', this.onPieceDragStart.bind(this));
                     oPieceView.addEventListener('touchstart', this.onPieceDragStart.bind(this));
@@ -261,10 +261,10 @@ class KnightsViewController {
     }
 
     makePieces(oChessboard) {
-        for (let nRankIndex = KnightsConstants.NUM_RANKS - 1; nRankIndex >= 0; nRankIndex--) {
+        for (let nRankIndex = KC.NUM_RANKS - 1; nRankIndex >= 0; nRankIndex--) {
             let nRank = nRankIndex + 1;
-            for (let nFileIndex = 0; nFileIndex < KnightsConstants.NUM_FILES; nFileIndex++) {
-                let sFile = KnightsConstants.aFiles[nFileIndex];
+            for (let nFileIndex = 0; nFileIndex < KC.NUM_FILES; nFileIndex++) {
+                let sFile = KC.aFiles[nFileIndex];
                 let sPieceId = oChessboard[`${sFile}${nRank}`];
                 if (sPieceId.length > 0) {
                     let sPieceClass = sPieceId.substring(0, 2);
@@ -280,7 +280,7 @@ class KnightsViewController {
     }
 
     start() {
-        this.model.setupChessboard(KnightsConstants.CHESSBOARD_START);
+        this.model.setupChessboard(KC.CHESSBOARD_START);
         const oHandlers = {
             saveGame: this.saveGame.bind(this),
             loadGame: this.loadGame.bind(this),
@@ -289,12 +289,12 @@ class KnightsViewController {
             onSquareDrop: this.onSquareDrop.bind(this),
             onTouchEnd: this.onTouchEnd.bind(this)
         }
-        KnightsView.makeGameboard('main', KnightsConstants.GAMEBOARD_RENDER_TYPES.main, oHandlers);
-        let sMiniGameboardId = `mini-${this.currentMiniGameboard}`;
-        KnightsView.makeGameboard(sMiniGameboardId, KnightsConstants.GAMEBOARD_RENDER_TYPES.mini);
+        KnightsView.makeGameboard(KC.GAMEBOARD_MAIN_ID, KC.GAMEBOARD_RENDER_TYPES.main, oHandlers);
+        let sMiniGameboardId = `${KC.GAMEBOARD_MINI_CLASS}-${this.currentMiniGameboard}`;
+        KnightsView.makeGameboard(sMiniGameboardId, KC.GAMEBOARD_RENDER_TYPES.mini);
         this.makePieces(this.model.getChessboard());
-        sMiniGameboardId = `mini-2`;
-        KnightsView.makeGameboard(sMiniGameboardId, KnightsConstants.GAMEBOARD_RENDER_TYPES.mini);
+        sMiniGameboardId = `${KC.GAMEBOARD_MINI_CLASS}-2`;
+        KnightsView.makeGameboard(sMiniGameboardId, KC.GAMEBOARD_RENDER_TYPES.mini);
         this.makePieces(this.model.getChessboard());
         this.renderPiecesOnChessboard(this.model.getChessboard());
     }

@@ -1,8 +1,10 @@
 export const NUM_RANKS = 8;
 export const NUM_FILES = 8;
 
-export const WHITE_DISCARD = 'whiteDiscard';
-export const BLACK_DISCARD = 'blackDiscard';
+export const WHITE_DISCARD_ID = 'whiteDiscard';
+export const BLACK_DISCARD_ID = 'blackDiscard';
+export const GAMEBOARD_MAIN_ID = 'main';
+export const GAMEBOARD_MINI_CLASS = 'mini';
 
 export const CHESSBOARD_START = {
     'a1': 'wr1',

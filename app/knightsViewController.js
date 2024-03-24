@@ -290,7 +290,10 @@ class KnightsViewController {
             onTouchEnd: this.onTouchEnd.bind(this)
         }
         KnightsView.makeGameboard('main', KnightsConstants.GAMEBOARD_RENDER_TYPES.main, oHandlers);
-        const sMiniGameboardId = `mini-${this.currentMiniGameboard}`;
+        let sMiniGameboardId = `mini-${this.currentMiniGameboard}`;
+        KnightsView.makeGameboard(sMiniGameboardId, KnightsConstants.GAMEBOARD_RENDER_TYPES.mini);
+        this.makePieces(this.model.getChessboard());
+        sMiniGameboardId = `mini-2`;
         KnightsView.makeGameboard(sMiniGameboardId, KnightsConstants.GAMEBOARD_RENDER_TYPES.mini);
         this.makePieces(this.model.getChessboard());
         this.renderPiecesOnChessboard(this.model.getChessboard());

@@ -307,7 +307,7 @@ class KnightsViewController {
         }
     }
 
-    start() {
+    async start() {
         this.model.setupChessboard(K.CHESSBOARD_START);
         const oHandlers = {
             loadGame: this.loadGame.bind(this),
@@ -320,6 +320,11 @@ class KnightsViewController {
         let sMiniGameboardId = `${K.GAMEBOARD_MINI_CLASS}-${this.currentMiniGameboard}`;
         this.makePieces(this.model.getChessboard());
         KnightsView.makeGameboard(sMiniGameboardId, K.GAMEBOARD_RENDER_TYPES.mini);
+        try {
+            await this.loadGame();
+        } catch (oError) {
+            console.error(`error loading game: ${oError}`);
+        }
         this.makePieces(this.model.getChessboard(), sMiniGameboardId);
         sMiniGameboardId = `${K.GAMEBOARD_MINI_CLASS}-1`;
         KnightsView.makeGameboard(sMiniGameboardId, K.GAMEBOARD_RENDER_TYPES.mini);

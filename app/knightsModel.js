@@ -2,6 +2,7 @@ import * as KnightsConstants from './knightsConstants.js';
 class KnightsModel {
 
     gameboard = {
+        version: 1,
         chessboard: {}
     };
 

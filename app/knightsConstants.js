@@ -1,8 +1,8 @@
 export const NUM_RANKS = 8;
 export const NUM_FILES = 8;
 
-export const WHITE_DISCARD_ID = 'whiteDiscard';
-export const BLACK_DISCARD_ID = 'blackDiscard';
+export const BLACK_DISCARD_ID = 'discardBlack';
+export const WHITE_DISCARD_ID = 'discardWhite';
 export const GAMEBOARD_MAIN_ID = 'main';
 export const GAMEBOARD_MINI_CLASS = 'mini';
 

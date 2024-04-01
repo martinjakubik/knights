@@ -96,20 +96,6 @@ class KnightsView {
             oGameboardDiv.addEventListener('touchmove', oHandlers.onTouchMovePreventDefault);
         }
         document.body.appendChild(oGameboardDiv);
-        const oSaveGameButton = document.createElement('button');
-        const oLoadGameButton = document.createElement('button');
-        oSaveGameButton.id = 'savegamebutton';
-        oLoadGameButton.id = 'loadgamebutton';
-        oSaveGameButton.innerText = 'Save';
-        oLoadGameButton.innerText = 'Load';
-        if (oHandlers.saveGame) {
-            oSaveGameButton.onclick = oHandlers.saveGame;
-        }
-        if (oHandlers.loadGame) {
-            oLoadGameButton.onclick = oHandlers.loadGame;
-        }
-        document.body.appendChild(oSaveGameButton);
-        document.body.appendChild(oLoadGameButton);
     }
 
     static makeMiniGameboard = function (oGameboardDiv, sId = null) {

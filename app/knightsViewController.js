@@ -141,7 +141,7 @@ class KnightsViewController {
         }
     }
 
-    onSquareDrop(oEvent) {
+    async onSquareDrop(oEvent) {
         const oTarget = oEvent.target;
         let oSquareView = oTarget;
         if (oTarget && oTarget.classList.contains('piece')) {
@@ -152,6 +152,7 @@ class KnightsViewController {
             console.log(`moved piece '${this.originOfMove.pieceId}' from ${this.originOfMove.originId} to ${this.targetOfMove.targetId}`);
             KnightsViewController.updateChessboardMove(this.model, this.originOfMove, this.targetOfMove);
             this.clearMovingPieces();
+            await this.saveGame();
         }
     }
 
@@ -160,7 +161,7 @@ class KnightsViewController {
         this.targetOfMove = {};
     }
 
-    saveGame = async function () {
+    async saveGame() {
         const nGame = 0;
         const sUrl = `${this.sKnightbaseUrl}/${nGame}/save`;
         const oFormBody = new URLSearchParams();
@@ -177,7 +178,7 @@ class KnightsViewController {
         const oResponse = await fetch(sUrl, oPostOptions);
     }
 
-    loadGame = async function () {
+    async loadGame() {
         const nGame = 0;
         const sUrl = `${this.sKnightbaseUrl}/${nGame}/load`;
 
@@ -309,7 +310,6 @@ class KnightsViewController {
     start() {
         this.model.setupChessboard(K.CHESSBOARD_START);
         const oHandlers = {
-            saveGame: this.saveGame.bind(this),
             loadGame: this.loadGame.bind(this),
             onDragoverPreventDefault: this.onDragoverPreventDefault.bind(this),
             onTouchMovePreventDefault: this.onDragoverPreventDefault.bind(this),

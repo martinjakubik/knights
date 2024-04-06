@@ -268,36 +268,23 @@ class KnightsViewController {
     }
 
     renderPiecesOnChessboard(oChessboard, sGameboardId, nGameboardRenderType) {
-        let nMaximumBoardWidth = KnightsView.getMaximumBoardDisplaySize();
-        if (nGameboardRenderType === K.GAMEBOARD_RENDER_TYPES.mini) {
-            nMaximumBoardWidth = K.GAMEBOARD_MINI_WIDTH;
-        }
-        let oPieceView;
-        const nSquareSize = nMaximumBoardWidth / K.NUM_RANKS;
+        const oHandlers = {
+            onPieceDragStart: this.onPieceDragStart.bind(this),
+            onTouchStart: this.onPieceDragStart.bind(this),
+            onTouchEnd: this.onTouchEnd.bind(this)
+        };
         for (let nRankIndex = K.NUM_RANKS - 1; nRankIndex >= 0; nRankIndex--) {
             let nRank = nRankIndex + 1;
             for (let nFileIndex = 0; nFileIndex < K.NUM_FILES; nFileIndex++) {
                 let sFile = K.aFiles[nFileIndex];
                 let sPieceId = oChessboard[`${sFile}${nRank}`];
                 if (sPieceId.length > 0) {
-                    const sPieceIdOnGameboard = `${sPieceId}-${sGameboardId}`;
-                    oPieceView = document.getElementById(sPieceIdOnGameboard);
-                    if (oPieceView) {
-                        oPieceView.style.width = nSquareSize + K.STYLE_PX;
-                        oPieceView.style.height = nSquareSize + K.STYLE_PX;
-                        oPieceView.draggable = true;
-                        oPieceView.addEventListener('dragstart', this.onPieceDragStart.bind(this));
-                        oPieceView.addEventListener('touchstart', this.onPieceDragStart.bind(this));
-                        oPieceView.addEventListener('touchend', this.onTouchEnd.bind(this));
-                        const sSquareId = `${sFile}${nRank}`;
-                        const sSquareIdOnGameboard = `${sSquareId}-${sGameboardId}`;
-                        let oSquareView = document.getElementById(sSquareIdOnGameboard);
-                        oSquareView.appendChild(oPieceView);
-                    }
+                    KnightsView.renderPieceOnChessboard(sPieceId, nRank, sFile, sGameboardId, nGameboardRenderType, oHandlers);
                 }
-            };
-        }
+            }
+        };
     }
+
 
     makePieces(oChessboard, sGameboardId = K.GAMEBOARD_MAIN_ID) {
         for (let nRankIndex = K.NUM_RANKS - 1; nRankIndex >= 0; nRankIndex--) {

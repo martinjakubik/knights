@@ -117,6 +117,28 @@ class KnightsView {
         }
         KnightsView.makeDiscard(oGameboardDiv, sGameboardId);
     }
+
+    static renderPieceOnChessboard(sPieceId, nRank, sFile, sGameboardId, nGameboardRenderType, oHandlers = {}) {
+        let nMaximumBoardWidth = KnightsView.getMaximumBoardDisplaySize();
+        if (nGameboardRenderType === K.GAMEBOARD_RENDER_TYPES.mini) {
+            nMaximumBoardWidth = K.GAMEBOARD_MINI_WIDTH;
+        }
+        const nSquareSize = nMaximumBoardWidth / K.NUM_RANKS;
+        const sPieceIdOnGameboard = `${sPieceId}-${sGameboardId}`;
+        let oPieceView = document.getElementById(sPieceIdOnGameboard);
+        if (oPieceView) {
+            oPieceView.style.width = nSquareSize + K.STYLE_PX;
+            oPieceView.style.height = nSquareSize + K.STYLE_PX;
+            oPieceView.draggable = true;
+            oPieceView.addEventListener('dragstart', oHandlers.onPieceDragStart);
+            oPieceView.addEventListener('touchstart', oHandlers.onTouchStart);
+            oPieceView.addEventListener('touchend', oHandlers.onTouchEnd);
+            const sSquareId = `${sFile}${nRank}`;
+            const sSquareIdOnGameboard = `${sSquareId}-${sGameboardId}`;
+            let oSquareView = document.getElementById(sSquareIdOnGameboard);
+            oSquareView.appendChild(oPieceView);
+        }
+    }
 }
 
 export { KnightsView };

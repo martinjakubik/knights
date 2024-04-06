@@ -106,16 +106,16 @@ class KnightsView {
         document.body.appendChild(oGameboardDiv);
     }
 
-    static makeGameboard = function (sId = null, nGameboardRenderType, oHandlers = {}) {
+    static makeGameboard = function (sGameboardId = null, nGameboardRenderType, oHandlers = {}) {
         let oGameboardDiv = document.createElement('div');
-        oGameboardDiv.id = sId ? `${KnightsView.sGameboardIdPrefix}-${sId}` : KnightsView.sGameboardIdPrefix;
+        oGameboardDiv.id = sGameboardId ? `${KnightsView.sGameboardIdPrefix}-${sGameboardId}` : KnightsView.sGameboardIdPrefix;
         oGameboardDiv.classList.add(K.CSS_CLASS_GAMEBOARD);
         if (nGameboardRenderType === K.GAMEBOARD_RENDER_TYPES.main) {
-            KnightsView.makeMainGameboard(oGameboardDiv, sId, oHandlers);
+            KnightsView.makeMainGameboard(oGameboardDiv, sGameboardId, oHandlers);
         } else if (nGameboardRenderType === K.GAMEBOARD_RENDER_TYPES.mini) {
-            KnightsView.makeMiniGameboard(oGameboardDiv, sId);
+            KnightsView.makeMiniGameboard(oGameboardDiv, sGameboardId);
         }
-        KnightsView.makeDiscard(oGameboardDiv, sId);
+        KnightsView.makeDiscard(oGameboardDiv, sGameboardId);
     }
 }
 

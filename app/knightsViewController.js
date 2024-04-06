@@ -97,11 +97,11 @@ class KnightsViewController {
         aGameboardIds.forEach(sGameboardId => {
             this.clearPiecesFromChessboardView(this.model.getChessboard(), sGameboardId);
         })
-        this.clearPiecesFromDiscardViewAndModel(this.model.getGameboard()[K.WHITE_DISCARD_ID], this.model.getGameboard()[K.BLACK_DISCARD_ID]);
+        this.clearPiecesFromDiscardViewAndModel(this.model.getGameboard()[K.WHITE_DISCARD_ID], this.model.getGameboard()[K.BLACK_DISCARD_ID], K.GAMEBOARD_MAIN_ID);
         const oGameboard = KnightsViewController.transformKnightbaseGameToGameboard(oKnightbaseGame);
         this.model.setGameboard(oGameboard);
         aGameboardIds.forEach(sGameboardId => {
-            this.renderPiecesOnChessboard(this.model.getChessboard(), sGameboardId);
+            this.renderPiecesOnChessboard(this.model.getChessboard(), sGameboardId, K.GAMEBOARD_RENDER_TYPES.mini);
         });
         this.renderPiecesInDiscard(this.model.getGameboard()[K.WHITE_DISCARD_ID], this.model.getGameboard()[K.BLACK_DISCARD_ID]);
     }
@@ -194,13 +194,14 @@ class KnightsViewController {
         }
     }
 
-    clearPiecesFromDiscardViewAndModel(aWhiteDiscard, aBlackDiscard) {
+    clearPiecesFromDiscardViewAndModel(aWhiteDiscard, aBlackDiscard, sGameboardId = K.GAMEBOARD_MAIN_ID) {
         for (let i = aWhiteDiscard.length - 1; i >= 0; i--) {
             const sPieceId = `${aWhiteDiscard[i]}-${K.GAMEBOARD_MAIN_ID}`;
             let oPieceView = document.getElementById(sPieceId);
             oPieceView.removeEventListener('dragstart', this.onPieceDragStart.bind(this));
             oPieceView.removeEventListener('touchstart', this.onPieceDragStart.bind(this));
-            const oDiscardViewForPiece = document.getElementById(K.WHITE_DISCARD_ID);
+            const sDiscardAreaOnGameboard = `${K.WHITE_DISCARD_ID}-${sGameboardId}`;
+            const oDiscardViewForPiece = document.getElementById(sDiscardAreaOnGameboard);
             oDiscardViewForPiece.removeChild(oPieceView);
             document.body.appendChild(oPieceView);
             aWhiteDiscard.splice(i, 1);
@@ -210,14 +211,15 @@ class KnightsViewController {
             let oPieceView = document.getElementById(sPieceId);
             oPieceView.removeEventListener('dragstart', this.onPieceDragStart.bind(this));
             oPieceView.removeEventListener('touchstart', this.onPieceDragStart.bind(this));
-            const oDiscardViewForPiece = document.getElementById(K.BLACK_DISCARD_ID);
+            const sDiscardAreaOnGameboard = `${K.BLACK_DISCARD_ID}-${sGameboardId}`;
+            const oDiscardViewForPiece = document.getElementById(sDiscardAreaOnGameboard);
             oDiscardViewForPiece.removeChild(oPieceView);
             document.body.appendChild(oPieceView);
             aBlackDiscard.splice(i, 1);
         }
     }
 
-    clearPiecesFromChessboardView(oChessboard, sGameboardId = 'main') {
+    clearPiecesFromChessboardView(oChessboard, sGameboardId = K.GAMEBOARD_MAIN_ID) {
         for (let nRankIndex = K.NUM_RANKS - 1; nRankIndex >= 0; nRankIndex--) {
             let nRank = nRankIndex + 1;
             for (let nFileIndex = 0; nFileIndex < K.NUM_FILES; nFileIndex++) {
@@ -242,21 +244,25 @@ class KnightsViewController {
         }
     }
 
-    renderPiecesInDiscard(aWhiteDiscard, aBlackDiscard) {
+    renderPiecesInDiscard(aWhiteDiscard, aBlackDiscard, sGameboardId = K.GAMEBOARD_MAIN_ID) {
         for (let i = 0; i < aWhiteDiscard.length; i++) {
             const sPieceId = aWhiteDiscard[i];
-            let oPieceView = document.getElementById(sPieceId);
+            const sPieceIdOnGameboard = `${sPieceId}-${sGameboardId}`;
+            let oPieceView = document.getElementById(sPieceIdOnGameboard);
             oPieceView.addEventListener('dragstart', this.onPieceDragStart.bind(this));
             oPieceView.addEventListener('touchstart', this.onPieceDragStart.bind(this));
-            const oDiscardViewForPiece = document.getElementById(K.WHITE_DISCARD_ID);
+            const sDiscardAreaOnGameboard = `${K.WHITE_DISCARD_ID}-${sGameboardId}`;
+            const oDiscardViewForPiece = document.getElementById(sDiscardAreaOnGameboard);
             oDiscardViewForPiece.appendChild(oPieceView);
         }
         for (let i = 0; i < aBlackDiscard.length; i++) {
             const sPieceId = aBlackDiscard[i];
-            let oPieceView = document.getElementById(sPieceId);
+            const sPieceIdOnGameboard = `${sPieceId}-${sGameboardId}`;
+            let oPieceView = document.getElementById(sPieceIdOnGameboard);
             oPieceView.addEventListener('dragstart', this.onPieceDragStart.bind(this));
             oPieceView.addEventListener('touchstart', this.onPieceDragStart.bind(this));
-            const oDiscardViewForPiece = document.getElementById(K.BLACK_DISCARD_ID);
+            const sDiscardAreaOnGameboard = `${K.BLACK_DISCARD_ID}-${sGameboardId}`;
+            const oDiscardViewForPiece = document.getElementById(sDiscardAreaOnGameboard);
             oDiscardViewForPiece.appendChild(oPieceView);
         }
     }
@@ -276,16 +282,18 @@ class KnightsViewController {
                 if (sPieceId.length > 0) {
                     const sPieceIdOnGameboard = `${sPieceId}-${sGameboardId}`;
                     oPieceView = document.getElementById(sPieceIdOnGameboard);
-                    oPieceView.style.width = nSquareSize + K.STYLE_PX;
-                    oPieceView.style.height = nSquareSize + K.STYLE_PX;
-                    oPieceView.draggable = true;
-                    oPieceView.addEventListener('dragstart', this.onPieceDragStart.bind(this));
-                    oPieceView.addEventListener('touchstart', this.onPieceDragStart.bind(this));
-                    oPieceView.addEventListener('touchend', this.onTouchEnd.bind(this));
-                    const sSquareId = `${sFile}${nRank}`;
-                    const sSquareIdOnGameboard = `${sSquareId}-${sGameboardId}`;
-                    let oSquareView = document.getElementById(sSquareIdOnGameboard);
-                    oSquareView.appendChild(oPieceView);
+                    if (oPieceView) {
+                        oPieceView.style.width = nSquareSize + K.STYLE_PX;
+                        oPieceView.style.height = nSquareSize + K.STYLE_PX;
+                        oPieceView.draggable = true;
+                        oPieceView.addEventListener('dragstart', this.onPieceDragStart.bind(this));
+                        oPieceView.addEventListener('touchstart', this.onPieceDragStart.bind(this));
+                        oPieceView.addEventListener('touchend', this.onTouchEnd.bind(this));
+                        const sSquareId = `${sFile}${nRank}`;
+                        const sSquareIdOnGameboard = `${sSquareId}-${sGameboardId}`;
+                        let oSquareView = document.getElementById(sSquareIdOnGameboard);
+                        oSquareView.appendChild(oPieceView);
+                    }
                 }
             };
         }

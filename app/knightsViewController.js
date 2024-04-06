@@ -285,7 +285,6 @@ class KnightsViewController {
         };
     }
 
-
     makePieces(oChessboard, sGameboardId = K.GAMEBOARD_MAIN_ID) {
         for (let nRankIndex = K.NUM_RANKS - 1; nRankIndex >= 0; nRankIndex--) {
             let nRank = nRankIndex + 1;

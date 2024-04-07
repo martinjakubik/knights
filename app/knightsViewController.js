@@ -212,26 +212,16 @@ class KnightsViewController {
     }
 
     clearPiecesFromChessboardView(oChessboard, sGameboardId = K.GAMEBOARD_MAIN_ID) {
+        const oHandlers = {
+            onPieceDragStart: this.onPieceDragStart.bind(this),
+            onTouchStart: this.onPieceDragStart.bind(this)
+        };
         for (let nRankIndex = K.NUM_RANKS - 1; nRankIndex >= 0; nRankIndex--) {
             let nRank = nRankIndex + 1;
             for (let nFileIndex = 0; nFileIndex < K.NUM_FILES; nFileIndex++) {
                 let sFile = K.aFiles[nFileIndex];
                 let sPieceId = oChessboard[`${sFile}${nRank}`];
-                const sPieceIdOnGameboard = `${sPieceId}-${sGameboardId}`;
-                if (sPieceId.length > 0) {
-                    let oPieceView = document.getElementById(sPieceIdOnGameboard);
-                    if (oPieceView) {
-                        oPieceView.removeEventListener('dragstart', this.onPieceDragStart.bind(this));
-                        oPieceView.removeEventListener('touchstart', this.onPieceDragStart.bind(this));
-                        const sSquareId = `${sFile}${nRank}`;
-                        const sSquareIdOnGameboard = `${sSquareId}-${sGameboardId}`;
-                        let oSquareView = document.getElementById(sSquareIdOnGameboard);
-                        if (oSquareView.hasChildNodes(oPieceView)) {
-                            oSquareView.removeChild(oPieceView);
-                            document.body.appendChild(oPieceView);
-                        }
-                    }
-                }
+                KnightsView.clearPieceFromChessboardView(sPieceId, sGameboardId, oHandlers);
             };
         }
     }

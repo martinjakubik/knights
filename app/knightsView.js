@@ -156,7 +156,22 @@ class KnightsView {
         document.body.appendChild(oPieceView);
     }
 
-    static clearPieceFromChessboardView(sGameboardId = K.GAMEBOARD_MAIN_ID) {
+    static clearPieceFromChessboardView(sPieceId, sGameboardId = K.GAMEBOARD_MAIN_ID, oHandlers = {}) {
+        if (sPieceId.length > 0) {
+            const sPieceIdOnGameboard = `${sPieceId}-${sGameboardId}`;
+            let oPieceView = document.getElementById(sPieceIdOnGameboard);
+            if (oPieceView) {
+                oPieceView.removeEventListener('dragstart', oHandlers.onPieceDragStart);
+                oPieceView.removeEventListener('touchstart', oHandlers.onTouchStart);
+                const sSquareId = `${sFile}${nRank}`;
+                const sSquareIdOnGameboard = `${sSquareId}-${sGameboardId}`;
+                let oSquareView = document.getElementById(sSquareIdOnGameboard);
+                if (oSquareView.hasChildNodes(oPieceView)) {
+                    oSquareView.removeChild(oPieceView);
+                    document.body.appendChild(oPieceView);
+                }
+            }
+        }
     }
 }
 

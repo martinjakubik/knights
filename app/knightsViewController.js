@@ -245,25 +245,17 @@ class KnightsViewController {
     }
 
     renderPiecesInDiscard(aWhiteDiscard, aBlackDiscard, sGameboardId = K.GAMEBOARD_MAIN_ID) {
+        const oHandlers = {
+            onPieceDragStart: this.onPieceDragStart.bind(this),
+            onTouchStart: this.onPieceDragStart.bind(this)
+        };
         for (let i = 0; i < aWhiteDiscard.length; i++) {
             const sPieceId = aWhiteDiscard[i];
-            const sPieceIdOnGameboard = `${sPieceId}-${sGameboardId}`;
-            let oPieceView = document.getElementById(sPieceIdOnGameboard);
-            oPieceView.addEventListener('dragstart', this.onPieceDragStart.bind(this));
-            oPieceView.addEventListener('touchstart', this.onPieceDragStart.bind(this));
-            const sDiscardAreaOnGameboard = `${K.WHITE_DISCARD_ID}-${sGameboardId}`;
-            const oDiscardViewForPiece = document.getElementById(sDiscardAreaOnGameboard);
-            oDiscardViewForPiece.appendChild(oPieceView);
+            KnightsView.renderPieceInDiscard(K.WHITE_DISCARD_ID, sPieceId, sGameboardId, oHandlers);
         }
         for (let i = 0; i < aBlackDiscard.length; i++) {
             const sPieceId = aBlackDiscard[i];
-            const sPieceIdOnGameboard = `${sPieceId}-${sGameboardId}`;
-            let oPieceView = document.getElementById(sPieceIdOnGameboard);
-            oPieceView.addEventListener('dragstart', this.onPieceDragStart.bind(this));
-            oPieceView.addEventListener('touchstart', this.onPieceDragStart.bind(this));
-            const sDiscardAreaOnGameboard = `${K.BLACK_DISCARD_ID}-${sGameboardId}`;
-            const oDiscardViewForPiece = document.getElementById(sDiscardAreaOnGameboard);
-            oDiscardViewForPiece.appendChild(oPieceView);
+            KnightsView.renderPieceInDiscard(K.BLACK_DISCARD_ID, sPieceId, sGameboardId, oHandlers);
         }
     }
 

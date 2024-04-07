@@ -118,6 +118,16 @@ class KnightsView {
         KnightsView.makeDiscard(oGameboardDiv, sGameboardId);
     }
 
+    static renderPieceInDiscard(sDiscardId, sPieceId, sGameboardId, oHandlers = {}) {
+        const sPieceIdOnGameboard = `${sPieceId}-${sGameboardId}`;
+        let oPieceView = document.getElementById(sPieceIdOnGameboard);
+        oPieceView.addEventListener('dragstart', oHandlers.onPieceDragStart);
+        oPieceView.addEventListener('touchstart', oHandlers.onTouchStart);
+        const sDiscardAreaOnGameboard = `${sDiscardId}-${sGameboardId}`;
+        const oDiscardViewForPiece = document.getElementById(sDiscardAreaOnGameboard);
+        oDiscardViewForPiece.appendChild(oPieceView);
+    }
+
     static renderPieceOnChessboard(sPieceId, nRank, sFile, sGameboardId, nGameboardRenderType, oHandlers = {}) {
         let nMaximumBoardWidth = KnightsView.getMaximumBoardDisplaySize();
         if (nGameboardRenderType === K.GAMEBOARD_RENDER_TYPES.mini) {

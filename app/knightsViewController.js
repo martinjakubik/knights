@@ -194,6 +194,10 @@ class KnightsViewController {
         }
     }
 
+    getPieceIdFromRankIndexAndFileIndex(nRankIndex, nFileIndex, oChessboard) {
+        return oChessboard[`${K.aFiles[nFileIndex]}${nRankIndex + 1}`];
+    }
+
     clearPiecesFromDiscardViewAndModel(aWhiteDiscard, aBlackDiscard, sGameboardId = K.GAMEBOARD_MAIN_ID) {
         const oHandlers = {
             onPieceDragStart: this.onPieceDragStart.bind(this),
@@ -217,10 +221,8 @@ class KnightsViewController {
             onTouchStart: this.onPieceDragStart.bind(this)
         };
         for (let nRankIndex = K.NUM_RANKS - 1; nRankIndex >= 0; nRankIndex--) {
-            let nRank = nRankIndex + 1;
             for (let nFileIndex = 0; nFileIndex < K.NUM_FILES; nFileIndex++) {
-                let sFile = K.aFiles[nFileIndex];
-                let sPieceId = oChessboard[`${sFile}${nRank}`];
+                let sPieceId = this.getPieceIdFromRankIndexAndFileIndex(nRankIndex, nFileIndex, oChessboard);
                 KnightsView.clearPieceFromChessboardView(sPieceId, sGameboardId, oHandlers);
             };
         }
@@ -251,7 +253,7 @@ class KnightsViewController {
             let nRank = nRankIndex + 1;
             for (let nFileIndex = 0; nFileIndex < K.NUM_FILES; nFileIndex++) {
                 let sFile = K.aFiles[nFileIndex];
-                let sPieceId = oChessboard[`${sFile}${nRank}`];
+                let sPieceId = this.getPieceIdFromRankIndexAndFileIndex(nRankIndex, nFileIndex, oChessboard);
                 if (sPieceId.length > 0) {
                     KnightsView.renderPieceOnChessboard(sPieceId, nRank, sFile, sGameboardId, nGameboardRenderType, oHandlers);
                 }

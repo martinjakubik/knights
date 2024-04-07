@@ -114,7 +114,7 @@ class KnightsView {
         KnightsView.makeDiscard(oGameboardDiv, sGameboardId);
     }
 
-    static renderPieceInDiscard(sDiscardId, sPieceId, sGameboardId = K.GAMEBOARD_MAIN_ID, oHandlers = {}) {
+    static renderPieceInDiscard(sPieceId, sDiscardId, sGameboardId = K.GAMEBOARD_MAIN_ID, oHandlers = {}) {
         const sPieceIdOnGameboard = `${sPieceId}-${sGameboardId}`;
         let oPieceView = document.getElementById(sPieceIdOnGameboard);
         oPieceView.addEventListener('dragstart', oHandlers.onPieceDragStart);
@@ -146,7 +146,7 @@ class KnightsView {
         }
     }
 
-    static clearPieceFromDiscardView(sDiscardId, sPieceId, sGameboardId = K.GAMEBOARD_MAIN_ID, oHandlers = {}) {
+    static clearPieceFromDiscardView(sPieceId, sDiscardId, sGameboardId = K.GAMEBOARD_MAIN_ID, oHandlers = {}) {
         let oPieceView = document.getElementById(sPieceId);
         oPieceView.removeEventListener('dragstart', oHandlers.onPieceDragStart);
         oPieceView.removeEventListener('touchstart', oHandlers.onTouchStart);

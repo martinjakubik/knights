@@ -201,12 +201,12 @@ class KnightsViewController {
         };
         for (let i = aBlackDiscard.length - 1; i >= 0; i--) {
             const sPieceId = `${aBlackDiscard[i]}-${K.GAMEBOARD_MAIN_ID}`;
-            KnightsView.clearPieceFromDiscardView(K.BLACK_DISCARD_ID, sPieceId, sGameboardId, oHandlers);
+            KnightsView.clearPieceFromDiscardView(sPieceId, K.BLACK_DISCARD_ID, sGameboardId, oHandlers);
             aBlackDiscard.splice(i, 1);
         }
         for (let i = aWhiteDiscard.length - 1; i >= 0; i--) {
             const sPieceId = `${aWhiteDiscard[i]}-${K.GAMEBOARD_MAIN_ID}`;
-            KnightsView.clearPieceFromDiscardView(K.WHITE_DISCARD_ID, sPieceId, sGameboardId, oHandlers);
+            KnightsView.clearPieceFromDiscardView(sPieceId, K.WHITE_DISCARD_ID, sGameboardId, oHandlers);
             aWhiteDiscard.splice(i, 1);
         }
     }
@@ -241,13 +241,13 @@ class KnightsViewController {
             onPieceDragStart: this.onPieceDragStart.bind(this),
             onTouchStart: this.onPieceDragStart.bind(this)
         };
-        for (let i = 0; i < aWhiteDiscard.length; i++) {
-            const sPieceId = aWhiteDiscard[i];
-            KnightsView.renderPieceInDiscard(K.WHITE_DISCARD_ID, sPieceId, sGameboardId, oHandlers);
-        }
         for (let i = 0; i < aBlackDiscard.length; i++) {
             const sPieceId = aBlackDiscard[i];
-            KnightsView.renderPieceInDiscard(K.BLACK_DISCARD_ID, sPieceId, sGameboardId, oHandlers);
+            KnightsView.renderPieceInDiscard(sPieceId, K.BLACK_DISCARD_ID, sGameboardId, oHandlers);
+        }
+        for (let i = 0; i < aWhiteDiscard.length; i++) {
+            const sPieceId = aWhiteDiscard[i];
+            KnightsView.renderPieceInDiscard(sPieceId, K.WHITE_DISCARD_ID, sGameboardId, oHandlers);
         }
     }
 

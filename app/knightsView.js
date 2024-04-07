@@ -232,5 +232,6 @@ class KnightsView {
         }
         return sTargetOfMoveId;
     }
+}
 
 export { KnightsView };

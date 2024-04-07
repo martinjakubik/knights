@@ -195,27 +195,19 @@ class KnightsViewController {
     }
 
     clearPiecesFromDiscardViewAndModel(aWhiteDiscard, aBlackDiscard, sGameboardId = K.GAMEBOARD_MAIN_ID) {
-        for (let i = aWhiteDiscard.length - 1; i >= 0; i--) {
-            const sPieceId = `${aWhiteDiscard[i]}-${K.GAMEBOARD_MAIN_ID}`;
-            let oPieceView = document.getElementById(sPieceId);
-            oPieceView.removeEventListener('dragstart', this.onPieceDragStart.bind(this));
-            oPieceView.removeEventListener('touchstart', this.onPieceDragStart.bind(this));
-            const sDiscardAreaOnGameboard = `${K.WHITE_DISCARD_ID}-${sGameboardId}`;
-            const oDiscardViewForPiece = document.getElementById(sDiscardAreaOnGameboard);
-            oDiscardViewForPiece.removeChild(oPieceView);
-            document.body.appendChild(oPieceView);
-            aWhiteDiscard.splice(i, 1);
-        }
+        const oHandlers = {
+            onPieceDragStart: this.onPieceDragStart.bind(this),
+            onTouchStart: this.onPieceDragStart.bind(this)
+        };
         for (let i = aBlackDiscard.length - 1; i >= 0; i--) {
             const sPieceId = `${aBlackDiscard[i]}-${K.GAMEBOARD_MAIN_ID}`;
-            let oPieceView = document.getElementById(sPieceId);
-            oPieceView.removeEventListener('dragstart', this.onPieceDragStart.bind(this));
-            oPieceView.removeEventListener('touchstart', this.onPieceDragStart.bind(this));
-            const sDiscardAreaOnGameboard = `${K.BLACK_DISCARD_ID}-${sGameboardId}`;
-            const oDiscardViewForPiece = document.getElementById(sDiscardAreaOnGameboard);
-            oDiscardViewForPiece.removeChild(oPieceView);
-            document.body.appendChild(oPieceView);
+            KnightsView.clearPieceFromDiscardView(K.BLACK_DISCARD_ID, sPieceId, sGameboardId, oHandlers);
             aBlackDiscard.splice(i, 1);
+        }
+        for (let i = aWhiteDiscard.length - 1; i >= 0; i--) {
+            const sPieceId = `${aWhiteDiscard[i]}-${K.GAMEBOARD_MAIN_ID}`;
+            KnightsView.clearPieceFromDiscardView(K.WHITE_DISCARD_ID, sPieceId, sGameboardId, oHandlers);
+            aWhiteDiscard.splice(i, 1);
         }
     }
 

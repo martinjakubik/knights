@@ -114,7 +114,7 @@ class KnightsView {
         KnightsView.makeDiscard(oGameboardDiv, sGameboardId);
     }
 
-    static renderPieceInDiscard(sDiscardId, sPieceId, sGameboardId, oHandlers = {}) {
+    static renderPieceInDiscard(sDiscardId, sPieceId, sGameboardId = K.GAMEBOARD_MAIN_ID, oHandlers = {}) {
         const sPieceIdOnGameboard = `${sPieceId}-${sGameboardId}`;
         let oPieceView = document.getElementById(sPieceIdOnGameboard);
         oPieceView.addEventListener('dragstart', oHandlers.onPieceDragStart);
@@ -144,6 +144,19 @@ class KnightsView {
             let oSquareView = document.getElementById(sSquareIdOnGameboard);
             oSquareView.appendChild(oPieceView);
         }
+    }
+
+    static clearPieceFromDiscardView(sDiscardId, sPieceId, sGameboardId = K.GAMEBOARD_MAIN_ID, oHandlers = {}) {
+        let oPieceView = document.getElementById(sPieceId);
+        oPieceView.removeEventListener('dragstart', oHandlers.onPieceDragStart);
+        oPieceView.removeEventListener('touchstart', oHandlers.onTouchStart);
+        const sDiscardAreaOnGameboard = `${sDiscardId}-${sGameboardId}`;
+        const oDiscardViewForPiece = document.getElementById(sDiscardAreaOnGameboard);
+        oDiscardViewForPiece.removeChild(oPieceView);
+        document.body.appendChild(oPieceView);
+    }
+
+    static clearPieceFromChessboardView(sGameboardId = K.GAMEBOARD_MAIN_ID) {
     }
 }
 

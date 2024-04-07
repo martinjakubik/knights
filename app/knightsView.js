@@ -1,9 +1,6 @@
 import * as K from './knightsConstants.js';
 
 class KnightsView {
-    static sGameboardIdPrefix = 'gameboard';
-    static sChessboardIdPrefix = 'chessboard';
-    static sDiscardIdPrefix = 'discard';
 
     static isTallScreen = function () {
         const nViewportWidth = document.documentElement.clientWidth;
@@ -33,7 +30,7 @@ class KnightsView {
         }
         const nSquareSize = nMaximumBoardWidth / K.NUM_RANKS;
         let oChessboardDiv = document.createElement('div');
-        oChessboardDiv.id = sId ? `${KnightsView.sChessboardIdPrefix}-${sId}` : KnightsView.sChessboardIdPrefix;
+        oChessboardDiv.id = sId ? `${K.CHESSBOARD_ID_PREFIX}-${sId}` : K.CHESSBOARD_ID_PREFIX;
         oChessboardDiv.classList.add(K.CSS_CLASS_CHESSBOARD);
         oGameboardDiv.appendChild(oChessboardDiv);
         oChessboardDiv.style.width = nMaximumBoardWidth + K.STYLE_PX;
@@ -66,7 +63,7 @@ class KnightsView {
         const nMaximumBoardWidth = KnightsView.getMaximumBoardDisplaySize();
         const nSquareSize = nMaximumBoardWidth / K.NUM_RANKS;
         let oDiscardDiv = document.createElement('div');
-        oDiscardDiv.id = sId ? `${KnightsView.sDiscardIdPrefix}-${sId}` : KnightsView.sDiscardIdPrefix;
+        oDiscardDiv.id = sId ? `${K.DISCARD_ID_PREFIX}-${sId}` : K.DISCARD_ID_PREFIX;
         oDiscardDiv.classList.add('discard');
         let oDiscardBlackDiv = document.createElement('div');
         let oDiscardWhiteDiv = document.createElement('div');
@@ -108,7 +105,7 @@ class KnightsView {
 
     static makeGameboard = function (sGameboardId = null, nGameboardRenderType, oHandlers = {}) {
         let oGameboardDiv = document.createElement('div');
-        oGameboardDiv.id = sGameboardId ? `${KnightsView.sGameboardIdPrefix}-${sGameboardId}` : KnightsView.sGameboardIdPrefix;
+        oGameboardDiv.id = sGameboardId ? `${K.GAMEBOARD_ID_PREFIX}-${sGameboardId}` : K.GAMEBOARD_ID_PREFIX;
         oGameboardDiv.classList.add(K.CSS_CLASS_GAMEBOARD);
         if (nGameboardRenderType === K.GAMEBOARD_RENDER_TYPES.main) {
             KnightsView.makeMainGameboard(oGameboardDiv, sGameboardId, oHandlers);

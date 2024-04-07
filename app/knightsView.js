@@ -213,6 +213,24 @@ class KnightsView {
             }
         }
     }
-}
+
+    static getTargetSquareViewIdFromXY(nPageX, nPageY) {
+        let sTargetOfMoveId = '';
+        const nMaximumBoardWidth = KnightsView.getMaximumBoardDisplaySize();
+        const nSquareSize = nMaximumBoardWidth / K.NUM_RANKS;
+        if (nPageX > -1 && nPageY > -1) {
+            const nFileIndex = Math.floor(nPageX / nSquareSize + K.GAMEBOARD_PIXEL_PADDING) - 2;
+            const sFile = K.aFiles[nFileIndex];
+            const nRankIndex = K.NUM_RANKS - Math.floor(nPageY / nSquareSize);
+            const sRank = nRankIndex;
+            const sSquareId = `${sFile}${sRank}`;
+            const sSquareIdOnMainGameboard = `${sSquareId}-${K.GAMEBOARD_MAIN_ID}`;
+            let oSquareView = document.getElementById(sSquareIdOnMainGameboard);
+            if (oSquareView && oSquareView.classList.contains('square')) {
+                sTargetOfMoveId = oSquareView ? oSquareView.dataset.modelId : 'none';
+            }
+        }
+        return sTargetOfMoveId;
+    }
 
 export { KnightsView };

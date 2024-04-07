@@ -99,25 +99,15 @@ class KnightsViewController {
     }
 
     onTouchEnd() {
-        const nMaximumBoardWidth = KnightsView.getMaximumBoardDisplaySize();
-        const nSquareSize = nMaximumBoardWidth / K.NUM_RANKS;
         const nPageX = this.currentTouchPageX;
         const nPageY = this.currentTouchPageY;
         if (nPageX > -1 && nPageY > -1) {
-            const nFileIndex = Math.floor(nPageX / nSquareSize + K.GAMEBOARD_PIXEL_PADDING) - 2;
-            const sFile = K.aFiles[nFileIndex];
-            const nRankIndex = 8 - Math.floor(nPageY / nSquareSize);
-            const sRank = nRankIndex;
-            const sSquareId = `${sFile}${sRank}`;
-            const sSquareIdOnMainGameboard = `${sSquareId}-${K.GAMEBOARD_MAIN_ID}`;
-            let oSquareView = document.getElementById(sSquareIdOnMainGameboard);
-            if (oSquareView && oSquareView.classList.contains('square')) {
-                const sTargetOfMoveId = oSquareView ? oSquareView.dataset.modelId : 'none';
+            const sTargetOfMoveId = KnightsView.getTargetSquareViewIdFromXY(nPageX, nPageY);
+            if (sTargetOfMoveId.length > 0) {
                 this.targetOfMove.targetId = sTargetOfMoveId;
-                console.log(`moved piece '${this.originOfMove.pieceId}' from ${this.originOfMove.originId} to ${this.targetOfMove.targetId}`);
                 KnightsViewController.updateChessboardMove(this.model, this.originOfMove, this.targetOfMove);
-                this.clearMovingPieces();
             }
+            this.clearMovingPieces();
             this.currentTouchPageX = -1;
             this.currentTouchPageY = -1;
         }

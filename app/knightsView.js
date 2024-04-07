@@ -1,7 +1,6 @@
 import * as K from './knightsConstants.js';
 
 class KnightsView {
-
     static isTallScreen = function () {
         const nViewportWidth = document.documentElement.clientWidth;
         const nViewportHeight = document.documentElement.clientHeight;

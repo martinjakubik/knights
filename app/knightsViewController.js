@@ -263,19 +263,9 @@ class KnightsViewController {
 
     makePieces(oChessboard, sGameboardId = K.GAMEBOARD_MAIN_ID) {
         for (let nRankIndex = K.NUM_RANKS - 1; nRankIndex >= 0; nRankIndex--) {
-            let nRank = nRankIndex + 1;
             for (let nFileIndex = 0; nFileIndex < K.NUM_FILES; nFileIndex++) {
-                let sFile = K.aFiles[nFileIndex];
-                let sPieceId = oChessboard[`${sFile}${nRank}`];
-                if (sPieceId.length > 0) {
-                    let sPieceClass = sPieceId.substring(0, 2);
-                    let oPieceView = document.createElement('div');
-                    oPieceView.id = `${sPieceId}-${sGameboardId}`;
-                    oPieceView.dataset.modelId = sPieceId;
-                    oPieceView.classList.add('piece');
-                    oPieceView.classList.add(sPieceClass);
-                    document.body.appendChild(oPieceView);
-                }
+                let sPieceId = this.getPieceIdFromRankIndexAndFileIndex(nRankIndex, nFileIndex, oChessboard);
+                KnightsView.makePiece(sPieceId, sGameboardId);
             };
         }
     }

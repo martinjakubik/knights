@@ -114,6 +114,18 @@ class KnightsView {
         KnightsView.makeDiscard(oGameboardDiv, sGameboardId);
     }
 
+    static makePiece(sPieceId, sGameboardId = null) {
+        if (sPieceId.length > 0) {
+            let sPieceClass = sPieceId.substring(0, 2);
+            let oPieceView = document.createElement('div');
+            oPieceView.id = `${sPieceId}-${sGameboardId}`;
+            oPieceView.dataset.modelId = sPieceId;
+            oPieceView.classList.add('piece');
+            oPieceView.classList.add(sPieceClass);
+            document.body.appendChild(oPieceView);
+        }
+    }
+
     static renderPieceInDiscard(sPieceId, sDiscardId, sGameboardId = K.GAMEBOARD_MAIN_ID, oHandlers = {}) {
         const sPieceIdOnGameboard = `${sPieceId}-${sGameboardId}`;
         let oPieceView = document.getElementById(sPieceIdOnGameboard);

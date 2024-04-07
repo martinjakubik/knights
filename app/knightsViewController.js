@@ -121,7 +121,6 @@ class KnightsViewController {
         }
         if (oSquareView && oSquareView.classList.contains('square')) {
             this.targetOfMove.targetId = oSquareView ? oSquareView.dataset.modelId : 'none';
-            console.log(`moved piece '${this.originOfMove.pieceId}' from ${this.originOfMove.originId} to ${this.targetOfMove.targetId}`);
             KnightsViewController.updateChessboardMove(this.model, this.originOfMove, this.targetOfMove);
             this.clearMovingPieces();
             await this.saveGame();

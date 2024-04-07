@@ -136,6 +136,19 @@ class KnightsView {
         oDiscardViewForPiece.appendChild(oPieceView);
     }
 
+    static rerenderPieceOnChessboardMove(sOriginOfMoveId, sPieceId, sTargetOfMoveId, sGameboardId) {
+        const sOriginOfMoveIdOnGameboard = `${sOriginOfMoveId}-${sGameboardId}`;
+        const sPieceIdOnGameboard = `${sPieceId}-${sGameboardId}`;
+        const sTargetOfMoveIdOnGameboard = `${sTargetOfMoveId}-${sGameboardId}`;
+        const oMovedFromNode = document.getElementById(sOriginOfMoveIdOnGameboard);
+        const oMovedPieceNode = document.getElementById(sPieceIdOnGameboard);
+        const oMovedToNode = document.getElementById(sTargetOfMoveIdOnGameboard);
+        if (oMovedFromNode && oMovedPieceNode && oMovedToNode) {
+            oMovedFromNode.removeChild(oMovedPieceNode);
+            oMovedToNode.appendChild(oMovedPieceNode);
+        }
+    }
+
     static renderPieceOnChessboard(sPieceId, nRank, sFile, sGameboardId, nGameboardRenderType, oHandlers = {}) {
         let nMaximumBoardWidth = KnightsView.getMaximumBoardDisplaySize();
         if (nGameboardRenderType === K.GAMEBOARD_RENDER_TYPES.mini) {

@@ -69,16 +69,7 @@ class KnightsViewController {
     static rerenderPiecesOnChessboardMove(oOriginOfMove, oTargetOfMove) {
         const aGameboardIds = KnightsViewController.getListOfGameboardIds();
         aGameboardIds.forEach(sGameboardId => {
-            const sOriginOfMoveIdOnGameboard = `${oOriginOfMove.originId}-${sGameboardId}`;
-            const sPieceIdOnGameboard = `${oOriginOfMove.pieceId}-${sGameboardId}`;
-            const sTargetOfMoveIdOnGameboard = `${oTargetOfMove.targetId}-${sGameboardId}`;
-            const oMovedFromNode = document.getElementById(sOriginOfMoveIdOnGameboard);
-            const oMovedPieceNode = document.getElementById(sPieceIdOnGameboard);
-            const oMovedToNode = document.getElementById(sTargetOfMoveIdOnGameboard);
-            if (oMovedFromNode && oMovedPieceNode && oMovedToNode) {
-                oMovedFromNode.removeChild(oMovedPieceNode);
-                oMovedToNode.appendChild(oMovedPieceNode);
-            }
+            KnightsView.rerenderPieceOnChessboardMove(oOriginOfMove.originId, oOriginOfMove.pieceId, oOriginOfMove.targetId, sGameboardId);
         });
     }
 

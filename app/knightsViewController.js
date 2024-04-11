@@ -89,7 +89,6 @@ class KnightsViewController {
     onPieceDragStart(oEvent) {
         const oTarget = oEvent.target;
         this.originOfMove = KnightsViewController.getMoveOriginFromPieceView(oTarget);
-        console.log(`moving piece '${this.originOfMove.pieceId}' from ${this.originOfMove.originId}`);
     }
 
     onDragoverPreventDefault(oEvent) {

@@ -162,8 +162,16 @@ class KnightsViewController {
         }
     }
 
+    getSquareIdFromRankIndexAndFileIndex(nRankIndex, nFileIndex) {
+        return `${K.aFiles[nFileIndex]}${nRankIndex + 1}`;
+    }
+
+    getPieceIdFromSquareId(sSquareId, oChessboard) {
+        return oChessboard[sSquareId];
+    }
+
     getPieceIdFromRankIndexAndFileIndex(nRankIndex, nFileIndex, oChessboard) {
-        return oChessboard[`${K.aFiles[nFileIndex]}${nRankIndex + 1}`];
+        return oChessboard[this.getSquareIdFromRankIndexAndFileIndex(nRankIndex, nFileIndex)];
     }
 
     clearPiecesFromDiscardViewAndModel(aWhiteDiscard, aBlackDiscard, sGameboardId = K.GAMEBOARD_MAIN_ID) {
@@ -190,8 +198,9 @@ class KnightsViewController {
         };
         for (let nRankIndex = K.NUM_RANKS - 1; nRankIndex >= 0; nRankIndex--) {
             for (let nFileIndex = 0; nFileIndex < K.NUM_FILES; nFileIndex++) {
-                let sPieceId = this.getPieceIdFromRankIndexAndFileIndex(nRankIndex, nFileIndex, oChessboard);
-                KnightsView.clearPieceFromChessboardView(sPieceId, sGameboardId, oHandlers);
+                const sSquareId = this.getSquareIdFromRankIndexAndFileIndex(nRankIndex, nFileIndex);
+                const sPieceId = this.getPieceIdFromSquareId(sSquareId, oChessboard);
+                KnightsView.clearPieceFromChessboardView(sPieceId, sSquareId, sGameboardId, oHandlers);
             };
         }
     }

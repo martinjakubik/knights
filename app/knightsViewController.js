@@ -58,7 +58,7 @@ class KnightsViewController {
     static rerenderPiecesOnChessboardMove(oOriginOfMove, oTargetOfMove) {
         const aGameboardIds = KnightsViewController.getListOfGameboardIds();
         aGameboardIds.forEach(sGameboardId => {
-            KnightsView.rerenderPieceOnChessboardMove(oOriginOfMove.originId, oOriginOfMove.pieceId, oOriginOfMove.targetId, sGameboardId);
+            KnightsView.rerenderPieceOnChessboardMove(oOriginOfMove.originId, oOriginOfMove.pieceId, oTargetOfMove.targetId, sGameboardId);
         });
     }
 

@@ -134,16 +134,14 @@ class KnightsViewController {
     async saveGame() {
         const nGame = 0;
         const sUrl = `${this.sKnightbaseUrl}/${nGame}/save`;
-        const oFormBody = new URLSearchParams();
-        const oKnightbaseGame = KnightsViewController.transformGameboardToKnightbaseGame(this.model.getGameboard());
-        oFormBody.set('game', oKnightbaseGame);
+        const oGameData = KnightsViewController.transformGameboardToKnightbaseGame(this.model.getGameboard());
 
         const oPostOptions = {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
+                'Content-Type': 'application/json'
             },
-            body: oFormBody
+            body: oGameData
         };
         const oResponse = await fetch(sUrl, oPostOptions);
     }

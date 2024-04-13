@@ -66,10 +66,10 @@ class KnightsView {
         oDiscardDiv.classList.add('discard');
         let oDiscardBlackDiv = document.createElement('div');
         let oDiscardWhiteDiv = document.createElement('div');
-        oDiscardBlackDiv.id = `${K.BLACK_DISCARD_ID}-${sId}`;
-        oDiscardWhiteDiv.id = `${K.WHITE_DISCARD_ID}-${sId}`;
-        oDiscardBlackDiv.dataset.modelId = K.BLACK_DISCARD_ID;
-        oDiscardWhiteDiv.dataset.modelId = K.WHITE_DISCARD_ID;
+        oDiscardBlackDiv.id = `${K.DISCARD_BLACK_ID}-${sId}`;
+        oDiscardWhiteDiv.id = `${K.DISCARD_WHITE_ID}-${sId}`;
+        oDiscardBlackDiv.dataset.modelId = K.DISCARD_BLACK_ID;
+        oDiscardWhiteDiv.dataset.modelId = K.DISCARD_WHITE_ID;
         oDiscardBlackDiv.style.width = KnightsView.getWidthOfDiscardArea(nMaximumBoardWidth, K.NUM_FILES) + K.STYLE_PX;
         oDiscardBlackDiv.style.height = nSquareSize + K.STYLE_PX;
         oDiscardWhiteDiv.style.width = KnightsView.getWidthOfDiscardArea(nMaximumBoardWidth, K.NUM_FILES) + K.STYLE_PX;
@@ -183,7 +183,7 @@ class KnightsView {
         if (oSquareView && oPieceView && oSquareView.hasChildNodes(oPieceView)) {
             oSquareView.removeChild(oPieceView);
             const sDiscardAreaForPieceId = sPieceIdOnGameboard.substring(0, 1);
-            const sDiscardAreaForPiece = sDiscardAreaForPieceId === 'b' ? K.BLACK_DISCARD_ID : K.WHITE_DISCARD_ID;
+            const sDiscardAreaForPiece = sDiscardAreaForPieceId === 'b' ? K.DISCARD_BLACK_ID : K.DISCARD_WHITE_ID;
             const sDiscardAreaOnGameboard = `${sDiscardAreaForPiece}-${sGameboardId}`;
             const oDiscardViewForPiece = document.getElementById(sDiscardAreaOnGameboard);
             oDiscardViewForPiece.appendChild(oPieceView);

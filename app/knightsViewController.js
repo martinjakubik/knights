@@ -77,13 +77,13 @@ class KnightsViewController {
         aGameboardIds.forEach(sGameboardId => {
             this.clearPiecesFromChessboardView(this.model.getChessboard(), sGameboardId);
         })
-        this.clearPiecesFromDiscardViewAndModel(this.model.getGameboard()[K.WHITE_DISCARD_ID], this.model.getGameboard()[K.BLACK_DISCARD_ID], K.GAMEBOARD_MAIN_ID);
+        this.clearPiecesFromDiscardViewAndModel(this.model.getGameboard()[K.DISCARD_WHITE_ID], this.model.getGameboard()[K.DISCARD_BLACK_ID], K.GAMEBOARD_MAIN_ID);
         const oGameboard = KnightsViewController.transformKnightbaseGameToGameboard(oKnightbaseGame);
         this.model.setGameboard(oGameboard);
         aGameboardIds.forEach(sGameboardId => {
             this.renderPiecesOnChessboard(this.model.getChessboard(), sGameboardId, K.GAMEBOARD_RENDER_TYPES.mini);
         });
-        this.renderPiecesInDiscard(this.model.getGameboard()[K.WHITE_DISCARD_ID], this.model.getGameboard()[K.BLACK_DISCARD_ID]);
+        this.renderPiecesInDiscard(this.model.getGameboard()[K.DISCARD_WHITE_ID], this.model.getGameboard()[K.DISCARD_BLACK_ID]);
     }
 
     onPieceDragStart(oEvent) {
@@ -172,20 +172,20 @@ class KnightsViewController {
         return oChessboard[this.getSquareIdFromRankIndexAndFileIndex(nRankIndex, nFileIndex)];
     }
 
-    clearPiecesFromDiscardViewAndModel(aWhiteDiscard, aBlackDiscard, sGameboardId = K.GAMEBOARD_MAIN_ID) {
+    clearPiecesFromDiscardViewAndModel(aDiscardWhite, aDiscardBlack, sGameboardId = K.GAMEBOARD_MAIN_ID) {
         const oHandlers = {
             onPieceDragStart: this.onPieceDragStart.bind(this),
             onTouchStart: this.onPieceDragStart.bind(this)
         };
-        for (let i = aBlackDiscard.length - 1; i >= 0; i--) {
-            const sPieceId = `${aBlackDiscard[i]}-${K.GAMEBOARD_MAIN_ID}`;
-            KnightsView.clearPieceFromDiscardView(sPieceId, K.BLACK_DISCARD_ID, sGameboardId, oHandlers);
-            aBlackDiscard.splice(i, 1);
+        for (let i = aDiscardBlack.length - 1; i >= 0; i--) {
+            const sPieceId = `${aDiscardBlack[i]}-${K.GAMEBOARD_MAIN_ID}`;
+            KnightsView.clearPieceFromDiscardView(sPieceId, K.DISCARD_BLACK_ID, sGameboardId, oHandlers);
+            aDiscardBlack.splice(i, 1);
         }
-        for (let i = aWhiteDiscard.length - 1; i >= 0; i--) {
-            const sPieceId = `${aWhiteDiscard[i]}-${K.GAMEBOARD_MAIN_ID}`;
-            KnightsView.clearPieceFromDiscardView(sPieceId, K.WHITE_DISCARD_ID, sGameboardId, oHandlers);
-            aWhiteDiscard.splice(i, 1);
+        for (let i = aDiscardWhite.length - 1; i >= 0; i--) {
+            const sPieceId = `${aDiscardWhite[i]}-${K.GAMEBOARD_MAIN_ID}`;
+            KnightsView.clearPieceFromDiscardView(sPieceId, K.DISCARD_WHITE_ID, sGameboardId, oHandlers);
+            aDiscardWhite.splice(i, 1);
         }
     }
 
@@ -203,18 +203,18 @@ class KnightsViewController {
         }
     }
 
-    renderPiecesInDiscard(aWhiteDiscard, aBlackDiscard, sGameboardId = K.GAMEBOARD_MAIN_ID) {
+    renderPiecesInDiscard(aDiscardWhite, aDiscardBlack, sGameboardId = K.GAMEBOARD_MAIN_ID) {
         const oHandlers = {
             onPieceDragStart: this.onPieceDragStart.bind(this),
             onTouchStart: this.onPieceDragStart.bind(this)
         };
-        for (let i = 0; i < aBlackDiscard.length; i++) {
-            const sPieceId = aBlackDiscard[i];
-            KnightsView.renderPieceInDiscard(sPieceId, K.BLACK_DISCARD_ID, sGameboardId, oHandlers);
+        for (let i = 0; i < aDiscardBlack.length; i++) {
+            const sPieceId = aDiscardBlack[i];
+            KnightsView.renderPieceInDiscard(sPieceId, K.DISCARD_BLACK_ID, sGameboardId, oHandlers);
         }
-        for (let i = 0; i < aWhiteDiscard.length; i++) {
-            const sPieceId = aWhiteDiscard[i];
-            KnightsView.renderPieceInDiscard(sPieceId, K.WHITE_DISCARD_ID, sGameboardId, oHandlers);
+        for (let i = 0; i < aDiscardWhite.length; i++) {
+            const sPieceId = aDiscardWhite[i];
+            KnightsView.renderPieceInDiscard(sPieceId, K.DISCARD_WHITE_ID, sGameboardId, oHandlers);
         }
     }
 

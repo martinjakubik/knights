@@ -6,8 +6,8 @@ export const GAMEBOARD_MAIN_ID = 'main';
 export const GAMEBOARD_MINI_CLASS = 'mini';
 export const CHESSBOARD_ID_PREFIX = 'chessboard';
 export const DISCARD_ID_PREFIX = 'discard';
-export const BLACK_DISCARD_ID = 'discardBlack';
-export const WHITE_DISCARD_ID = 'discardWhite';
+export const DISCARD_BLACK_ID = 'discardBlack';
+export const DISCARD_WHITE_ID = 'discardWhite';
 
 export const CHESSBOARD_START = {
     'a1': 'wr1',

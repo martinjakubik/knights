@@ -115,6 +115,8 @@ class KnightsView {
     }
 
     static makePiece(sPieceId, sGameboardId = null) {
+        let nMaximumBoardWidth = KnightsView.getMaximumBoardDisplaySize();
+        const nSquareSize = nMaximumBoardWidth / K.NUM_RANKS;
         if (sPieceId.length > 0) {
             let sPieceClass = sPieceId.substring(0, 2);
             let oPieceView = document.createElement('div');
@@ -122,19 +124,17 @@ class KnightsView {
             oPieceView.dataset.modelId = sPieceId;
             oPieceView.classList.add('piece');
             oPieceView.classList.add(sPieceClass);
+            oPieceView.style.width = nSquareSize + K.STYLE_PX;
+            oPieceView.style.height = nSquareSize + K.STYLE_PX;
             document.body.appendChild(oPieceView);
         }
     }
 
     static renderPieceInDiscard(sPieceId, sDiscardId, sGameboardId = K.GAMEBOARD_MAIN_ID, oHandlers = {}) {
-        let nMaximumBoardWidth = KnightsView.getMaximumBoardDisplaySize();
-        const nSquareSize = nMaximumBoardWidth / K.NUM_RANKS;
         const sPieceIdOnGameboard = `${sPieceId}-${sGameboardId}`;
         let oPieceView = document.getElementById(sPieceIdOnGameboard);
         oPieceView.addEventListener('dragstart', oHandlers.onPieceDragStart);
         oPieceView.addEventListener('touchstart', oHandlers.onTouchStart);
-        oPieceView.style.width = nSquareSize + K.STYLE_PX;
-        oPieceView.style.height = nSquareSize + K.STYLE_PX;
         const sDiscardAreaOnGameboard = `${sDiscardId}-${sGameboardId}`;
         const oDiscardViewForPiece = document.getElementById(sDiscardAreaOnGameboard);
         oDiscardViewForPiece.appendChild(oPieceView);

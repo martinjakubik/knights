@@ -24,7 +24,7 @@ div#discard-main {
     flex-direction: column;
 }
 
-div#blackDiscard-main, div#whiteDiscard-main {
+div#discardBlack-main, div#discardWhite-main {
     display: flex;
 }
 
@@ -32,6 +32,9 @@ div.square, div.piece {
     background-size: contain;
     background-position-x: center;
     background-repeat: no-repeat;
+}
+
+div.piece {
 }
 
 div.square.high {

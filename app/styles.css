@@ -35,6 +35,8 @@ div.square, div.piece {
 }
 
 div.piece {
+    width: 100%;
+    height: 100%;
 }
 
 div.square.high {

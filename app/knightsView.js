@@ -124,8 +124,6 @@ class KnightsView {
             oPieceView.dataset.modelId = sPieceId;
             oPieceView.classList.add('piece');
             oPieceView.classList.add(sPieceClass);
-            oPieceView.style.width = nSquareSize + K.STYLE_PX;
-            oPieceView.style.height = nSquareSize + K.STYLE_PX;
             document.body.appendChild(oPieceView);
         }
     }
@@ -154,16 +152,9 @@ class KnightsView {
     }
 
     static renderPieceOnChessboard(sPieceId, nRank, sFile, sGameboardId, nGameboardRenderType, oHandlers = {}) {
-        let nMaximumBoardWidth = KnightsView.getMaximumBoardDisplaySize();
-        if (nGameboardRenderType === K.GAMEBOARD_RENDER_TYPES.mini) {
-            nMaximumBoardWidth = K.GAMEBOARD_MINI_WIDTH;
-        }
-        const nSquareSize = nMaximumBoardWidth / K.NUM_RANKS;
         const sPieceIdOnGameboard = `${sPieceId}-${sGameboardId}`;
         let oPieceView = document.getElementById(sPieceIdOnGameboard);
         if (oPieceView) {
-            oPieceView.style.width = nSquareSize + K.STYLE_PX;
-            oPieceView.style.height = nSquareSize + K.STYLE_PX;
             oPieceView.draggable = true;
             oPieceView.addEventListener('dragstart', oHandlers.onPieceDragStart);
             oPieceView.addEventListener('touchstart', oHandlers.onTouchStart);

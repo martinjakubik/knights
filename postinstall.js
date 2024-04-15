@@ -17,6 +17,22 @@ oFs.mkdir(sLibPath, oMkDirOptions).then((oResult) => {
         console.log(oError);
     });
 
+    oFs.copyFile(
+        './node_modules/client-application-settings/SettingsController.js', `${sLibPath}/SettingsController.js`
+    ).then((oResult) => {
+        console.log(oResult);
+    }).catch((oError) => {
+        console.log(oError);
+    });
+
+    oFs.copyFile(
+        './node_modules/client-application-settings/SettingsView.js', `${sLibPath}/SettingsView.js`
+    ).then((oResult) => {
+        console.log(oResult);
+    }).catch((oError) => {
+        console.log(oError);
+    });
+
 }).catch((oError) => {
     console.log(oError);
 });

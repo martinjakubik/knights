@@ -5,6 +5,7 @@
     "express": "^4.19.2"
   },
   "dependencies": {
+    "client-application-settings": "^1.1.0",
     "learnhypertext": "^2.1.0"
   },
   "scripts": {

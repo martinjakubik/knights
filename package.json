@@ -9,5 +9,6 @@
   "scripts": {
     "start": "node dev/server.js",
     "postinstall": "node postinstall.js"
-  }
+  },
+  "license": "SEE LICENSE IN LICENSE"
 }

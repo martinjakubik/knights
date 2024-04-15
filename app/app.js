@@ -1,4 +1,10 @@
 import { KnightsViewController } from './knightsViewController.js';
+import { SettingsController } from '../lib/SettingsController.js';
+
+const aSettings = [];
+aSettings.push({ key: 'devMode', value: true })
+this.settingsController = new SettingsController(aSettings);
+this.settingsController.renderSettings();
 
 const oAppConfig = {
     protocol: 'https',

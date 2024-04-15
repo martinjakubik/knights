@@ -1,7 +1,6 @@
 import { KnightsView } from './knightsView.js';
 import { KnightsModel } from './knightsModel.js';
 import * as K from './knightsConstants.js';
-
 class KnightsViewController {
     model = {};
 

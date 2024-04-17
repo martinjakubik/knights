@@ -115,8 +115,6 @@ class KnightsView {
     }
 
     static makePiece(sPieceId, sGameboardId = null) {
-        let nMaximumBoardWidth = KnightsView.getMaximumBoardDisplaySize();
-        const nSquareSize = nMaximumBoardWidth / K.NUM_RANKS;
         if (sPieceId.length > 0) {
             let sPieceClass = sPieceId.substring(0, 2);
             let oPieceView = document.createElement('div');

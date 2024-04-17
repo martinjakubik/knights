@@ -204,43 +204,34 @@ class KnightsViewController {
     }
 
     renderPiecesInDiscard(aDiscardWhite, aDiscardBlack, sGameboardId = K.GAMEBOARD_MAIN_ID) {
-        const oHandlers = {
-            onPieceDragStart: this.onPieceDragStart.bind(this),
-            onTouchStart: this.onPieceDragStart.bind(this)
-        };
         for (let i = 0; i < aDiscardBlack.length; i++) {
             const sPieceId = aDiscardBlack[i];
-            KnightsView.renderPieceInDiscard(sPieceId, K.DISCARD_BLACK_ID, sGameboardId, oHandlers);
+            KnightsView.renderPieceInDiscard(sPieceId, K.DISCARD_BLACK_ID, sGameboardId);
         }
         for (let i = 0; i < aDiscardWhite.length; i++) {
             const sPieceId = aDiscardWhite[i];
-            KnightsView.renderPieceInDiscard(sPieceId, K.DISCARD_WHITE_ID, sGameboardId, oHandlers);
+            KnightsView.renderPieceInDiscard(sPieceId, K.DISCARD_WHITE_ID, sGameboardId);
         }
     }
 
     renderPiecesOnChessboard(oChessboard, sGameboardId, nGameboardRenderType) {
-        const oHandlers = {
-            onPieceDragStart: this.onPieceDragStart.bind(this),
-            onTouchStart: this.onPieceDragStart.bind(this),
-            onTouchEnd: this.onTouchEnd.bind(this)
-        };
         for (let nRankIndex = K.NUM_RANKS - 1; nRankIndex >= 0; nRankIndex--) {
             let nRank = nRankIndex + 1;
             for (let nFileIndex = 0; nFileIndex < K.NUM_FILES; nFileIndex++) {
                 let sFile = K.aFiles[nFileIndex];
                 let sPieceId = this.getPieceIdFromRankIndexAndFileIndex(nRankIndex, nFileIndex, oChessboard);
                 if (sPieceId.length > 0) {
-                    KnightsView.renderPieceOnChessboard(sPieceId, nRank, sFile, sGameboardId, nGameboardRenderType, oHandlers);
+                    KnightsView.renderPieceOnChessboard(sPieceId, nRank, sFile, sGameboardId, nGameboardRenderType);
                 }
             }
         };
     }
 
-    makePieces(oChessboard, sGameboardId = K.GAMEBOARD_MAIN_ID) {
+    makePieces(oChessboard, sGameboardId = K.GAMEBOARD_MAIN_ID, oHandlers = {}) {
         for (let nRankIndex = K.NUM_RANKS - 1; nRankIndex >= 0; nRankIndex--) {
             for (let nFileIndex = 0; nFileIndex < K.NUM_FILES; nFileIndex++) {
                 let sPieceId = this.getPieceIdFromRankIndexAndFileIndex(nRankIndex, nFileIndex, oChessboard);
-                KnightsView.makePiece(sPieceId, sGameboardId);
+                KnightsView.makePiece(sPieceId, sGameboardId, oHandlers);
             };
         }
     }
@@ -256,14 +247,14 @@ class KnightsViewController {
         }
         KnightsView.makeGameboard(K.GAMEBOARD_MAIN_ID, K.GAMEBOARD_RENDER_TYPES.main, oHandlers);
         let sMiniGameboardId = `${K.GAMEBOARD_MINI_CLASS}-${this.currentMiniGameboard}`;
-        this.makePieces(this.model.getChessboard());
+        this.makePieces(this.model.getChessboard(), K.GAMEBOARD_MAIN_ID, oHandlers);
         KnightsView.makeGameboard(sMiniGameboardId, K.GAMEBOARD_RENDER_TYPES.mini);
         try {
             await this.loadGame();
         } catch (oError) {
             console.error(`error loading game: ${oError}`);
         }
-        this.makePieces(this.model.getChessboard(), sMiniGameboardId);
+        this.makePieces(this.model.getChessboard(), sMiniGameboardId, oHandlers);
         sMiniGameboardId = `${K.GAMEBOARD_MINI_CLASS}-1`;
         KnightsView.makeGameboard(sMiniGameboardId, K.GAMEBOARD_RENDER_TYPES.mini);
         const aGameboardIds = KnightsViewController.getListOfGameboardIds();

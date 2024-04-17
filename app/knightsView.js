@@ -114,7 +114,7 @@ class KnightsView {
         KnightsView.makeDiscard(oGameboardDiv, sGameboardId);
     }
 
-    static makePiece(sPieceId, sGameboardId = null) {
+    static makePiece(sPieceId, sGameboardId = null, oHandlers) {
         if (sPieceId.length > 0) {
             let sPieceClass = sPieceId.substring(0, 2);
             let oPieceView = document.createElement('div');
@@ -122,15 +122,16 @@ class KnightsView {
             oPieceView.dataset.modelId = sPieceId;
             oPieceView.classList.add('piece');
             oPieceView.classList.add(sPieceClass);
+            oPieceView.addEventListener('dragstart', oHandlers.onPieceDragStart);
+            oPieceView.addEventListener('touchstart', oHandlers.onTouchStart);
+            oPieceView.addEventListener('touchend', oHandlers.onTouchEnd);
             document.body.appendChild(oPieceView);
         }
     }
 
-    static renderPieceInDiscard(sPieceId, sDiscardId, sGameboardId = K.GAMEBOARD_MAIN_ID, oHandlers = {}) {
+    static renderPieceInDiscard(sPieceId, sDiscardId, sGameboardId = K.GAMEBOARD_MAIN_ID) {
         const sPieceIdOnGameboard = `${sPieceId}-${sGameboardId}`;
         let oPieceView = document.getElementById(sPieceIdOnGameboard);
-        oPieceView.addEventListener('dragstart', oHandlers.onPieceDragStart);
-        oPieceView.addEventListener('touchstart', oHandlers.onTouchStart);
         const sDiscardAreaOnGameboard = `${sDiscardId}-${sGameboardId}`;
         const oDiscardViewForPiece = document.getElementById(sDiscardAreaOnGameboard);
         oDiscardViewForPiece.appendChild(oPieceView);
@@ -149,14 +150,11 @@ class KnightsView {
         }
     }
 
-    static renderPieceOnChessboard(sPieceId, nRank, sFile, sGameboardId, nGameboardRenderType, oHandlers = {}) {
+    static renderPieceOnChessboard(sPieceId, nRank, sFile, sGameboardId) {
         const sPieceIdOnGameboard = `${sPieceId}-${sGameboardId}`;
         let oPieceView = document.getElementById(sPieceIdOnGameboard);
         if (oPieceView) {
             oPieceView.draggable = true;
-            oPieceView.addEventListener('dragstart', oHandlers.onPieceDragStart);
-            oPieceView.addEventListener('touchstart', oHandlers.onTouchStart);
-            oPieceView.addEventListener('touchend', oHandlers.onTouchEnd);
             const sSquareId = `${sFile}${nRank}`;
             const sSquareIdOnGameboard = `${sSquareId}-${sGameboardId}`;
             let oSquareView = document.getElementById(sSquareIdOnGameboard);
@@ -179,23 +177,19 @@ class KnightsView {
         }
     }
 
-    static clearPieceFromDiscardView(sPieceId, sDiscardId, sGameboardId = K.GAMEBOARD_MAIN_ID, oHandlers = {}) {
+    static clearPieceFromDiscardView(sPieceId, sDiscardId, sGameboardId = K.GAMEBOARD_MAIN_ID) {
         let oPieceView = document.getElementById(sPieceId);
-        oPieceView.removeEventListener('dragstart', oHandlers.onPieceDragStart);
-        oPieceView.removeEventListener('touchstart', oHandlers.onTouchStart);
         const sDiscardAreaOnGameboard = `${sDiscardId}-${sGameboardId}`;
         const oDiscardViewForPiece = document.getElementById(sDiscardAreaOnGameboard);
         oDiscardViewForPiece.removeChild(oPieceView);
         document.body.appendChild(oPieceView);
     }
 
-    static clearPieceFromChessboardView(sPieceId, sSquareId, sGameboardId = K.GAMEBOARD_MAIN_ID, oHandlers = {}) {
+    static clearPieceFromChessboardView(sPieceId, sSquareId, sGameboardId = K.GAMEBOARD_MAIN_ID) {
         if (sPieceId.length > 0) {
             const sPieceIdOnGameboard = `${sPieceId}-${sGameboardId}`;
             let oPieceView = document.getElementById(sPieceIdOnGameboard);
             if (oPieceView) {
-                oPieceView.removeEventListener('dragstart', oHandlers.onPieceDragStart);
-                oPieceView.removeEventListener('touchstart', oHandlers.onTouchStart);
                 const sSquareIdOnGameboard = `${sSquareId}-${sGameboardId}`;
                 let oSquareView = document.getElementById(sSquareIdOnGameboard);
                 if (oSquareView.hasChildNodes(oPieceView)) {

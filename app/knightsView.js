@@ -58,7 +58,7 @@ class KnightsView {
         }
     }
 
-    static makeDiscard = function (oGameboardDiv, sId) {
+    static makeDiscard = function (oGameboardDiv, sId, oHandlers = {}) {
         const nMaximumBoardWidth = KnightsView.getMaximumBoardDisplaySize();
         const nSquareSize = nMaximumBoardWidth / K.NUM_RANKS;
         let oDiscardDiv = document.createElement('div');
@@ -74,6 +74,12 @@ class KnightsView {
         oDiscardBlackDiv.style.height = nSquareSize + K.STYLE_PX;
         oDiscardWhiteDiv.style.width = KnightsView.getWidthOfDiscardArea(nMaximumBoardWidth, K.NUM_FILES) + K.STYLE_PX;
         oDiscardWhiteDiv.style.height = nSquareSize + K.STYLE_PX;
+        if (oHandlers.onDragoverPreventDefault) {
+            oDiscardBlackDiv.addEventListener('dragover', oHandlers.onDragoverPreventDefault);
+        }
+        if (oHandlers.onDragoverPreventDefault) {
+            oDiscardWhiteDiv.addEventListener('dragover', oHandlers.onDragoverPreventDefault);
+        }
         oDiscardDiv.appendChild(oDiscardBlackDiv);
         oDiscardDiv.appendChild(oDiscardWhiteDiv);
         oGameboardDiv.appendChild(oDiscardDiv);
@@ -111,7 +117,7 @@ class KnightsView {
         } else if (nGameboardRenderType === K.GAMEBOARD_RENDER_TYPES.mini) {
             KnightsView.makeMiniGameboard(oGameboardDiv, sGameboardId);
         }
-        KnightsView.makeDiscard(oGameboardDiv, sGameboardId);
+        KnightsView.makeDiscard(oGameboardDiv, sGameboardId, oHandlers);
     }
 
     static makePiece(sPieceId, sGameboardId = null, oHandlers) {
@@ -122,7 +128,7 @@ class KnightsView {
             oPieceView.dataset.modelId = sPieceId;
             oPieceView.classList.add('piece');
             oPieceView.classList.add(sPieceClass);
-            oPieceView.addEventListener('dragstart', oHandlers.onPieceDragStart);
+            oPieceView.addEventListener('dragstart', () => { console.log('drag started') });
             oPieceView.addEventListener('touchstart', oHandlers.onTouchStart);
             oPieceView.addEventListener('touchend', oHandlers.onTouchEnd);
             document.body.appendChild(oPieceView);

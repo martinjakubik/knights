@@ -47,7 +47,11 @@ class KnightsModel {
     }
 
     putPieceOnSquare(sPieceId, sSquareId) {
-        this.getChessboard()[sSquareId] = sPieceId;
+        if (sPieceId && sSquareId) {
+            this.getChessboard()[sSquareId] = sPieceId;
+        } else {
+            console.error('square or piece missing during move')
+        }
     }
 
     removePieceFromSquare(sSquareId) {

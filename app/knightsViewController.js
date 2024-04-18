@@ -173,32 +173,24 @@ class KnightsViewController {
     }
 
     clearPiecesFromDiscardViewAndModel(aDiscardWhite, aDiscardBlack, sGameboardId = K.GAMEBOARD_MAIN_ID) {
-        const oHandlers = {
-            onPieceDragStart: this.onPieceDragStart.bind(this),
-            onTouchStart: this.onPieceDragStart.bind(this)
-        };
         for (let i = aDiscardBlack.length - 1; i >= 0; i--) {
             const sPieceId = `${aDiscardBlack[i]}-${K.GAMEBOARD_MAIN_ID}`;
-            KnightsView.clearPieceFromDiscardView(sPieceId, K.DISCARD_BLACK_ID, sGameboardId, oHandlers);
+            KnightsView.clearPieceFromDiscardView(sPieceId, K.DISCARD_BLACK_ID, sGameboardId);
             aDiscardBlack.splice(i, 1);
         }
         for (let i = aDiscardWhite.length - 1; i >= 0; i--) {
             const sPieceId = `${aDiscardWhite[i]}-${K.GAMEBOARD_MAIN_ID}`;
-            KnightsView.clearPieceFromDiscardView(sPieceId, K.DISCARD_WHITE_ID, sGameboardId, oHandlers);
+            KnightsView.clearPieceFromDiscardView(sPieceId, K.DISCARD_WHITE_ID, sGameboardId);
             aDiscardWhite.splice(i, 1);
         }
     }
 
     clearPiecesFromChessboardView(oChessboard, sGameboardId = K.GAMEBOARD_MAIN_ID) {
-        const oHandlers = {
-            onPieceDragStart: this.onPieceDragStart.bind(this),
-            onTouchStart: this.onPieceDragStart.bind(this)
-        };
         for (let nRankIndex = K.NUM_RANKS - 1; nRankIndex >= 0; nRankIndex--) {
             for (let nFileIndex = 0; nFileIndex < K.NUM_FILES; nFileIndex++) {
                 const sSquareId = this.getSquareIdFromRankIndexAndFileIndex(nRankIndex, nFileIndex);
                 const sPieceId = this.getPieceIdFromSquareId(sSquareId, oChessboard);
-                KnightsView.clearPieceFromChessboardView(sPieceId, sSquareId, sGameboardId, oHandlers);
+                KnightsView.clearPieceFromChessboardView(sPieceId, sSquareId, sGameboardId);
             };
         }
     }
@@ -240,9 +232,11 @@ class KnightsViewController {
         this.model.setupChessboard(K.CHESSBOARD_START);
         const oHandlers = {
             loadGame: this.loadGame.bind(this),
+            onPieceDragStart: this.onPieceDragStart.bind(this),
             onDragoverPreventDefault: this.onDragoverPreventDefault.bind(this),
-            onTouchMovePreventDefault: this.onDragoverPreventDefault.bind(this),
             onSquareDrop: this.onSquareDrop.bind(this),
+            onTouchStart: this.onPieceDragStart.bind(this),
+            onTouchMovePreventDefault: this.onDragoverPreventDefault.bind(this),
             onTouchEnd: this.onTouchEnd.bind(this)
         }
         KnightsView.makeGameboard(K.GAMEBOARD_MAIN_ID, K.GAMEBOARD_RENDER_TYPES.main, oHandlers);

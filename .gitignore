@@ -8,3 +8,5 @@ node_modules/
 package.sh
 prepare.sh
 upload.sh
+
+knightsgame-*

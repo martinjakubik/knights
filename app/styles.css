@@ -2,6 +2,10 @@ body {
     margin: 0;
 }
 
+div#settings {
+    display: none;
+}
+
 div.gameboard {
     display: flex;
 }

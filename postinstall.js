@@ -1,6 +1,6 @@
 import * as oFs from 'fs/promises';
 
-const sLibPath = './lib';
+const sLibPath = './app';
 
 const oMkDirOptions = {
     recursive: true

@@ -3,16 +3,19 @@ import { KnightsModel } from './knightsModel.js';
 import * as K from './knightsConstants.js';
 
 class KnightsViewController {
-    sKnightbaseUrl = 'https://www.supertitle.org:2721/knightbase';
     model = {};
 
-    constructor() {
+    constructor(oAppConfig) {
         this.model = new KnightsModel();
         this.originOfMove = {};
         this.targetOfMove = {};
         this.currentTouchPageX = -1;
         this.currentTouchPageY = -1;
         this.currentMiniGameboard = 0;
+        this.knightbaseUrl = 'https://www.supertitle.org:2721/knightbase';
+        if (oAppConfig && oAppConfig.protocol && oAppConfig.hostname && oAppConfig.port) {
+            this.knightbaseUrl = `${oAppConfig.protocol}://${oAppConfig.hostname}:${oAppConfig.port}/${K.KNIGHTBASE_PATH}`;
+        }
     }
 
     static getMoveOriginFromPieceView(oPieceView) {
@@ -133,7 +136,7 @@ class KnightsViewController {
 
     async saveGame() {
         const nGame = 0;
-        const sUrl = `${this.sKnightbaseUrl}/${nGame}/save`;
+        const sUrl = `${this.knightbaseUrl}/${nGame}/save`;
         const oGameData = KnightsViewController.transformGameboardToKnightbaseGame(this.model.getGameboard());
 
         const oPostOptions = {
@@ -148,7 +151,7 @@ class KnightsViewController {
 
     async loadGame() {
         const nGame = 0;
-        const sUrl = `${this.sKnightbaseUrl}/${nGame}/load`;
+        const sUrl = `${this.knightbaseUrl}/${nGame}/load`;
 
         const oGetOptions = {
             method: 'GET',

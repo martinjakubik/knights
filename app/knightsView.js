@@ -128,6 +128,7 @@ class KnightsView {
             oPieceView.dataset.modelId = sPieceId;
             oPieceView.classList.add('piece');
             oPieceView.classList.add(sPieceClass);
+            oPieceView.draggable = true;
             oPieceView.addEventListener('dragstart', oHandlers.onPieceDragStart);
             oPieceView.addEventListener('touchstart', oHandlers.onTouchStart);
             oPieceView.addEventListener('touchend', oHandlers.onTouchEnd);
@@ -160,7 +161,6 @@ class KnightsView {
         const sPieceIdOnGameboard = `${sPieceId}-${sGameboardId}`;
         let oPieceView = document.getElementById(sPieceIdOnGameboard);
         if (oPieceView) {
-            oPieceView.draggable = true;
             const sSquareId = `${sFile}${nRank}`;
             const sSquareIdOnGameboard = `${sSquareId}-${sGameboardId}`;
             let oSquareView = document.getElementById(sSquareIdOnGameboard);

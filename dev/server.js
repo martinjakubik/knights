@@ -1,7 +1,8 @@
-import * as oHttp from 'http';
-import * as oUrl from 'url';
-import * as oFs from 'fs';
-import * as oPath from 'path';
+import express from 'express';
+import * as oHttps from 'http';
+import * as oProcess from 'process';
+import { knightservice } from './localknightservice.js';
+
 
 let bDebug = false;
 process.argv.forEach(function (sValue, index, array) {
@@ -10,91 +11,41 @@ process.argv.forEach(function (sValue, index, array) {
     }
 });
 
-let sBaseDirectory = './app';
+const app = express();
 
-let nPort = 2003;
+let nPort = process.env.PORT || 2003;
 
-let getDefaultIfBlankPath = function (sPath) {
-    let sResponsePath = sPath;
+const bProductionEnv = oProcess.env.NODE_ENV;
 
-    if (process.platform === 'win32') {
-        if (sPath === '\\') {
-            sResponsePath = sBaseDirectory + '\\index.html';
-        } else {
-            sResponsePath = sBaseDirectory + sPath;
-        }
+app.use(express.json());
+
+app.use(express.static('app'))
+
+app.post('/knightbase/:game/save', (oRequest, oResponse) => {
+    if (bDebug) console.log('supertitle post');
+    if (bDebug) console.log(`strigified request: ${JSON.stringify(oRequest.body)} `);
+    let bValid = false;
+    const nGame = oRequest.params.game;
+    const oGame = oRequest.body;
+    if (nGame && oGame && nGame >= 0 && nGame <= 99) {
+        bValid = knightservice.validateKnightsData(oGame, bDebug);
+    }
+    if (bValid) {
+        const sGame = JSON.stringify(oGame);
+        knightservice.save(nGame, sGame, bDebug);
+        oResponse.send(`game ${nGame} saved`);
     } else {
-        if (sPath === '/') {
-            sResponsePath = sBaseDirectory + '/index.html';
-        } else {
-            sResponsePath = sBaseDirectory + sPath;
-        }
+        oResponse.send(`failed to save game '${nGame}'`);
     }
+})
 
-    return sResponsePath;
-};
+app.get('/knightbase/:game/load', (oRequest, oResponse) => {
+    const nGame = oRequest.params.game;
+    knightservice.load(nGame, oResponse, bDebug);
+});
 
-let getContentType = function (sPath) {
-    let sContentType = 'text/plain';
+const oHttpsServer = oHttps.createServer(app);
 
-    if (process.platform === 'win32' && sPath === sBaseDirectory + '\\index.html') {
-        sContentType = 'text/html';
-    } else if (sPath === sBaseDirectory + '/index.html') {
-        sContentType = 'text/html';
-    } else if (sPath.includes('.css')) {
-        sContentType = 'text/css';
-    } else if (sPath.includes('.html')) {
-        sContentType = 'text/html';
-    } else if (sPath.includes('.png')) {
-        sContentType = 'image/png';
-    } else if (sPath.includes('/resources/')) {
-        sContentType = 'image/png';
-    } else if (process.platform === 'win32' && sPath.includes('\\resources\\')) {
-        sContentType = 'image/png';
-    } else if (sPath.includes('.js') || sPath.includes('.mjs')) {
-        sContentType = 'application/javascript';
-    }
-
-    return sContentType;
-};
-
-oHttp.createServer(function (oRequest, oResponse) {
-    try {
-        let oRequestUrl = oUrl.parse(oRequest.url);
-
-        let sPath = oRequestUrl.pathname;
-
-        // need to use oPath.normalize so people can't access directories underneath sBaseDirectory
-        let sFSPath = oPath.normalize(sPath);
-
-        let sFinalPath = getDefaultIfBlankPath(sFSPath);
-        if (bDebug) console.log(`final path: ${sFinalPath}`);
-
-        let sContentType = getContentType(sFinalPath);
-        if (bDebug) console.log(`content type: ${sContentType}`);
-
-        let oHeaders = {
-            'Content-Type': sContentType
-        };
-        if (bDebug) console.log(`headers: ${oHeaders}`);
-        if (bDebug) console.log('----');
-
-        oResponse.writeHead(200, oHeaders);
-        let oFileStream = oFs.createReadStream(sFinalPath);
-        oFileStream.pipe(oResponse);
-        oFileStream.on('error', function (e) {
-            // assumes the file doesn't exist
-            oResponse.writeHead(404);
-            oResponse.end();
-        });
-    } catch (e) {
-        oResponse.writeHead(500);
-
-        // ends the oResponse so browsers don't hang
-        oResponse.end();
-        console.log(e.stack);
-    }
-
-}).listen(process.env.PORT || nPort);
+oHttpsServer.listen(process.env.PORT || nPort);
 
 console.log(`listening on port '${nPort}'`);

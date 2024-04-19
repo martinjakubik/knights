@@ -128,7 +128,7 @@ class KnightsView {
             oPieceView.dataset.modelId = sPieceId;
             oPieceView.classList.add('piece');
             oPieceView.classList.add(sPieceClass);
-            oPieceView.addEventListener('dragstart', () => { console.log('drag started') });
+            oPieceView.addEventListener('dragstart', oHandlers.onPieceDragStart);
             oPieceView.addEventListener('touchstart', oHandlers.onTouchStart);
             oPieceView.addEventListener('touchend', oHandlers.onTouchEnd);
             document.body.appendChild(oPieceView);

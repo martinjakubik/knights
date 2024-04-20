@@ -19,7 +19,8 @@ if (window.location.hostname === 'localhost') {
 }
 
 let oSearchParams = new URL(document.location).searchParams;
-let bIsDebug = oSearchParams.get('debug') ? true : false;
+let sDebugParam = oSearchParams.get('debug');
+let bIsDebug = sDebugParam === 'true' ? true : false;
 if (oAppConfig.hostname != 'localhost' && bIsDebug) {
     console.log('debug mode');
     oAppConfig.port = 22721;

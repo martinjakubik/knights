@@ -8,7 +8,7 @@ settingsController.renderSettings();
 
 const oAppConfig = {
     protocol: 'https',
-    domain: 'www.supertitle.org',
+    hostname: 'www.supertitle.org',
     port: 2721,
 };
 
@@ -16,6 +16,13 @@ if (window.location.hostname === 'localhost') {
     oAppConfig.protocol = 'http';
     oAppConfig.hostname = 'localhost';
     oAppConfig.port = 2003;
+}
+
+let oSearchParams = new URL(document.location).searchParams;
+let bIsDebug = oSearchParams.get('debug') ? true : false;
+if (oAppConfig.hostname != 'localhost' && bIsDebug) {
+    console.log('debug mode');
+    oAppConfig.port = 22721;
 }
 
 let oKnightsViewController = new KnightsViewController(oAppConfig);

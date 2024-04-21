@@ -6,6 +6,14 @@ div#settings {
     display: none;
 }
 
+div#debug {
+    display: none;
+}
+
+div#debug.visible {
+    display: block;
+}
+
 div.gameboard {
     display: flex;
 }

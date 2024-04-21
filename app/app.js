@@ -10,6 +10,7 @@ const oAppConfig = {
     protocol: 'https',
     hostname: 'www.supertitle.org',
     port: 2721,
+    debug: false
 };
 
 if (window.location.hostname === 'localhost') {
@@ -20,10 +21,10 @@ if (window.location.hostname === 'localhost') {
 
 let oSearchParams = new URL(document.location).searchParams;
 let sDebugParam = oSearchParams.get('debug');
-let bIsDebug = sDebugParam === 'true' ? true : false;
+let bIsDebug = (sDebugParam === 'true') ? true : false;
 if (oAppConfig.hostname != 'localhost' && bIsDebug) {
-    console.log('debug mode');
     oAppConfig.port = 22721;
+    oAppConfig.debug = true;
 }
 
 let oKnightsViewController = new KnightsViewController(oAppConfig);

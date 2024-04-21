@@ -1,6 +1,7 @@
 import { KnightsView } from './knightsView.js';
 import { KnightsModel } from './knightsModel.js';
 import * as K from './knightsConstants.js';
+
 class KnightsViewController {
     model = {};
 
@@ -15,6 +16,9 @@ class KnightsViewController {
         if (oAppConfig && oAppConfig.protocol && oAppConfig.hostname && oAppConfig.port) {
             this.knightbaseUrl = `${oAppConfig.protocol}://${oAppConfig.hostname}:${oAppConfig.port}/${K.KNIGHTBASE_PATH}`;
         }
+        this.debug = oAppConfig ? (oAppConfig.debug == true) : false;
+        KnightsView.makeDebugView(this.debug == true);
+        KnightsView.renderDebugMessage(`in KVC constructor, debug: '${this.debug}'`);
     }
 
     static getMoveOriginFromPieceView(oPieceView) {
@@ -99,7 +103,8 @@ class KnightsViewController {
         this.currentTouchPageY = (oEvent.touches && oEvent.touches.length > 0) ? oEvent.touches.item(0).pageY : -1;
     }
 
-    onTouchEnd() {
+    async onTouchEnd() {
+        if (this.debug == true) KnightsView.clearDebugMessage();
         const nPageX = this.currentTouchPageX;
         const nPageY = this.currentTouchPageY;
         if (nPageX > -1 && nPageY > -1) {
@@ -116,6 +121,7 @@ class KnightsViewController {
     }
 
     async onSquareDrop(oEvent) {
+        if (this.debug == true) KnightsView.clearDebugMessage();
         const oTarget = oEvent.target;
         let oSquareView = oTarget;
         if (oTarget && oTarget.classList.contains('piece')) {
@@ -135,10 +141,11 @@ class KnightsViewController {
     }
 
     async saveGame() {
+        KnightsView.renderDebugMessage(`in savegame, this.debug: '${this.debug}'`);
         const nGame = 0;
         const sUrl = `${this.knightbaseUrl}/${nGame}/save`;
         const oGameData = KnightsViewController.transformGameboardToKnightbaseGame(this.model.getGameboard());
-
+        if (this.debug == true) KnightsView.renderDebugMessage('calling save game');
         const oPostOptions = {
             method: 'POST',
             headers: {

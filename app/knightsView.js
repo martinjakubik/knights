@@ -1,6 +1,22 @@
 import * as K from './knightsConstants.js';
+import { createDiv } from './learnhypertext.mjs';
 
 class KnightsView {
+    static makeDebugView(bDebug = false) {
+        const oDebugView = createDiv('debug');
+        if (bDebug) oDebugView.classList.add('visible');
+    }
+
+    static renderDebugMessage(sMessage) {
+        const oDebugView = document.getElementById('debug');
+        oDebugView.innerHTML += ' ; ' + sMessage;
+    }
+
+    static clearDebugMessage() {
+        const oDebugView = document.getElementById('debug');
+        oDebugView.innerHTML = '';
+    }
+
     static isTallScreen = function () {
         const nViewportWidth = document.documentElement.clientWidth;
         const nViewportHeight = document.documentElement.clientHeight;

@@ -109,6 +109,7 @@ class KnightsViewController {
                 KnightsViewController.updateChessboardMove(this.model, this.originOfMove, this.targetOfMove);
             }
             this.clearMovingPieces();
+            await this.saveGame();
             this.currentTouchPageX = -1;
             this.currentTouchPageY = -1;
         }

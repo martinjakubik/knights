@@ -17,8 +17,6 @@ class KnightsViewController {
             this.knightbaseUrl = `${oAppConfig.protocol}://${oAppConfig.hostname}:${oAppConfig.port}/${K.KNIGHTBASE_PATH}`;
         }
         this.debug = oAppConfig ? (oAppConfig.debug == true) : false;
-        KnightsView.makeDebugView(this.debug == true);
-        KnightsView.renderDebugMessage(`in KVC constructor, debug: '${this.debug}'`);
     }
 
     static getMoveOriginFromPieceView(oPieceView) {
@@ -258,7 +256,7 @@ class KnightsViewController {
         } catch (oError) {
             console.error(`error loading game: ${oError}`);
         }
-        this.makePieces(this.model.getChessboard(), sMiniGameboardId, oHandlers);
+        KnightsView.makeDebugView(this.debug == true);
         sMiniGameboardId = `${K.GAMEBOARD_MINI_CLASS}-1`;
         KnightsView.makeGameboard(sMiniGameboardId, K.GAMEBOARD_RENDER_TYPES.mini);
         const aGameboardIds = KnightsViewController.getListOfGameboardIds();
@@ -266,6 +264,7 @@ class KnightsViewController {
             const nGameboardRenderType = nIndex == 0 ? K.GAMEBOARD_RENDER_TYPES.main : K.GAMEBOARD_RENDER_TYPES.mini;
             this.renderPiecesOnChessboard(this.model.getChessboard(), sGameboardId, nGameboardRenderType);
         });
+        this.makePieces(this.model.getChessboard(), sMiniGameboardId, oHandlers);
     }
 }
 

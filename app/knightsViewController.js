@@ -62,7 +62,7 @@ class KnightsViewController {
     static rerenderPiecesOnChessboardMove(oOriginOfMove, oTargetOfMove) {
         const aGameboardIds = KnightsViewController.getListOfGameboardIds();
         aGameboardIds.forEach(sGameboardId => {
-            KnightsView.rerenderPieceOnChessboardMove(oOriginOfMove.originId, oOriginOfMove.pieceId, oTargetOfMove.targetId, sGameboardId);
+            KnightsView.rerenderPieceOnChessboardMove(oOriginOfMove.originId, oOriginOfMove.originType, oOriginOfMove.pieceId, oTargetOfMove.targetId, sGameboardId);
         });
     }
 
@@ -248,9 +248,10 @@ class KnightsViewController {
             onTouchEnd: this.onTouchEnd.bind(this)
         }
         KnightsView.makeGameboard(K.GAMEBOARD_MAIN_ID, K.GAMEBOARD_RENDER_TYPES.main, oHandlers);
-        let sMiniGameboardId = `${K.GAMEBOARD_MINI_CLASS}-${this.currentMiniGameboard}`;
         this.makePieces(this.model.getChessboard(), K.GAMEBOARD_MAIN_ID, oHandlers);
+        let sMiniGameboardId = `${K.GAMEBOARD_MINI_CLASS}-${this.currentMiniGameboard}`;
         KnightsView.makeGameboard(sMiniGameboardId, K.GAMEBOARD_RENDER_TYPES.mini);
+        this.makePieces(this.model.getChessboard(), sMiniGameboardId);
         try {
             await this.loadGame();
         } catch (oError) {
@@ -259,12 +260,12 @@ class KnightsViewController {
         KnightsView.makeDebugView(this.debug == true);
         sMiniGameboardId = `${K.GAMEBOARD_MINI_CLASS}-1`;
         KnightsView.makeGameboard(sMiniGameboardId, K.GAMEBOARD_RENDER_TYPES.mini);
+        this.makePieces(this.model.getChessboard(), sMiniGameboardId);
         const aGameboardIds = KnightsViewController.getListOfGameboardIds();
         aGameboardIds.forEach((sGameboardId, nIndex) => {
             const nGameboardRenderType = nIndex == 0 ? K.GAMEBOARD_RENDER_TYPES.main : K.GAMEBOARD_RENDER_TYPES.mini;
             this.renderPiecesOnChessboard(this.model.getChessboard(), sGameboardId, nGameboardRenderType);
         });
-        this.makePieces(this.model.getChessboard(), sMiniGameboardId, oHandlers);
     }
 }
 

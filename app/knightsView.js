@@ -136,7 +136,7 @@ class KnightsView {
         KnightsView.makeDiscard(oGameboardDiv, sGameboardId, oHandlers);
     }
 
-    static makePiece(sPieceId, sGameboardId = null, oHandlers) {
+    static makePiece(sPieceId, sGameboardId = null, oHandlers = {}) {
         if (sPieceId.length > 0) {
             let sPieceClass = sPieceId.substring(0, 2);
             let oPieceView = document.createElement('div');
@@ -145,9 +145,15 @@ class KnightsView {
             oPieceView.classList.add('piece');
             oPieceView.classList.add(sPieceClass);
             oPieceView.draggable = true;
-            oPieceView.addEventListener('dragstart', oHandlers.onPieceDragStart);
-            oPieceView.addEventListener('touchstart', oHandlers.onTouchStart);
-            oPieceView.addEventListener('touchend', oHandlers.onTouchEnd);
+            if (oHandlers && oHandlers.onPieceDragStart) {
+                oPieceView.addEventListener('dragstart', oHandlers.onPieceDragStart);
+            }
+            if (oHandlers && oHandlers.onTouchStart) {
+                oPieceView.addEventListener('touchstart', oHandlers.onTouchStart);
+            }
+            if (oHandlers && oHandlers.onTouchEnd) {
+                oPieceView.addEventListener('touchend', oHandlers.onTouchEnd);
+            }
             document.body.appendChild(oPieceView);
         }
     }
@@ -160,15 +166,17 @@ class KnightsView {
         oDiscardViewForPiece.appendChild(oPieceView);
     }
 
-    static rerenderPieceOnChessboardMove(sOriginOfMoveId, sPieceId, sTargetOfMoveId, sGameboardId) {
+    static rerenderPieceOnChessboardMove(sOriginOfMoveId, sOriginOfMoveType, sPieceId, sTargetOfMoveId, sGameboardId) {
         const sOriginOfMoveIdOnGameboard = `${sOriginOfMoveId}-${sGameboardId}`;
         const sPieceIdOnGameboard = `${sPieceId}-${sGameboardId}`;
         const sTargetOfMoveIdOnGameboard = `${sTargetOfMoveId}-${sGameboardId}`;
         const oMovedFromNode = document.getElementById(sOriginOfMoveIdOnGameboard);
         const oMovedPieceNode = document.getElementById(sPieceIdOnGameboard);
         const oMovedToNode = document.getElementById(sTargetOfMoveIdOnGameboard);
-        if (oMovedFromNode && oMovedPieceNode && oMovedToNode) {
+        if (sOriginOfMoveType === K.MOVE_FROM_TYPES.square && oMovedFromNode && oMovedPieceNode) {
             oMovedFromNode.removeChild(oMovedPieceNode);
+        }
+        if (oMovedPieceNode && oMovedToNode) {
             oMovedToNode.appendChild(oMovedPieceNode);
         }
     }

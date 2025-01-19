@@ -13,3 +13,5 @@ knightsgame-*
 SettingsController.js
 SettingsView.js
 learnhypertext.mjs
+
+app/logo.png

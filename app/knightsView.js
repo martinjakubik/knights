@@ -27,7 +27,7 @@ class KnightsView {
         const nViewportWidth = document.documentElement.clientWidth;
         const nViewportHeight = document.documentElement.clientHeight;
         const nMaximumSize = KnightsView.isTallScreen() ? nViewportWidth : nViewportHeight;
-        return nMaximumSize - K.GAMEBOARD_PIXEL_PADDING;
+        return nMaximumSize - K.GAMEBOARD_PIXEL_PADDING + 1;
     }
 
     static getWidthOfDiscardArea = function (nMaximumBoardWidth) {

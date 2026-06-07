@@ -14,10 +14,6 @@ div#debug.visible {
     display: block;
 }
 
-div.gameboard {
-    display: flex;
-}
-
 div.gameboard.mini {
     margin: 1em;
 }

@@ -11,4 +11,7 @@ for layerId in {1..6}; do
     # exports two versions of the drawing scene
     inkscape resources/chesspieces.svg -i layer${layerId} -j -C --export-png=build/piece-${label}.b.forhtml.png
     magick build/piece-${label}.b.forhtml.png -alpha deactivate -negate build/piece-${label}.w.forhtml.png
+
+    mv build/piece-${label}.b.forhtml.png app/
+    mv build/piece-${label}.w.forhtml.png app/
 done

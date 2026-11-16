@@ -3,6 +3,7 @@ import * as oHttps from 'http';
 import * as oProcess from 'process';
 import { knightservice } from './localknightservice.js';
 
+const __dirname = import.meta.dirname;
 
 let bDebug = false;
 process.argv.forEach(function (sValue, index, array) {
@@ -19,7 +20,7 @@ const bProductionEnv = oProcess.env.NODE_ENV;
 
 app.use(express.json());
 
-app.use(express.static('app'))
+app.use(express.static(`${__dirname}/app`));
 
 app.post('/knightbase/:game/save', (oRequest, oResponse) => {
     if (bDebug) console.log('supertitle post');

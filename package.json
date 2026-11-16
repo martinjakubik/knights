@@ -9,6 +9,8 @@
     "learnhypertext": "^2.1.0"
   },
   "scripts": {
+    "build": "node build.js",
+    "clean": "node clean.js",
     "start": "node dev/server.js",
     "postinstall": "node postinstall.js"
   },

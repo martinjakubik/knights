@@ -5,13 +5,11 @@ build
 # Dependency directories
 node_modules/
 
-package.sh
-prepare.sh
-upload.sh
-
 knightsgame-*
 SettingsController.js
 SettingsView.js
 learnhypertext.mjs
 
-app/logo.png
+resources/*.png
+
+app
